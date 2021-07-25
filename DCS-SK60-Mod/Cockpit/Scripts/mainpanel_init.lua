@@ -80,16 +80,14 @@ animation_list = {
     {"NoseWPOS_IND",318},
     {"MainLWPOS_IND", 319},
     {"MainRWPOS_IND", 320},
+    {"AIR_SPEED", 321},
     {"MACH_IND", 322},
     {"G_METER", 323},
     {"GYRO_ROLL", 324},
     {"GYRO_PITCH", 325},
-
-    -- new clock
-    {"CLOCK_H", 343},
-    {"CLOCK_M", 342},
-    {"CLOCK_S", 344},
-
+    {"CLOCK_H", 326},
+    {"CLOCK_M", 327},
+    {"CLOCK_S", 328},
     {"OXY_QUAN", 329},
     {"BARO_ALT", 330},
     {"BARO_x1H", 331},
@@ -103,9 +101,9 @@ animation_list = {
     {"CLIMB_RATE", 339},
     {"SLIDE_IND", 340},
     {"HSI_COMPASS", 341},
-    {"HSI_COURSE", 3420},
-    {"HSI_CRS_TOF", 3430},
-    {"HSI_HEADING", 3440},
+    {"HSI_COURSE", 342},
+    {"HSI_CRS_TOF", 343},
+    {"HSI_HEADING", 344},
     {"HSI_TACAN", 345},
     {"HSI_ADF", 346},
     {"HSI_T_D_x1k", 347},
@@ -140,13 +138,6 @@ animation_list = {
     {"PTN_132", 132},
     
     {"PTN_601", 601},
-
-    {"RUDDER_PADEL", 3},
-    {"STICK_PITCH", 1, {-1, 1}, {1, -1}},
-    {"STICK_ROLL", 2},
-    {"EFM_LEFT_THRUST_A", 104},
-    {"EFM_RIGHT_THRUST_A", 105},
-    {"AIRSPEED_IND", 321},
 }
 
 --[[
@@ -173,6 +164,31 @@ Landinggearhandle.arg_number		= 50
 Landinggearhandle.input				= {0, 1}
 Landinggearhandle.output			= {0, 1}
 Landinggearhandle.parameter_name	= "LandingGearLevel"
+
+
+StickPitch							= CreateGauge()
+StickPitch.arg_number				= 2
+StickPitch.input					= {-100, 100}
+StickPitch.output					= {-1, 1}
+StickPitch.controller				= controllers.base_gauge_StickPitchPosition
+
+StickBank							= CreateGauge()
+StickBank.arg_number				= 1
+StickBank.input						= {-100, 100}
+StickBank.output					= {1, -1}
+StickBank.controller				= controllers.base_gauge_StickRollPosition
+
+ThrottleLeft						= CreateGauge()
+ThrottleLeft.arg_number				= 104
+ThrottleLeft.input					= {0, 1}
+ThrottleLeft.output					= {0, 1}
+ThrottleLeft.parameter_name			= "EFM_LEFT_THRUST_A"
+
+ThrottleRight						= CreateGauge()
+ThrottleRight.arg_number			= 105
+ThrottleRight.input					= {0, 1}
+ThrottleRight.output				= {0, 1}
+ThrottleRight.parameter_name		= "EFM_RIGHT_THRUST_A"
 
 --INSTRUMENTS--
 LeftRPM								= CreateGauge ()
