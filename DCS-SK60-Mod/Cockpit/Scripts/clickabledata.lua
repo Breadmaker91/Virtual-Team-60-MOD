@@ -347,8 +347,8 @@ elements["PNT_083"] = default_2_position_tumb(_("Landing Gear Handle"), devices.
 
 -- Power Systems
 -- elements["PTN_107"] = default_2_position_tumb("Battry Swith", devices.ELECTRIC_SYSTEM, Keys.BatteryPower, 107)
-elements["PTN_108"] = default_multi_position_tumb("Left Generator Switch", devices.ELECTRIC_SYSTEM, Keys.PowerGeneratorLeftUP, Keys.PowerGeneratorLeftDOWN, -1)
-elements["PTN_111"] = default_multi_position_tumb("Right Generator Switch", devices.ELECTRIC_SYSTEM, Keys.PowerGeneratorRightUP, Keys.PowerGeneratorRightDOWN, -1)
+-- elements["PTN_108"] = default_multi_position_tumb("Left Generator Switch", devices.ELECTRIC_SYSTEM, Keys.PowerGeneratorLeftUP, Keys.PowerGeneratorLeftDOWN, -1)
+-- elements["PTN_111"] = default_multi_position_tumb("Right Generator Switch", devices.ELECTRIC_SYSTEM, Keys.PowerGeneratorRightUP, Keys.PowerGeneratorRightDOWN, -1)
 
 
 -- Engine system
@@ -379,17 +379,25 @@ elements["PTN_118"] = default_button("Boost Pump Test", devices.FUEL_SYSTEM, Key
 multi_tumb_click_list = {
 
     {"PTN_429", "Anti-Collision Light", devices.LIGHT_SYSTEM, 429, Keys.LightStrobeUP, Keys.LightStrobeDOWN},
+    {"PTN_424", "Navigation Light", devices.LIGHT_SYSTEM, 424, Keys.LightNaviWingUP,Keys.LightNaviWingDOWN},
+    
     {"PTN_125", "Taxi/Probe Light", devices.LIGHT_SYSTEM, 125, Keys.LightTaxi},
     {"PTN_128", "Tail Navigation Light", devices.LIGHT_SYSTEM, 128, Keys.LightNaviTailUP, Keys.LightNaviTailDOWN},
-    {"PTN_417", "Navigation Light", devices.LIGHT_SYSTEM, 417, Keys.LightNaviWingUP},
     {"PTN_130", "Formation Light", devices.LIGHT_SYSTEM, 130, Keys.LightFormationUP, Keys.LightFormationDOWN},
     {"PTN_133", "Flood Light", devices.LIGHT_SYSTEM, 133, Keys.LightFloodUP, Keys.LightFloodDOWN},
 
+    -- Electric Power Switches
+    {"PTN_401", "Main Power Switch", devices.ELECTRIC_SYSTEM, 401, Keys.BatteryPower},
+    {"PTN_402", "Left Generator Switch", devices.ELECTRIC_SYSTEM, 402, Keys.PowerGeneratorLeft},
+    {"PTN_404", "Right Generator Switch", devices.ELECTRIC_SYSTEM, 404, Keys.PowerGeneratorRight},
+
     -- GNS430
-    {"PTN_509", "COM frequency Flip-flop", devices.HUD_DCMS, 509, Keys.COM_Freq_Swap},
-    {"PTN_510", "VLOC frequency Flip-flop", devices.HUD_DCMS, 510, Keys.VLOC_Freq_Swap},
-    {"PTN_511", "Freqency MHz Knob", devices.HUD_DCMS, 511, Keys.Freq_Num},
-    {"PTN_512", "Freqency kHz Knob", devices.HUD_DCMS, 512, Keys.Freq_Degi},
+    {"PTN_513", "VLOC/COM Focus Change", devices.HUD_DCMS, 513, Keys.Freq_Knob_Push},
+    {"PTN_514", "COM frequency Flip-flop", devices.HUD_DCMS, 514, Keys.COM_Freq_Swap},
+    {"PTN_515", "VLOC frequency Flip-flop", devices.HUD_DCMS, 515, Keys.VLOC_Freq_Swap},
+    {"PTN_526", "Enter", devices.HUD_DCMS, 526, Keys.Nav_Ent},
+
+    {"PTN_601", "Canopy Handle", devices.CANOPY, 601, 71}, -- iCommandPlaneCanopy
 }
 
 for k,v in pairs(multi_tumb_click_list) do
@@ -423,6 +431,18 @@ elements["PTN_554"] = default_axis("Quantity x1", devices.WEAPON_SYSTEM, Keys.Qu
 elements["PTN_555"] = default_axis("Time x100", devices.WEAPON_SYSTEM, Keys.TimeTumbWheel100, 1134, 0, 0.1)
 elements["PTN_556"] = default_axis("Time x10", devices.WEAPON_SYSTEM, Keys.TimeTumbWheel10, 1134, 0, 0.1)
 elements["PTN_557"] = default_axis("Time x1", devices.WEAPON_SYSTEM, Keys.TimeTumbWheel, 1134, 0, 0.1)
+
+-- EHSI SANDEL SN3500
+elements["PTN_534"] = default_axis("Course Selection Knob", devices.HUD_DCMS, Keys.Nav_Course_Sel, 1134, 0, 0.1)
+elements["PTN_541"] = default_axis("Heading Selection Knob", devices.HUD_DCMS, Keys.Nav_Heading_Sel, 1134, 0, 0.1)
+
+-- GNS430 Unit
+elements["PTN_509"] = default_axis("Vol/PWR Knob", devices.HUD_DCMS, Keys.Nav_Vol_PWR, 1134, 0, 0.1)
+elements["PTN_510"] = default_axis("Vol Knob", devices.HUD_DCMS, Keys.Nav_Vol, 1134, 0, 0.1)
+elements["PTN_511"] = default_axis("Freqency MHz Knob", devices.HUD_DCMS, Keys.Freq_Num, 1134, 0, 0.1)
+elements["PTN_512"] = default_axis("Freqency kHz Knob", devices.HUD_DCMS, Keys.Freq_Degi, 1134, 0, 0.1)
+elements["PTN_527"] = default_axis("Right Large Knob", devices.HUD_DCMS, Keys.Nav_Right_Knob_L, 1134, 0, 0.1)
+elements["PTN_528"] = default_axis("Right Small Knob", devices.HUD_DCMS, Keys.Nav_Right_Knob_S, 1134, 0, 0.1)
 
 
 elements["PTN_179"] = springloaded_3_pos_tumb("UHF tens of Mega hertz", devices.RADIO_SYSTEM, Keys.UHFFreqAUP, Keys.UHFFreqASTOP, Keys.UHFFreqADOWN, Keys.UHFFreqASTOP, 1134)

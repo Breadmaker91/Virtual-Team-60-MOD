@@ -112,11 +112,8 @@ Keys =
     FuelMasterLeft = __custom_counter(),
     FuelMasterRight = __custom_counter(),
 
-    PowerGeneratorLeftUP = __custom_counter(),
-    PowerGeneratorLeftDOWN = __custom_counter(),
-
-    PowerGeneratorRightUP = __custom_counter(),
-    PowerGeneratorRightDOWN = __custom_counter(),
+    --PowerGeneratorLeft = __custom_counter(),
+    --PowerGeneratorRight = __custom_counter(),
 
     LeftEngineIDLE = __custom_counter(),
     RightEngineIDLE = __custom_counter(),
@@ -300,7 +297,11 @@ Keys =
     Nav_Right_Knob_L = 5116,
     Nav_Right_Knob_S = 5117,
     Nav_Right_Knob_Push = 5118,
+    Nav_Vol_PWR = 5119,
+    Nav_Vol = 5120,
     -- SN3500
+    Nav_Course_Sel = 5150,
+    Nav_Heading_Sel = 5151,
 }
 
 --从5000开始递增点击指令
