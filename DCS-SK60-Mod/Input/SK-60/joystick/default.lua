@@ -55,8 +55,8 @@ keyCommands = {
     -- Systems
     {down = iCommandPowerOnOff,					name = _('Electric Power Switch'),		category = _('Systems')},
     {down = iCommandPlaneAirBrake,				name = _('Airbrake'),					category = _('Systems') , features = {"airbrake"}},
-    {down = iCommandPlaneAirBrakeOn,			name = _('Airbrake On'),				category = _('Systems') , features = {"airbrake"}},
-    {down = iCommandPlaneAirBrakeOff,			name = _('Airbrake Off'),				category = _('Systems') , features = {"airbrake"}},
+    {down = iCommandPlaneAirBrakeOn,up = Keys.AirbrakePauseMove,			name = _('Airbrake On'),				category = _('Systems') , features = {"airbrake"}},
+    {down = iCommandPlaneAirBrakeOff,up = Keys.AirbrakePauseMove,			name = _('Airbrake Off'),				category = _('Systems') , features = {"airbrake"}},
     {down = iCommandPlaneWingtipSmokeOnOff,		name = _('Smoke'),						category = _('Systems')},
     {down = iCommandPlaneCockpitIllumination,	name = _('Illumination Cockpit'),		category = _('Systems')},
     {down = iCommandPlaneLightsOnOff,			name = _('Navigation lights'),			category = _('Systems')},
@@ -327,7 +327,7 @@ keyCommands = {
     --Flight Control
     {down = iCommandPlaneTrimOn, up = iCommandPlaneTrimOff, name = _('T/O Trim'), category = _('Flight Control')},
 
-    {down = iCommandPlaneAirBrakeOn,	up = iCommandPlaneAirBrakeOff,			name = _('HOTAS_Airbrake'),					category = _('Systems') },
+    {down = iCommandPlaneAirBrakeOn,	up = iCommandPlaneAirBrakeOff,			name = _('HOTAS Airbrake'),					category = _('Systems') },
 
     -- Systems
     --{down = Keys.FlapUp, name = _('Flaps Up'), category = _('Systems')},
@@ -350,6 +350,10 @@ keyCommands = {
 
     {down = Keys.WingPylonSmokeOn,	name = _('Smoke Pod On/Off'),		category = _('Weapons')},
     {down = Keys.NozzleSmokeOn,	name = _('Nozzle Smoke On/Off'),		category = _('Weapons')},
+
+    --HOTAS
+    {down = Keys.Flap_Pos_Up,	up = Keys.Flap_Pos_Half,			name = _('HOTAS Flap Up Position'),					category = _('HOTAS') },
+    {down = Keys.Flap_Pos_Down,	up = Keys.Flap_Pos_Half,			name = _('HOTAS Flap Down Position'),				category = _('HOTAS') },
 },
 
 -- joystick axes 

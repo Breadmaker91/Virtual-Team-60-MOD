@@ -238,7 +238,7 @@ return {
     --Flight Control
     {combos = {{key = 'T', reformers = {'LAlt'}}}, down = iCommandPlaneTrimOn, up = iCommandPlaneTrimOff, name = _('T/O Trim'), category = _('Flight Control')},
 
-    {down = iCommandPlaneAirBrakeOn,	up = iCommandPlaneAirBrakeOff,			name = _('HOTAS_Airbrake'),					category = _('Systems') },
+    {down = iCommandPlaneAirBrakeOn,	up = iCommandPlaneAirBrakeOff,			name = _('HOTAS Airbrake'),					category = _('Systems') },
 
     -- Systems
     --{combos = {{key = 'F', reformers = {'LShift'}}}, down = Keys.FlapUp, name = _('Flaps Up'), category = _('Systems')},
@@ -298,8 +298,8 @@ return {
     -- Systems
     {combos = {{key = 'L', reformers = {'RShift'}}},	down = iCommandPowerOnOff,					name = _('Electric Power Switch'),					category = _('Systems')},
     {combos = {{key = 'B'}},							down = iCommandPlaneAirBrake,				name = _('Airbrake'),								category = _('Systems') , features = {"airbrake"}},
-    {combos = {{key = 'B', reformers = {'LShift'}}},	down = iCommandPlaneAirBrakeOn,				name = _('Airbrake On'),							category = _('Systems') , features = {"airbrake"}},
-    {combos = {{key = 'B', reformers = {'LCtrl'}}},		down = iCommandPlaneAirBrakeOff,			name = _('Airbrake Off'),							category = _('Systems') , features = {"airbrake"}},
+    {combos = {{key = 'B', reformers = {'LShift'}}},	down = iCommandPlaneAirBrakeOn,	up = Keys.AirbrakePauseMove,			name = _('Airbrake On'),							category = _('Systems') , features = {"airbrake"}},
+    {combos = {{key = 'B', reformers = {'LCtrl'}}},		down = iCommandPlaneAirBrakeOff,up = Keys.AirbrakePauseMove,			name = _('Airbrake Off'),							category = _('Systems') , features = {"airbrake"}},
     {combos = {{key = 'T'}},							down = iCommandPlaneWingtipSmokeOnOff,		name = _('Smoke'),									category = _('Systems')},
     {combos = {{key = 'L'}},							down = iCommandPlaneCockpitIllumination,	name = _('Illumination Cockpit'),					category = _('Systems')},
     {combos = {{key = 'L', reformers = {'RCtrl'}}},		down = iCommandPlaneLightsOnOff,			name = _('Navigation lights'),						category = _('Systems')},
@@ -354,11 +354,15 @@ return {
     {down = Keys.NozzleSmokeOn,	name = _('Nozzle Smoke On/Off'),		category = _('Weapons')},
 
     -- debug
-    {down = 5005,	name = _('DEBUG RECORD'),		category = _('Debugs')},
+    --{down = 5005,	name = _('DEBUG RECORD'),		category = _('Debugs')},
 
     --Multicrew Control
     {combos = {{key = 'J'}},	down = iCommandNetCrewRequestControl,	name = _('Request Aircraft Control'),	category = _('Flight Control')},
     {combos = {{key = '1'}},	down = iCommandViewCockpitChangeSeat, value_down = 1, name = _('Occupy Seat 1'),	category = _('View Cockpit')},
     {combos = {{key = '2'}},	down = iCommandViewCockpitChangeSeat, value_down = 2, name = _('Occupy Seat 2'),	category = _('View Cockpit')},
+
+    --HOTAS
+    {down = Keys.Flap_Pos_Up,	up = Keys.Flap_Pos_Half,			name = _('HOTAS Flap Up Position'),					category = _('HOTAS') },
+    {down = Keys.Flap_Pos_Down,	up = Keys.Flap_Pos_Half,			name = _('HOTAS Flap Down Position'),				category = _('HOTAS') },
 },
 }

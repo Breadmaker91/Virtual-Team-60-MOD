@@ -141,6 +141,9 @@ animation_list = {
     
     {"PTN_601", 601},
 
+    -- Airbrake Ind
+    {"AIRBRAKE_IND", 316},
+
     -- Electric power
     {"PTN_401", 401}, -- Main Power
     {"PTN_402", 402}, -- Left Gen
@@ -205,7 +208,7 @@ Landinggearhandle					= CreateGauge("parameter")
 Landinggearhandle.arg_number		= 50
 Landinggearhandle.input				= {0, 1}
 Landinggearhandle.output			= {0, 1}
-Landinggearhandle.parameter_name	= "LandingGearLevel"
+Landinggearhandle.parameter_name	= "PTN_083"
 
 --INSTRUMENTS--
 LeftRPM								= CreateGauge ()
