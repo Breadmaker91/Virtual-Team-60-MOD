@@ -139,7 +139,8 @@ Keys =
 
     LightStrobeUP = __custom_counter(),
     LightStrobeDOWN = __custom_counter(),
-    LightTaxi = __custom_counter(),
+    LightTaxiDOWN = __custom_counter(),
+    LightTaxiUP = __custom_counter(),
     LightNaviWingUP = __custom_counter(),
     LightNaviWingDOWN = __custom_counter(),
     LightNaviTailUP = __custom_counter(),
@@ -275,6 +276,9 @@ Keys =
     -- Weapon Part till 5070
     WingPylonSmokeOn = 5053,
     NozzleSmokeOn = 5054,
+
+    -- special functions
+    SpecialSence = 5070,
 
     -- Flight Control Key start from 5071 - 5100
     AirbrakePauseMove = 5071,
