@@ -385,6 +385,8 @@ multi_tumb_click_list = {
     {"PTN_420", "Right Low Pressure Fuel Pump", devices.HUD_DCMS, 420, Keys.R_LP_PUMP},
     {"PTN_406", "Left Main Fuel Pump", devices.HUD_DCMS, 406, Keys.L_HP_PUMP},
     {"PTN_408", "Right Main Fuel Pump", devices.HUD_DCMS, 408, Keys.R_HP_PUMP},
+    {"PTN_604", "Left Throttle Idle", devices.HUD_DCMS, 604, Keys.L_THROTTLE_IDLE},
+    {"PTN_605", "Right Throttle Idle", devices.HUD_DCMS, 605, Keys.R_THROTTLE_IDLE},
 
     {"PTN_436", "Taxi/Landing Light", devices.LIGHT_SYSTEM, 436, Keys.LightTaxiUP, Keys.LightTaxiDOWN},
     {"PTN_429", "Anti-Collision Light", devices.LIGHT_SYSTEM, 429, Keys.LightStrobeUP, Keys.LightStrobeDOWN},
@@ -397,8 +399,8 @@ multi_tumb_click_list = {
 
     -- Electric Power Switches
     {"PTN_401", "Main Power Switch", devices.ELECTRIC_SYSTEM, 401, Keys.BatteryPower},
-    {"PTN_402", "Left Generator Switch", devices.ELECTRIC_SYSTEM, 402, Keys.PowerGeneratorLeft},
-    {"PTN_404", "Right Generator Switch", devices.ELECTRIC_SYSTEM, 404, Keys.PowerGeneratorRight},
+    {"PTN_402", "Inverter 1 Switch", devices.ELECTRIC_SYSTEM, 402, Keys.PowerGeneratorLeft},
+    {"PTN_404", "Inverter 2 Switch", devices.ELECTRIC_SYSTEM, 404, Keys.PowerGeneratorRight},
 
     -- EADI
     {"PTN_501", "Screen Display Dim-", devices.HUD_DCMS, 501, Keys.Display_Darker},

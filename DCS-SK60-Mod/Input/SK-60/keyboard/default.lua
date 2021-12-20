@@ -332,6 +332,12 @@ return {
     {combos = {{key = '=', reformers = {'RShift'}}}, pressed = iCommandAltimeterPressureIncrease,	up = iCommandAltimeterPressureStop, name = _('Altimeter Pressure Increase'), category = _('Systems')},
     {combos = {{key = '-', reformers = {'RShift'}}}, pressed = iCommandAltimeterPressureDecrease, up = iCommandAltimeterPressureStop, name = _('Altimeter Pressure Decrease'), category = _('Systems')},
 
+    -- Engine Control
+    {down = Keys.L_THROTTLE_IDLE,					name = _('Set Left Throttle IDLE/OFF'),			category = _('Engine')},
+    {down = Keys.R_THROTTLE_IDLE,					name = _('Set Right Throttle IDLE/OFF'),		category = _('Engine')},
+    {down = Keys.L_THROTTLE_SETIDLE,    up = Keys.L_THROTTLE_SETOFF,				name = _('Left Throttle IDLE (on/press) else OFF'),			category = _('Engine')},
+    {down = Keys.R_THROTTLE_SETIDLE,   up = Keys.R_THROTTLE_SETOFF,					name = _('Right Throttle IDLE (on/press) else OFF'),		category = _('Engine')},
+
     -- Countermeasures
     {combos = {{key = 'Q', reformers = {'LShift'}}},	down = iCommandPlaneDropSnar,			name = _('Countermeasures Continuously Dispense'),					category = _('Countermeasures') , features = {"Countermeasures"}},
     {combos = {{key = 'Q'}},							down = iCommandPlaneDropSnarOnce, up = iCommandPlaneDropSnarOnceOff, name = _('Countermeasures Release'),	category = _('Countermeasures') , features = {"Countermeasures"}},
