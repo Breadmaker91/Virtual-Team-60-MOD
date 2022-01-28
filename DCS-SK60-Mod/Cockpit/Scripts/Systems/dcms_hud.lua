@@ -36,6 +36,7 @@ local hud_nav_data_3 = get_param_handle("HUD_NAV_DATA_3_DIS")
 --local eadi_lf2_display = get_param_handle("L_EADI_DISPLAY_TL2")
 --local eadi_rb1_display = get_param_handle("L_EADI_DISPLAY_BR1")
 
+local erpm_power = get_param_handle("ERPM_ENABLE")
 local erpm_ln2 = get_param_handle("LRPM_N2_DIGTAL")
 local erpm_rn2 = get_param_handle("RRPM_N2_DIGTAL")
 local erpm_color = get_param_handle("RPM_COLOR")
@@ -55,7 +56,7 @@ local ehsi_course_heading = get_param_handle("EHSI_COURSE")
 --local ns430_logo_page = get_param_handle("NAVU_PAGE1_ENABLE")
 --local ns430_info_page = get_param_handle("NAVU_PAGE2_ENABLE")
 --local ns430_base_page = get_param_handle("NAVU_BASE_ENABLE")
-
+local temp_dbg = get_param_handle("DBG_OUT_TMP")
 
 local sensor_data = get_base_data()
 local ias_conversion_to_knots = 1.9504132
@@ -93,6 +94,7 @@ function post_initialize()
     --hud_enable:set(1)
     hud_maxg_dis:set(1)
     --gps_base:set(1)
+    erpm_power:set(0)
 end
 
 NS430_Test_Status = 0;
@@ -149,20 +151,37 @@ function update()
     --eadi_rf1_display:set(sensor_data.getMachNumber())
     --eadi_rb1_display:set("ERECT")
 
-    erpm_ln2:set(sensor_data.getEngineLeftRPM() * 100 / 1.2)
-    erpm_rn2:set(sensor_data.getEngineRightRPM() * 100 / 1.2)
-    erpm_color:set(1)
+    -- debug
+    local roll_rate = sensor_data.getRateOfRoll()
+    temp_dbg:set(roll_rate * RAD_TO_DEGREE)
 
+    if get_elec_dc_status() then
+        erpm_power:set(1)
+        erpm_ln2:set(sensor_data.getEngineLeftRPM() * 100 / 1.2)
+        erpm_rn2:set(sensor_data.getEngineRightRPM() * 100 / 1.2)
+        erpm_color:set(1)
+    else
+        erpm_power:set(0)
+        erpm_ln2:set(0.0)
+        erpm_rn2:set(0.0)
+        erpm_color:set(1)
+    end
+
+    if get_elec_ac_status() then
+        local deg_heading = sensor_data.getMagneticHeading() * RAD_TO_DEGREE
+        if deg_heading < 0 then
+            deg_heading = deg_heading + 360
+        elseif deg_heading > 360 then
+            deg_heading = deg_heading - 360
+        end
+        ehsi_mag_heading:set(deg_heading)
+        ehsi_compass:set(deg_heading)
+    end
+
+    --left_n1:set(sensor_data.getEngineLeftRPM())
+    --print_message_to_user(left_n1:get())
     --ehsi_enable:set(1)
     --ehsi_full_compass_enable:set(1)
-    local deg_heading = sensor_data.getMagneticHeading() * RAD_TO_DEGREE
-    if deg_heading < 0 then
-        deg_heading = deg_heading + 360
-    elseif deg_heading > 360 then
-        deg_heading = deg_heading - 360
-    end
-    ehsi_mag_heading:set(deg_heading)
-    ehsi_compass:set(deg_heading)
     --ehsi_course_heading:set(0 * RAD_TO_DEGREE)
     --nav_mode:set(1)
     --[[
