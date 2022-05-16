@@ -1,3 +1,5 @@
+local menus = data.menus
+
 local parameters = {
 	fighter = true,
 	radar = true,
@@ -26,4 +28,19 @@ menus['Weapon Config'] = {
 	}
 }
 
+menus['Install Gunsight'] = {
+	name = _('Gunsight Installation'),
+	items = {
+		[1] = {
+			name = _('Install'), 		
+			command = 5062
+		},
+		[2] = {
+			name = _('Uninstall'),
+			command = 5063
+		}
+	}
+}
+
 menus['Ground Crew'].items[4] = { name = _('Weapon Configuration'), submenu = menus['Weapon Config']}
+menus['Ground Crew'].items[5] = { name = _('Gunsight Installation'), submenu = menus['Install Gunsight']}

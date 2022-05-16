@@ -281,6 +281,10 @@ Keys =
     WeaponConfigAll = 5057,
     WeaponConfigSingle = 5058,
     WeaponConfigPairs = 5059,
+    WeaponMasterSwitch = 5060,
+    WeaponAirGroundChange = 5061,
+    GunSightInstall = 5062,
+    GunSightUninstall = 5063,
 
     -- special functions
     SpecialSence = 5070,
@@ -360,6 +364,7 @@ Keys =
     UHF_Key_9 = 5619,
     UHF_Key_MAN = 5620,
     UHF_Key_ENT = 5621,
+    RadioUpdate = 5622,
 }
 
 --从5000开始递增点击指令

@@ -1,6 +1,7 @@
 local WeaponSystem     = GetSelf()
 dofile(LockOn_Options.script_path.."debug_util.lua")
 dofile(LockOn_Options.common_script_path.."devices_defs.lua")
+dofile(LockOn_Options.script_path.."devices.lua")
 --dofile(LockOn_Options.script_path.."Systems/stores_config.lua")
 dofile(LockOn_Options.script_path.."command_defs.lua")
 dofile(LockOn_Options.script_path.."Systems/electric_system_api.lua")
@@ -23,6 +24,8 @@ local iCommandPlanePickleOff = 351
 --local iCommandPlaneDropFlareOnce = 357
 --local iCommandPlaneDropChaffOnce = 358
 
+local gun_sight_animation = get_param_handle("GUN_SIGHT")
+
 -- 获取锁定状态
 -- 是否锁定
 local ir_missile_lock_param = get_param_handle("WS_IR_MISSILE_LOCK")
@@ -43,6 +46,10 @@ WeaponSystem:listen_command(Keys.WeaponFireOff)
 WeaponSystem:listen_command(Keys.WeaponConfigSingle)
 WeaponSystem:listen_command(Keys.WeaponConfigPairs)
 WeaponSystem:listen_command(Keys.WeaponConfigAll)
+WeaponSystem:listen_command(Keys.WeaponMasterSwitch)
+WeaponSystem:listen_command(Keys.WeaponAirGroundChange)
+WeaponSystem:listen_command(Keys.GunSightInstall)
+WeaponSystem:listen_command(Keys.GunSightUninstall)
 
 local pod_smoke_light = get_param_handle("POD_SMOKE")
 local nozzle_smoke_light = get_param_handle("NOZZLE_SMOKE")
@@ -61,8 +68,33 @@ local has_nozzle_smoke = 0
 -- 0 is nothing, 1 is gunpod, 2 is rockets
 local weapon_system_mode = 0
 local fire_trigger_status = 0
+local gun_sight_is_installed = 0
 
 -- PYLON_INFO_LIST[pylonSelection + 1] = {station_data.weapon.level2, station_data.weapon.level3, station_data.count}
+
+local SWITCH_OFF = 0
+local SWITCH_ON = 1
+local SWITCH_TEST = -1
+
+switch_count = 0
+function _switch_counter()
+    switch_count = switch_count + 1
+    return switch_count
+end
+
+local master_switch = _switch_counter()
+local AG_switch = _switch_counter()
+
+target_status = {
+    {master_switch , SWITCH_OFF, get_param_handle("PTN_413"), "PTN_413"},
+    {AG_switch , SWITCH_OFF, get_param_handle("PTN_414"), "PTN_414"},
+}
+
+current_status = {
+    {master_switch , SWITCH_OFF, SWITCH_OFF},
+    {AG_switch , SWITCH_OFF, SWITCH_OFF},
+}
+
 
 -- 1,2,3,4,5,6,7,8 position
 -- 2, 4, 5, 7 can be loaded with smoke system, gun pod, and rockets
@@ -90,6 +122,35 @@ function check_load_status()
             weapon_system_mode = 2
         else
             loading_list[i] = 0
+        end
+    end
+end
+
+local current_freq = 256E6
+
+function check_frequency_change()
+    local dev=GetDevice(devices.UHF_RADIO)
+    if dev then
+        -- check if override by efm radio system
+        local freq_efm_signal = get_param_handle("RADIO_EFM_CHANGED")
+        local freq_uplink_signal = get_param_handle("RADIO_2EFM_CHANGED")
+        local freqency_EFM_exchange = get_param_handle("RADIO_UHF_FREQ_EXC")
+        -- dprintf(sprintf("current Freq: %d", dev:get_frequency()))
+        -- check if override by simple radio system
+        if (dev:get_frequency() ~= current_freq) then
+            -- send to efm, change display
+            dprintf("lua radio freq changed")
+            current_freq = dev:get_frequency()
+            -- this direction has higher prioity
+            freq_efm_signal:set(0)
+            freqency_EFM_exchange:set(current_freq/1e3)
+            freq_uplink_signal:set(1)
+        elseif freq_efm_signal:get() > 0 then
+            dprintf("EFM freq changed")
+            current_freq = freqency_EFM_exchange:get() * 1e3
+            dev:set_frequency(current_freq)
+            freq_uplink_signal:set(0)
+            freq_efm_signal:set(0)
         end
     end
 end
@@ -156,50 +217,53 @@ function launch_rockets(launch_mode)
 end
 
 function SetCommand(command,value)
-    check_load_status()
-    if (command == Keys.WingPylonSmokeOn) then
-        -- test only
-        if (loading_list[2] == 1 or loading_list[5] == 1) then
-            if loading_list[2] == 1 then
-                WeaponSystem:launch_station(1)
-            end
-            if loading_list[5] == 1 then
-                WeaponSystem:launch_station(4)
-            end
-            smokepodstatus = 1 - smokepodstatus
-            if smokepodstatus == 1 then
-                dprintf("Smoke pod is ON")
+    if (get_elec_dc_status() and current_status[master_switch][2] == SWITCH_ON ) then
+        check_load_status()
+        if (command == Keys.WingPylonSmokeOn) then
+            -- test only
+            if (loading_list[2] == 1 or loading_list[5] == 1) then
+                if loading_list[2] == 1 then
+                    WeaponSystem:launch_station(1)
+                end
+                if loading_list[5] == 1 then
+                    WeaponSystem:launch_station(4)
+                end
+                smokepodstatus = 1 - smokepodstatus
+                if smokepodstatus == 1 then
+                    dprintf("Smoke pod is ON")
+                else
+                    dprintf("Smoke pod is OFF")
+                end
             else
-                dprintf("Smoke pod is OFF")
+                dprintf("No Smoke Pod on Pylon")
+                smokepodstatus = 0
             end
-        else
-            dprintf("No Smoke Pod on Pylon")
-            smokepodstatus = 0
-        end
-    elseif (command == Keys.NozzleSmokeOn) then
-        if (loading_list[7] == 1 or loading_list[8] == 1) then
-            WeaponSystem:launch_station(6)
-            WeaponSystem:launch_station(7)
-            nozzlesmokestatus = 1 - nozzlesmokestatus
-            if nozzlesmokestatus == 1 then
-                dprintf("Nozzle smoke is ON")
+        elseif (command == Keys.NozzleSmokeOn) then
+            if (loading_list[7] == 1 or loading_list[8] == 1) then
+                WeaponSystem:launch_station(6)
+                WeaponSystem:launch_station(7)
+                nozzlesmokestatus = 1 - nozzlesmokestatus
+                if nozzlesmokestatus == 1 then
+                    dprintf("Nozzle smoke is ON")
+                else
+                    dprintf("Nozzle smoke is OFF")
+                end
             else
-                dprintf("Nozzle smoke is OFF")
+                nozzlesmokestatus = 0
+                dprintf("Nozzle Smoke Not Loaded")
             end
-        else
-            nozzlesmokestatus = 0
-            dprintf("Nozzle Smoke Not Loaded")
+        elseif (command == Keys.WeaponFireOn) then
+            if weapon_system_mode == 2 then
+                -- rocket
+                launch_rockets(rockets_fire_mode)
+            else
+                fire_trigger_status = 1
+            end
+        elseif (command == Keys.WeaponFireOff) then
+            fire_trigger_status = 0
         end
-    elseif (command == Keys.WeaponFireOn) then
-        if weapon_system_mode == 2 then
-            -- rocket
-            launch_rockets(rockets_fire_mode)
-        else
-            fire_trigger_status = 1
-        end
-    elseif (command == Keys.WeaponFireOff) then
-        fire_trigger_status = 0
-    elseif (command == Keys.WeaponConfigAll) then
+    end
+    if (command == Keys.WeaponConfigAll) then
         rockets_fire_mode = 3
         dprintf("rocket fire mode All")
     elseif (command == Keys.WeaponConfigSingle) then
@@ -208,6 +272,32 @@ function SetCommand(command,value)
     elseif (command == Keys.WeaponConfigPairs) then
         rockets_fire_mode = 2
         dprintf("rocket fire mode Pairs")
+    elseif (command == Keys.WeaponMasterSwitch) then
+        target_status[master_switch][2] = 1 - target_status[master_switch][2]
+        check_load_status()
+    elseif (command == Keys.GunSightInstall) then
+        gun_sight_is_installed = 1
+        gun_sight_animation:set(1 - gun_sight_is_installed)
+    elseif (command == Keys.GunSightUninstall) then
+        gun_sight_is_installed = 0
+        gun_sight_animation:set(1 - gun_sight_is_installed)
+    end
+end
+
+function update_switch_status()
+    local switch_moving_step = 0.25
+    for k,v in pairs(target_status) do
+        if math.abs(target_status[k][2] - current_status[k][2]) < switch_moving_step then
+            current_status[k][2] = target_status[k][2]
+        elseif target_status[k][2] > current_status[k][2] then
+            current_status[k][2] = current_status[k][2] + switch_moving_step
+        elseif target_status[k][2] < current_status[k][2] then
+            current_status[k][2] = current_status[k][2] - switch_moving_step
+        end
+        target_status[k][3]:set(current_status[k][2])
+        local temp_switch_ref = get_clickable_element_reference(target_status[k][4])
+        temp_switch_ref:update()
+        -- print_message_to_user(k)
     end
 end
 
@@ -215,6 +305,7 @@ function update()
     -- check_load_status()
     pod_smoke_light:set(smokepodstatus)
     nozzle_smoke_light:set(nozzlesmokestatus)
+    update_switch_status()
     if fire_trigger_status == 1 then
         for i = 1, 3, 1 do
             if loading_list[i] == 3 then
@@ -223,6 +314,7 @@ function update()
             end
         end
     end
+    check_frequency_change()
 end
 
 need_to_be_closed = false
