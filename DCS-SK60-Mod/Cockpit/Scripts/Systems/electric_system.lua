@@ -99,8 +99,8 @@ function update_elec_state() --更新电力总线状态
 
     if elec_battery_status:get() < 0 then
         elec_battery_status:set(0)
-    elseif elec_battery_status:get() > 30000 then
-        elec_battery_status:set(30000)
+    elseif elec_battery_status:get() > 3000000 then
+        elec_battery_status:set(3000000)
     end
 end
 
@@ -111,7 +111,7 @@ function post_initialize() --默认初始化函数
     local set_elec_pointer = get_param_handle("ELEC_POINTER")
     set_elec_pointer:set(str_ptr)
     -- end of block
-    elec_battery_status:set(30000)
+    elec_battery_status:set(3000000)
     local birth = LockOn_Options.init_conditions.birth_place
     if birth=="GROUND_HOT" or birth=="AIR_HOT" then --"GROUND_COLD","GROUND_HOT","AIR_HOT"
         electric_system:AC_Generator_1_on(true)
