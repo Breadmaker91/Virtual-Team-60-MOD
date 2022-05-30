@@ -91,7 +91,7 @@ animation_list = {
     {"CLOCK_S", 344},
 
     {"OXY_QUAN", 329},
-    {"BARO_ALT", 330},
+    {"ALT_XH_DIGTAL", 330, {0, 1000}, {0, 1}},
     {"BARO_x1H", 331},
     {"BARO_x1K", 332},
     {"BARO_x1W", 333},
@@ -165,6 +165,11 @@ animation_list = {
     -- Weapon panel
     {"PTN_413", 413},
     {"PTN_414", 414},
+
+    -- generator
+    {"PTN_415", 415},
+    {"PTN_422", 422},
+
     -- gun sight
     {"GUN_SIGHT", 915},
 
@@ -203,6 +208,9 @@ animation_list = {
     {"PTN_522", 522},
     {"PTN_523", 523},
     {"PTN_524", 524},
+
+    -- ipad model shown
+    {"IPAD_SHOWN", 950},
 }
 
 --[[
