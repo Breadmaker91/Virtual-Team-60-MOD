@@ -91,6 +91,16 @@ dev:listen_command(Keys.L_STARTER_RELEASE)
 dev:listen_command(Keys.L_STARTER_PRESS)
 dev:listen_command(Keys.Nav_Right_Knob_Push)
 
+-- iCommandPlaneViewVertical 2008
+-- iCommandPlaneViewHorizontal 2007
+dev:listen_command(2036)
+dev:listen_command(2037)
+dev:listen_command(2142)-- iService
+dev:listen_command(2143)-- 2143
+-- iCommandCockpitClickModeOnOff	363
+dev:listen_command(Keys.Custom_Menu)
+dev:listen_command(363)-- 2143
+
 local pos_x_loc, pos_y_loc, alt, coord
 
 function updateGPS()
@@ -115,15 +125,36 @@ end
 
 NS430_Test_Status = 0;
 
+cursor_v = 0
+cursor_h = 0
+viewang_v = 0
+viewang_h = 0
+
 function SetCommand(command,value)
-    --[[
-    if (command == Keys.L_STARTER_PRESS) then
-        print_message_to_user("Pressed")
-    elseif (command == Keys.L_STARTER_RELEASE) then
-        print_message_to_user("Release")
+    if (command == 9100) then
+        cursor_h = value
+        print_message_to_user("9100")
+    elseif (command == 2037) then
+        cursor_v = value
+        print_message_to_user("received")
+    elseif (command == 2142) then
+        viewang_h = value
+    elseif (command == 2143) then
+        viewang_v = value
+    elseif (command == Keys.Custom_Menu) then
+        -- ask the click mode to off
+        print_message_to_user("menu triggered")
+        -- force click off
+        -- dispatch_action(nil, 363)
+        -- force close transpose mode
+        -- dispatch_action(nil, 1594)
+        -- dispatch_action(nil, iCommandMouseViewOn, 1)
     end
-    ]]
+    -- print_message_to_user(command)
 end
+
+local debug_line1 = get_param_handle("DEBUG_LINE1")
+local debug_line2 = get_param_handle("DEBUG_LINE2")
 
 function update()
     --gps_base:set(1)
@@ -221,4 +252,9 @@ function update()
         ns430_base_page:set(1)
     end
     ]]
+
+    debug_line1:set("HORI HEAD: " ..string.format("%.2f", viewang_h).. "; HORI CURSOR: "..string.format("%.2f", cursor_h))
+    debug_line2:set("VERT HEAD: " ..string.format("%.2f", viewang_v).. "; VERT CURSOR: "..string.format("%.2f", cursor_v))
 end
+
+need_to_be_closed = false
