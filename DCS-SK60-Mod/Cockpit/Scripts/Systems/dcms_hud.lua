@@ -101,15 +101,6 @@ dev:listen_command(363)-- 2143
 
 local pos_x_loc, pos_y_loc, alt, coord
 
-function updateGPS()
-    pos_x_loc, alt, pos_y_loc= sensor_data.getSelfCoordinates()
-    coord = lo_to_geo_coords(pos_x_loc, pos_y_loc)
-    -- temp_dbg:set(coord.lat)
-    gps_receiver_lat:set(coord.lat)
-    gps_receiver_lon:set(coord.lon)
-    gps_receiver_alt:set(alt)
-end
-
 function post_initialize()
     hud_FD_x:set(0)
     hud_FD_y:set(0)
@@ -118,7 +109,7 @@ function post_initialize()
     hud_maxg_dis:set(1)
     --gps_base:set(1)
     erpm_power:set(0)
-    updateGPS()
+
 end
 
 NS430_Test_Status = 0;
@@ -159,6 +150,11 @@ function SetCommand(command,value)
     -- 
     ]]--
 end
+
+local testParam = get_param_handle("TEST_TEXTURE_STATE")
+local counter_test = 0
+
+local is_get_mission_route = 0
 
 function update()
     --gps_base:set(1)
@@ -234,7 +230,6 @@ function update()
     --print_message_to_user(temp_dbg:get())
     --print_message_to_user("maxI:"..temp_dbg1:get())
     --print_message_to_user("minI:"..temp_dbg2:get())
-    updateGPS()
     --left_n1:set(sensor_data.getEngineLeftRPM())
     --print_message_to_user(left_n1:get())
     --ehsi_enable:set(1)
@@ -256,6 +251,11 @@ function update()
         ns430_base_page:set(1)
     end
     ]]
+    -- print_message_to_user(line1_lat:get())
+    -- print_message_to_user(line1_lon:get())
+    -- local temp_dbg2 = get_param_handle("NS430_FPL_ACT_DISPLAY")
+    -- temp_dbg2:set(1)
+    -- print_message_to_user(temp_dbg2:get())
 end
 
 need_to_be_closed = false
