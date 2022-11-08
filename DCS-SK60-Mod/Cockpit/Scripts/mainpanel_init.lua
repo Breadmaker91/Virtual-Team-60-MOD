@@ -143,21 +143,16 @@ animation_list = {
     {"PTN_117", 117},
 	{"PTN_131", 131}, --{0, 1}, {0.12, 0.19}},
     {"PTN_132", 132}, --{0, 1}, {0.7, 1}},
-
-    {"PTN_136", 136}, --{0, 1}, {0.12, 0.19}},
-    {"PTN_137", 137}, --{0, 1}, {0.7, 1}},
     
     {"PTN_601", 601},
 
     -- Airbrake Ind
     {"AIRBRAKE_IND", 316},
-    {"FLAP_LEVEL", 43},
 
     -- Electric power
     {"PTN_401", 401}, -- Main Power
     {"PTN_402", 402}, -- Left Gen
     {"PTN_404", 404}, -- Right Gen
-    {"PTN_417", 417}, -- Nav Bus
 
     -- Engine
     {"PTN_405", 405},
@@ -267,7 +262,7 @@ Landinggearhandle.parameter_name	= "PTN_083"
 
 Fuel								= CreateGauge ()
 Fuel.arg_number						= 354
-Fuel.input							= {0, 1640}
+Fuel.input							= {0, 1134}
 Fuel.output							= {0, 1}
 Fuel.controller						= controllers.base_gauge_TotalFuelWeight
 

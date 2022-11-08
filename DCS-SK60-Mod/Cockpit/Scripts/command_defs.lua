@@ -344,8 +344,6 @@ Keys =
     Display_Brighter = 5200,
     Display_Darker = 5201,
     EALT_BARO = 5202,
-    -- Main Nav Power Bus
-    Nav_Main_Power = 5500,
 
     -- 5500 - 5550 Engine Conrol
     L_LP_PUMP = 5501,
