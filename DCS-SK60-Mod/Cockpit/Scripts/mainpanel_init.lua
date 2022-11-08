@@ -81,9 +81,7 @@ animation_list = {
     {"MainLWPOS_IND", 319},
     {"MainRWPOS_IND", 320},
     {"MACH_IND", 322},
-    -- {"G_METER", 323},
-    {"G_CURRENT_EFM", 323},
-    {"G_MAX_EFM", 324},
+    {"G_METER", 323},
     {"GYRO_ROLL", 335},
     {"GYRO_PITCH", 334},
 
@@ -129,7 +127,7 @@ animation_list = {
 	{"MainRWPOS_IND", 320},
 
     {"Inside_Canopy", 38, {0, 1}, {1, 0}},
-    {"RUDDER_PADDLE", 3, {-1, 1}, {1, -1}},
+    {"RUDDER_PADDLE", 3},
     {"BRAKE_LEFT", 4},
     {"BRAKE_RIGHT", 5},
 
@@ -213,8 +211,6 @@ animation_list = {
 
     -- ipad model shown
     {"IPAD_SHOWN", 950},
-    -- show the ias panel
-    {"IAS_TEXT", 900},
 }
 
 --[[
