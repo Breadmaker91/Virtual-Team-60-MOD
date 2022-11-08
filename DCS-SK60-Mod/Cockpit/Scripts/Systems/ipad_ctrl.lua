@@ -72,7 +72,6 @@ ipad:listen_command(Keys.MusicFastBack)
 ipad:listen_command(Keys.MusicLrcViewTrigger)
 ipad:listen_command(Keys.MusicVolUp)
 ipad:listen_command(Keys.MusicVolDown)
-ipad:listen_command(Keys.MusicScreenHide)
 
 local mp3_screen_enable = get_param_handle("MP3_SCR_ENABLE")
 local mp3_music_list_enable = get_param_handle("MP3_MUSIC_LIST_ENABLE")
@@ -109,7 +108,7 @@ function post_initialize()
     end
     if ipad_shown == 1 then
         ipad_handle:set(1)
-        ipad_display:set(0.7)
+        ipad_display:set(1)
     end
     sndhost = create_sound_host("COCKPIT", "HEADPHONES", 0, 0, 0)
     function initSnd(_i, _v)
@@ -218,12 +217,6 @@ function SetCommand(command,value)
 		else
 			Volume = 0
 		end
-    elseif (command == Keys.MusicScreenHide) then
-        if ipad_shown > 0.001 then
-            ipad_shown = 0
-        else
-            ipad_shown = 1
-        end
 	end
 end
 -- 显示歌单的函数
@@ -588,17 +581,9 @@ function update_switch_status()
     end
 end
 
-local general_brightness = get_param_handle("NS430_POWER")
-
 function update()
-    if (general_brightness:get() > 0.001) then
-        ipad_brightness = ipad_shown * general_brightness:get()
-    else
-        ipad_brightness = ipad_shown * 0.7
-    end
-    ipad_display:set(ipad_brightness)
     ipad_handle:set(-ipad_shown)
-    mp3_screen_enable:set(ipad_brightness)
+    mp3_screen_enable:set(ipad_shown)
     update_mp3()
     updateAMstyle()
 end
