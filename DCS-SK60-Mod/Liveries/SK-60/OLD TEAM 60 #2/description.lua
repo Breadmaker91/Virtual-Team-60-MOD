@@ -17,10 +17,13 @@ livery = {
 	{"SK60_Mask",	ROUGHNESS_METALLIC				,	"../OLD TEAM 60 #1/SK60_mask_roughmet", false};
 	{"SK60_Mask",	NORMAL							,	"../OLD TEAM 60 #1/SK60_mask_normal", false};
 	{"Panel Board.001",	DIFFUSE						,	"../OLD TEAM 60 #1/SK60_dashboardplate", false};
+	{"SK60_PilotSuit",	DIFFUSE						,	"../OLD TEAM 60 #1/SK60_PilotGSuit", false};
+	{"SK60_PilotGSuit",	ROUGHNESS_METALLIC			,	"../OLD TEAM 60 #1/SK60_PilotGSuit_roughmet", false};
+	{"SK60_PilotGSuit",	NORMAL						,	"../OLD TEAM 60 #1/SK60_PilotGSuit_normal", false};
+	{"undersuit.001",	DIFFUSE						,	"../OLD TEAM 60 #1/SK60_PilotOverall", false};
+	{"undersuit.001",	ROUGHNESS_METALLIC			,	"../OLD TEAM 60 #1/SK60_PilotOverall_roughmet", false};
+	{"undersuit.001",	NORMAL						,	"../OLD TEAM 60 #1/SK60_PilotOverall_normal", false};
 	{"SK60_PilotPatch",	DIFFUSE						,	"../OLD TEAM 60 #1/SK60_Patch", false};
-	{"Pilot_Body",	DIFFUSE							,	"../OLD TEAM 60 #1/Pilot_Suit", false};
-	{"Pilot_Body",	ROUGHNESS_METALLIC				,	"../OLD TEAM 60 #1/Pilot_Suit_roughmet", false};
-	{"Pilot_Body",	NORMAL							,	"../OLD TEAM 60 #1/Pilot_Suit_normal", false};
 	{"SK60_pilothead",	DIFFUSE				,	"SK60_pilothead", false};
 	
 	--BORT NUMBERS---------------------------------------------------------------	

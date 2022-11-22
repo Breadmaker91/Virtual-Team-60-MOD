@@ -17,9 +17,13 @@ livery = {
 	{"SK60_Mask",				ROUGHNESS_METALLIC	,	"SK60_mask_roughmet", false};
 	{"SK60_Mask",				NORMAL				,	"SK60_mask_normal", false};
 	{"Panel Board.001",	DIFFUSE				,	"SK60_dashboardplate", false};
-	{"Pilot_Body",	DIFFUSE				,	"Pilot_Suit", false};
-	{"Pilot_Body",	ROUGHNESS_METALLIC	,	"Pilot_Suit_roughmet", false};
-	{"Pilot_Body",	NORMAL				,	"Pilot_Suit_normal", false};
+	{"SK60_PilotSuit",	DIFFUSE				,	"SK60_PilotGSuit", false};
+	{"SK60_PilotGSuit",	ROUGHNESS_METALLIC	,	"SK60_PilotGSuit_roughmet", false};
+	{"SK60_PilotGSuit",	NORMAL				,	"SK60_PilotGSuit_normal", false};
+	{"undersuit.001",	DIFFUSE				,	"SK60_PilotOverall", false};
+	{"undersuit.001",	ROUGHNESS_METALLIC	,	"SK60_PilotOverall_roughmet", false};
+	{"undersuit.001",	NORMAL				,	"SK60_PilotOverall_normal", false};
+	{"SK60_PilotPatch",	DIFFUSE				,	"SK60_Patch", false};
 	{"SK60_pilothead",	DIFFUSE				,	"SK60_pilothead", false};
 	
 	
