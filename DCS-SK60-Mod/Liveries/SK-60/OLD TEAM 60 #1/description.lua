@@ -21,6 +21,7 @@ livery = {
 	{"Pilot_Body",	ROUGHNESS_METALLIC	,	"Pilot_Suit_roughmet", false};
 	{"Pilot_Body",	NORMAL				,	"Pilot_Suit_normal", false};
 	{"SK60_pilothead",	DIFFUSE				,	"SK60_pilothead", false};
+	{"Kneeboard_Page",	DIFFUSE				,	"SK60_KneeboardPage", false};
 	
 	
 	--BORT NUMBERS---------------------------------------------------------------	

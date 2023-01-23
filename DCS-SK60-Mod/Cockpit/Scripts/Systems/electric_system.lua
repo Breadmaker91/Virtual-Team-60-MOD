@@ -237,6 +237,7 @@ end
 function update() --刷新状态
     update_switch_status()
     update_elec_state()
+    nav_switch_transfer:set(target_status[main_nav_switch][2])
 end
 
 --[[
