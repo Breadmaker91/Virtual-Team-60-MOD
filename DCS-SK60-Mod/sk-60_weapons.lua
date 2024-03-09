@@ -321,7 +321,7 @@ function akan_m55_gun(tbl)
 		-- use temp 20mm here
 		shells = { "MINGR55", "MINGR55", "MINGR55" },
 		mixes  = { { 1, 2, 3, 1, 2, 3 } }, -- 50% HE-i, 25% AP-I, 25% AP-T
-		count  = 300,
+		count  = 150,
 	}
 	if tbl.mixes then
 		tbl.supply.mixes = tbl.mixes
