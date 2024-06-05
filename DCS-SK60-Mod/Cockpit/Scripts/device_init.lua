@@ -10,7 +10,7 @@ creators  = {}
 -- Basic power module
 creators[devices.ELECTRIC_SYSTEM] ={"avSimpleElectricSystem",LockOn_Options.script_path.."Systems/electric_system.lua"}
 -- Control plane module
-creators[devices.PRISURFACE]      ={"avLuaDevice"           ,LockOn_Options.script_path.."priControlSurface.lua"}
+--creators[devices.PRISURFACE]      ={"avLuaDevice"           ,LockOn_Options.script_path.."priControlSurface.lua"}
 -- Hatch, the simplest single monitoring module
 creators[devices.CANOPY]          ={"avLuaDevice"           ,LockOn_Options.script_path.."Systems/canopy.lua"}
 -- Brakes include air brakes, which mainly depend on the dispatch action of the braking system.
@@ -43,7 +43,8 @@ creators[devices.MENU_SYSTEM]     ={"avLuaDevice"           ,LockOn_Options.scri
 -- gps_receiver & the uplink databus to EFM
 creators[devices.UP_LINK]         ={"avLuaDevice"           ,LockOn_Options.script_path.."Systems/gps_receiver.lua"}
 creators[devices.MISCELANIOUS]     ={"avLuaDevice"            ,LockOn_Options.script_path.."Systems/miscelanious.lua"}
---creators[devices.EXTRA]     		={"avLuaDevice"            ,LockOn_Options.script_path.."Systems/extra.lua"}
+creators[devices.animations]     		={"avLuaDevice"            ,LockOn_Options.script_path.."Systems/animations.lua"}
+creators[devices.gunsight]              = {"avLuaDevice", LockOn_Options.script_path .. "GunSight/Device/Gunsight.lua"}
 -- Define display
 -- Indicators
 indicators = {}

@@ -2,8 +2,8 @@ multiplier_suspen = 5000000000--24005000;
 				--  16317400
 multi2 = 12 -- 6-- fit 2.5G max overload when fully retract
 
-multi2_damp_f = 32000--8000
-multi2_damp_b = 26000
+multi2_damp_f = 55000.0--32000--8000
+multi2_damp_b = multi2_damp_f*0.45--26000
 
 -- force = spring_force_factor * pow(reduce_length, amortizer_spring_force_factor_rate)
 

@@ -141,9 +141,9 @@ local M56_ARAK135HE = {
 
 	warhead	=
 	{
-		mass				= 4.2,
+		mass				= 21.6,
 		-- 3.7kg TNT
-		expl_mass 			= 3.7,
+		expl_mass 			= 21.6,
 		other_factors 		= { 2.0, 2.5, 2.5},--{ 1.0, 0.5, 0.5},
 		concrete_factors 	= { 0.8, 0.8, 0.8},--{ 1.0, 0.5, 0.1},
 		concrete_obj_factor = 0.8,
@@ -213,14 +213,14 @@ local M49_PSRAK145HEAT = {
             work_tail   = 1.5,
 
             smoke_color = {0.1, 0.1, 0.1},
-			smoke_transparency = 0.8,--0.8,
+			smoke_transparency = 0.1,--0.8,
         },
 
 	warhead	=
 	{
-		mass				= 4.2,
+		mass				= 19.7,
 		-- 3.7kg TNT
-		expl_mass 			= 3.7,
+		expl_mass 			= 19.7,
 		other_factors 		= { 2.0, 2.5, 2.5},--{ 1.0, 0.5, 0.5},
 		concrete_factors 	= { 0.8, 0.8, 0.8},--{ 1.0, 0.5, 0.1},
 		concrete_obj_factor = 0.8,
@@ -343,7 +343,7 @@ function akan_m55_gun(tbl)
 	tbl.ejector_dir             = { -1, -6, 0 } -- left/right; back/front;?/?
 	tbl.supply_position         = tbl.supply_position or { 0, 0.3, -0.3 }
 	tbl.aft_gun_mount           = false
-	tbl.effective_fire_distance = 2000
+	tbl.effective_fire_distance = 200000
 	tbl.drop_cartridge          = 204
 	tbl.muzzle_pos              = tbl.muzzle_pos or { 2.5, -0.4, 0 } -- all position from connector
 	tbl.muzzle_pos_connector    = tbl.muzzle_pos_connector or "Gun_point" -- all position from connector

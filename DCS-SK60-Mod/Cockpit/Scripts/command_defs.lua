@@ -8,6 +8,8 @@ end
 
 Keys =
 {
+	pilotToggle = __custom_counter(), 
+
 	PlanePickleOn	= 350,
 	PlanePickleOff	= 351,
     PlaneChgWeapon  = 101,
@@ -398,7 +400,9 @@ Keys =
     -- 6100 - 6200 for further warning system
     WARN_MASTER_CANCEL = 6100,
 	
-	--Breadmakers special additions
+	--6500 - 6900 Breadmakers special additions
+	PilotBody = 6500,
+	
 }
 
 --Increment click instructions starting from 5000
