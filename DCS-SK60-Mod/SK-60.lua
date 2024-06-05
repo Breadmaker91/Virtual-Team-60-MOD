@@ -129,7 +129,7 @@ SK_60 =  {
 			pos 		        = {- 2.6, 0.126, 0.7756}, -- nozzle coords
 			elevation           = 0,                -- AFB cone elevation
 			diameter	        = 0.001,                -- AFB cone diameter
-			exhaust_length_ab   = 0.01,                -- lenght in m
+			exhaust_length_ab   = 0,                -- lenght in m
 			exhaust_length_ab_K = 0.1,             -- AB animation
 			smokiness_level 	= 0.1
 		},  -- end of [1]
@@ -138,7 +138,7 @@ SK_60 =  {
 			pos 		        = {- 2.6, -0.126, -0.7756}, -- -07668 Y = -3469
 			elevation           = 0,                -- AFB cone elevation
 			diameter	        = 0.001,                -- AFB cone diameter
-			exhaust_length_ab   = 0.01,                -- lenght in m
+			exhaust_length_ab   = 0,                -- lenght in m
 			exhaust_length_ab_K = 0.76,             -- AB animation
 			smokiness_level 	= 0.1
 		},  -- end of [1]
