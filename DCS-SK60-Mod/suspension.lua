@@ -2,8 +2,8 @@ multiplier_suspen = 5000000000--24005000;
 				--  16317400
 multi2 = 12 -- 6-- fit 2.5G max overload when fully retract
 
-multi2_damp_f = 55000.0--32000--8000
-multi2_damp_b = multi2_damp_f*0.45--26000
+multi2_damp_f = 32000--8000
+multi2_damp_b = 26000
 
 -- force = spring_force_factor * pow(reduce_length, amortizer_spring_force_factor_rate)
 
@@ -80,7 +80,7 @@ suspension_data =
 		amortizer_basic_length					= 0.45,
 		amortizer_spring_force_factor			= multiplier_suspen,
 		amortizer_spring_force_factor_rate		= multi2,
-		amortizer_static_force					= 143, --1120
+		amortizer_static_force					= 1200, --143, --1120
 		amortizer_reduce_length					= 0.14,
 		amortizer_direct_damper_force_factor 	= multi2_damp_f,
 		amortizer_back_damper_force_factor 		= multi2_damp_b,
@@ -139,7 +139,7 @@ suspension_data =
 		amortizer_basic_length					= 0.45,
 		amortizer_spring_force_factor			= multiplier_suspen,
 		amortizer_spring_force_factor_rate		= multi2,
-		amortizer_static_force					= 143,  --1120
+		amortizer_static_force					= 1200, --143,  --1120
 		amortizer_reduce_length					= 0.14,
 		amortizer_direct_damper_force_factor 	= multi2_damp_f,
 		amortizer_back_damper_force_factor 		= multi2_damp_b,

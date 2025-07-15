@@ -8,6 +8,7 @@ devices = {}
 devices["ELECTRIC_SYSTEM"]			= counter() --1
 devices["PRISURFACE"]         		= counter() --2
 devices["CANOPY"]         			= counter() --3
+devices["General_Device"]			= counter() -- test
 devices["BREAK_SYSTEM"]				= counter() --4
 devices["WEAPON_SYSTEM"]			= counter() --5
 devices["UHF_RADIO"]				= counter() --6

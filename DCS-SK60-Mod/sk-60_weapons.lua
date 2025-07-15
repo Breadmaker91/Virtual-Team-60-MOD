@@ -1,99 +1,4 @@
-function declear_smoke_pod(_name, _color, _red, _green, _blue, _alpha, uuid)
-	local data = {
-		category		= CAT_PODS,
-		CLSID			= "{"..uuid.."}",
-		Picture	        = "smokePod.png",
-		PictureBlendColor = _color,		
-		displayName		= _("Team60 ".._name.." Smoke Pod"),
-		
-		attribute	=	{4,	15,	50,	WSTYPE_PLACEHOLDER},			
-		Smoke  = {
-			alpha = _alpha,
-			r  = _red,
-			g  = _green,
-			b  = _blue,
-			dx = -1.6,
-			dy = -0.05
-		},
-		
-		shape_table_data = 
-		{
-			{
-				name 	= "TEAM60-SMOKE-POD",
-				file	= "TEAM60-SMOKE-POD";
-				life	= 1;
-				fire	= {0, 1};
-				username= "{"..uuid.."}";
-				index	= WSTYPE_PLACEHOLDER;
-			},
-		},
-		Weight			= 15.5,
-		Count 			= 1,
-		Cx_pil			= 0.0005,
-		Elements		={{
-							ShapeName	=	"TEAM60-SMOKE-POD", 
-							Position	=	{0, 0, 0},
-						}}
-	}
 
-    declare_loadout(data)
-end
-
-function declear_smoke_nozzle(_name, _color, _red, _green, _blue, _alpha, uuid)
-	local data = {
-		category		= CAT_PODS,
-		CLSID			= "{"..uuid.."}",
-		Picture	        = "Nozzlesmoke.png",
-		PictureBlendColor = _color,		
-		displayName		= _("Team60 ".._name.." Nozzle Smoke"),
-		
-		attribute	=	{4,	15,	50,	WSTYPE_PLACEHOLDER},			
-		Smoke  = {
-			alpha = _alpha,
-			r  = _red,
-			g  = _green,
-			b  = _blue,
-			dx = -1.6,
-			dy = -0.05
-		},
-		
-		shape_table_data = 
-		{
-			{
-				name 	= "TEAM60",
-				file	= "TEAM60";
-				life	= 1;
-				fire	= {0, 1};
-				username= "{"..uuid.."}";
-				index	= WSTYPE_PLACEHOLDER;
-			},
-		},
-		Weight			= 1,
-		Count 			= 1,
-		Cx_pil			= 0,
-		Elements		={{
-                            ShapeName	=	"TEAM60-SMOKE", 
-							Position	=	{0, 0, 0},
-						}}
-	}
-
-    declare_loadout(data)
-end
-
-declear_smoke_pod('WHITE', '0xffffffff', 255, 255, 255, 200, '3d7bfa20-fefe-4642-ba1f-380d5ae4f9c1')
-declear_smoke_pod('RED', '0xcb1b45ff', 255, 30, 60, 200, '3d7bfa20-fefe-4642-ba1f-380d5ae4f9c2')
-declear_smoke_pod('YELLOW', '0xffc408ff', 255, 196, 8, 200, '3d7bfa20-fefe-4642-ba1f-380d5ae4f9c3')
-declear_smoke_pod('ORANGE', '0xffb11bff', 255, 177, 27, 200, '3d7bfa20-fefe-4642-ba1f-380d5ae4f9c4')
-declear_smoke_pod('GREEN', '0x1b813eff', 27, 130, 62, 200, '3d7bfa20-fefe-4642-ba1f-380d5ae4f9c5')
-declear_smoke_pod('BLUE', '0x2ea9dfff', 46, 169, 233, 200, '3d7bfa20-fefe-4642-ba1f-380d5ae4f9c6')
-
-
-declear_smoke_nozzle('WHITE', '0xffffffff', 255, 255, 255, 200, '3d7bfa20-fefe-4642-ba1f-380d5ae4f9d1')
-declear_smoke_nozzle('RED', '0xcb1b45ff', 255, 30, 60, 200, '3d7bfa20-fefe-4642-ba1f-380d5ae4f9d2')
-declear_smoke_nozzle('YELLOW', '0xffc408ff', 255, 196, 8, 200, '3d7bfa20-fefe-4642-ba1f-380d5ae4f9d3')
-declear_smoke_nozzle('ORANGE', '0xffb11bff', 255, 177, 27, 200, '3d7bfa20-fefe-4642-ba1f-380d5ae4f9d4')
-declear_smoke_nozzle('GREEN', '0x1b813eff', 27, 130, 62, 200, '3d7bfa20-fefe-4642-ba1f-380d5ae4f9d5')
-declear_smoke_nozzle('BLUE', '0x2ea9dfff', 46, 169, 233, 200, '3d7bfa20-fefe-4642-ba1f-380d5ae4f9d6')
 
 -- rockets and rocket pods 
 
@@ -141,9 +46,9 @@ local M56_ARAK135HE = {
 
 	warhead	=
 	{
-		mass				= 21.6,
+		mass				= 4.2,
 		-- 3.7kg TNT
-		expl_mass 			= 21.6,
+		expl_mass 			= 3.7,
 		other_factors 		= { 2.0, 2.5, 2.5},--{ 1.0, 0.5, 0.5},
 		concrete_factors 	= { 0.8, 0.8, 0.8},--{ 1.0, 0.5, 0.1},
 		concrete_obj_factor = 0.8,
@@ -213,14 +118,14 @@ local M49_PSRAK145HEAT = {
             work_tail   = 1.5,
 
             smoke_color = {0.1, 0.1, 0.1},
-			smoke_transparency = 0.1,--0.8,
+			smoke_transparency = 0.8,--0.8,
         },
 
 	warhead	=
 	{
-		mass				= 19.7,
+		mass				= 4.2,
 		-- 3.7kg TNT
-		expl_mass 			= 19.7,
+		expl_mass 			= 3.7,
 		other_factors 		= { 2.0, 2.5, 2.5},--{ 1.0, 0.5, 0.5},
 		concrete_factors 	= { 0.8, 0.8, 0.8},--{ 1.0, 0.5, 0.1},
 		concrete_obj_factor = 0.8,
@@ -321,7 +226,7 @@ function akan_m55_gun(tbl)
 		-- use temp 20mm here
 		shells = { "MINGR55", "MINGR55", "MINGR55" },
 		mixes  = { { 1, 2, 3, 1, 2, 3 } }, -- 50% HE-i, 25% AP-I, 25% AP-T
-		count  = 150,
+		count  = 300,
 	}
 	if tbl.mixes then
 		tbl.supply.mixes = tbl.mixes
@@ -343,7 +248,7 @@ function akan_m55_gun(tbl)
 	tbl.ejector_dir             = { -1, -6, 0 } -- left/right; back/front;?/?
 	tbl.supply_position         = tbl.supply_position or { 0, 0.3, -0.3 }
 	tbl.aft_gun_mount           = false
-	tbl.effective_fire_distance = 200000
+	tbl.effective_fire_distance = 2000
 	tbl.drop_cartridge          = 204
 	tbl.muzzle_pos              = tbl.muzzle_pos or { 2.5, -0.4, 0 } -- all position from connector
 	tbl.muzzle_pos_connector    = tbl.muzzle_pos_connector or "Gun_point" -- all position from connector

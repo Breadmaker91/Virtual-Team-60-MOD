@@ -2,6 +2,7 @@ local cscripts = folder.."../../../Cockpit/Scripts/"
 dofile(cscripts.."devices.lua")
 dofile(cscripts.."command_defs.lua")
 
+
 local kneeboard_id = 100
 if devices and devices.KNEEBOARD then
    kneeboard_id = devices.KNEEBOARD
@@ -54,7 +55,8 @@ keyCommands = {
     {down = iCommandPlaneAUTDecreaseRegimeRight,	name = _('Throttle Step Down Right'),	category = _('Flight Control')},
 
     -- Systems
-    {down = iCommandPowerOnOff,					name = _('Electric Power Switch'),		category = _('Systems')},
+    {down = iCommandPowerOnOff,					name = _('Electric Power Switch ON'),		category = _('Systems')},
+	{down = iCommandPowerOnOff,					name = _('Electric Power Switch OFF'),		category = _('Systems')},
     {down = iCommandPlaneAirBrake,				name = _('Airbrake'),					category = _('Systems') , features = {"airbrake"}},
     {down = iCommandPlaneAirBrakeOn,up = Keys.AirbrakePauseMove,			name = _('Airbrake On'),				category = _('Systems') , features = {"airbrake"}},
     {down = iCommandPlaneAirBrakeOff,up = Keys.AirbrakePauseMove,			name = _('Airbrake Off'),				category = _('Systems') , features = {"airbrake"}},
@@ -69,7 +71,8 @@ keyCommands = {
     {down = iCommandPlaneGearUp,				name = _('Landing Gear Up'),			category = _('Systems')},
     {down = iCommandPlaneGearDown,				name = _('Landing Gear Down'),			category = _('Systems')},
     {down = iCommandPlaneWheelBrakeOn, up = iCommandPlaneWheelBrakeOff,			name = _('Wheel Brake On'),		category = _('Systems')},
-    {down = iCommandPlaneFonar,					name = _('Canopy Open/Close'),			category = _('Systems')},
+    {down = iCommandPlaneFonar,value_down= 1, value_up = 0,	name = _('Canopy Open'),			category = _('Systems')},
+	{down = iCommandPlaneFonar,value_down= 0, value_up = 0,	name = _('Canopy Close'),			category = _('Systems')},
     {down = iCommandPlaneParachute,				name = _('Dragging Chute'),				category = _('Systems'),	features = {"dragchute"}},
     {down = iCommandPlaneResetMasterWarning,	name = _('Audible Warning Reset'),		category = _('Systems')},
     {down = iCommandPlaneJettisonWeapons,up = iCommandPlaneJettisonWeaponsUp,	name = _('Weapons Jettison'),	category = _('Systems')},
@@ -335,9 +338,6 @@ keyCommands = {
     {down = iCommandPlaneAirBrakeOn,	up = iCommandPlaneAirBrakeOff,			name = _('HOTAS Airbrake'),					category = _('Systems') },
 
     -- Systems
-    --{down = Keys.FlapUp, name = _('Flaps Up'), category = _('Systems')},
-    --{down = Keys.FlapDown, name = _('Flaps Down'), category = _('Systems')},
-    --{down = Keys.Flap, name = _('Flaps Up/Down'), category = _('Systems')},
     {down = iCommandPlaneAirRefuel, name = _('Refueling Boom'), category = _('Systems')},
     {down = iCommandPlaneJettisonFuelTanks, name = _('Jettison Fuel Tanks'), category = _('Systems')},
     {down = iCommandPlane_HOTAS_NoseWheelSteeringButton, up = iCommandPlane_HOTAS_NoseWheelSteeringButton, name = _('Nose Gear Maneuvering Range'), category = _('Systems')},
@@ -376,14 +376,26 @@ keyCommands = {
     {down = Keys.MusicLrcViewTrigger,		name = _('Music Display Lyrics'),			category = _('Music Player')},
 	
 	-- Breadmakers Additions
-	{down = 3401, up = 3401, value_down= 1, value_up = 0,	name = _('Main Battery Switch'), category = _('Electrical')},
-	{down = Keys.L_HP_PUMP,	value_down= 1, value_up = 0,	name = _('Left Fuel Pump'),					category = _('Engine Startup')},
-	{down = Keys.R_HP_PUMP,	value_down= 1, value_up = 0,	name = _('Right Fuel Pump'),				category = _('Engine Startup')},
-	{down = Keys.L_STARTER_PRESS,							name = _('Left Starter Switch'),			category = _('Engine Startup')},
-	{down = Keys.R_STARTER_PRESS,							name = _('Right Starter Switch'),			category = _('Engine Startup')},
-	{down = Keys.WeaponMasterSwitch,						name = _('Master Arm (Toggle)'),					category = _('Weapons')},
+	{down = Keys.BatteryPower, value_down= 1, value_up = 0,					name = _('FPL NAT ON'),   category = _('Electrical')},
+	{down = Keys.BatteryPower, value_down= 0, value_up = 0,					name = _('FPL NAT OFF'),  category = _('Electrical')},
+	{down = Keys.Nav_Main_Power, value_down= 1, value_up = 0,					name = _('NAV TILL'), category = _('Electrical')},
+	{down = Keys.Nav_Main_Power, value_down= 0, value_up = 0,					name = _('NAV FRAN'), category = _('Electrical')},	
+	{down = Keys.PowerGeneratorLeft, value_down= 1, value_up = 0,			name = _('OMF1 ON'),      category = _('Electrical')},
+	{down = Keys.PowerGeneratorLeft, value_down= 0, value_up = 0,			name = _('OMF1 OFF'),     category = _('Electrical')},
+	{down = Keys.PowerGeneratorRight, value_down= 1, value_up = 0,			name = _('OMF2 ON'),      category = _('Electrical')},
+	{down = Keys.PowerGeneratorRight, value_down= 0, value_up = 0,			name = _('OMF2 OFF'),     category = _('Electrical')},
+	{down = Keys.L_HP_PUMP,	value_down= 1, value_up = 0,	name = _('Left Fuel Pump OFF'),		      category = _('Engine Startup')},
+	{down = Keys.L_HP_PUMP,	value_down= 0.0, value_up = 0.0,	name = _('Left Fuel Pump ON'),	      category = _('Engine Startup')},
+	{down = Keys.R_HP_PUMP,	value_down= 1, value_up = 0,	name = _('Right Fuel Pump OFF'),	      category = _('Engine Startup')},
+	{down = Keys.R_HP_PUMP, value_down= 0.0, value_up = 0.0, name = _('Right Fuel Pump ON'), 	      category = _('Engine Startup')},
+	{down = Keys.L_STARTER_PRESS,							name = _('Left Starter Switch'),	      category = _('Engine Startup')},
+	{down = Keys.R_STARTER_PRESS,							name = _('Right Starter Switch'),	      category = _('Engine Startup')},
+	{down = Keys.WeaponMasterSwitch, value_down = 1, value_up = 0, name = _('Master Arm ON'),	      category = _('Weapons')},
+	{down = Keys.WeaponMasterSwitch, value_down = 0.0, value_up = 0.0, name = _('Master Arm OFF'),	  category = _('Weapons')},
+	{down = Keys.WARN_MASTER_CANCEL, value_down= 1, value_up = 0, name = _('Huvudvarning Kvittering'), category = _('Electrical')},
+	{down = Keys.GunSightInstall, value_down= 1, value_up = 0, name = _('Sikte Installera'), category = _('Weapons')},	
+	{down = Keys.GunSightUninstall, value_down = 0.0, value_up = 0.0, name = _('Sikte Parkera '),	  category = _('Weapons')},
 },
-
 
 
 -- joystick axes 
@@ -404,6 +416,7 @@ axisCommands = {
     {action = iCommandPlaneRoll,		name = _('Roll')},
     {action = iCommandPlanePitch,		name = _('Pitch')},
     {action = iCommandPlaneRudder,		name = _('Rudder')},
+	{action = iCommandPlaneRudder,	name = _('NWS')},
     {action = iCommandPlaneThrustCommon, name = _('Thrust')},
 
     {action = iCommandPlaneThrustLeft, name = _('Left Throttle')},
@@ -415,8 +428,9 @@ axisCommands = {
     {action = iCommandWheelBrake,		name = _('Wheel Brake')},
     {action = iCommandLeftWheelBrake,	name = _('Wheel Brake Left')},
     {action = iCommandRightWheelBrake,	name = _('Wheel Brake Right')},
-
-    -- trim
+	
+	{action = JOYSTICK.NoseWheelSteering,	name = _('NWS')}, --name = 'Nose Wheel Steering'},
+  
     {action = iCommandPlaneTrimPitch,	name = _('Elevator Trim')},
 },
 

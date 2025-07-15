@@ -376,7 +376,7 @@ return {
     {down = Keys.SpecialSence,			name = _('Tjena Hejsan'),				category = _('Special Function') },
     {down = Keys.Custom_Menu,			name = _('Trigger on Screen Menu'),				category = _('Special Function') },
     {down = Keys.Custom_Menu_Enter,			name = _('Menu Enter'),				category = _('Special Function') },
-	--{down = Keys.GunSight,			name = _('Toggle Gunsight'),				category = _('Special Function') },
+	--{down = Keys.PilotBody,			name = _('Toggle Pilot'),				category = _('Special Function') },
 
     -- Music Player
     {down = Keys.MusicPauseOrPlay,			name = _('Music Pause/Play'),				category = _('Music Player')},

@@ -5,6 +5,11 @@ local function __custom_counter()
 	return __count_custom
 end
 
+JOYSTICK =
+{
+	NoseWheelSteering = 13000,
+}
+
 
 Keys =
 {

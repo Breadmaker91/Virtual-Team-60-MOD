@@ -49,7 +49,7 @@ SK_60 =  {
 		H_max						=	13500,	-- m  (Maximum Operational Ceiling)
 		average_fuel_consumption	=	0.172,
 		CAS_min						=	56,		-- Minimum CAS speed (m/s) (for AI)
-		V_opt						=	200,	-- Cruise speed (m/s) (for AI)
+		V_opt						=	150,	-- Cruise speed (m/s) (for AI)
 		V_take_off					=	82,		-- Take off speed in m/s (for AI)
 		V_land						=	50,		-- Land speed in m/s (for AI)
 		has_afteburner				=	false,
@@ -129,7 +129,7 @@ SK_60 =  {
 			pos 		        = {- 2.6, 0.126, 0.7756}, -- nozzle coords
 			elevation           = 0,                -- AFB cone elevation
 			diameter	        = 0.001,                -- AFB cone diameter
-			exhaust_length_ab   = 0,                -- lenght in m
+			exhaust_length_ab   = 0.01,                -- lenght in m
 			exhaust_length_ab_K = 0.1,             -- AB animation
 			smokiness_level 	= 0.1
 		},  -- end of [1]
@@ -138,7 +138,7 @@ SK_60 =  {
 			pos 		        = {- 2.6, -0.126, -0.7756}, -- -07668 Y = -3469
 			elevation           = 0,                -- AFB cone elevation
 			diameter	        = 0.001,                -- AFB cone diameter
-			exhaust_length_ab   = 0,                -- lenght in m
+			exhaust_length_ab   = 0.01,                -- lenght in m
 			exhaust_length_ab_K = 0.76,             -- AB animation
 			smokiness_level 	= 0.1
 		},  -- end of [1]
