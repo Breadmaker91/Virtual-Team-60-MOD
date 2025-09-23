@@ -82,6 +82,8 @@ suspension_data =
 		amortizer_spring_force_factor_rate		= multi2,
 		amortizer_static_force					= 2500, --143, --1120
 		amortizer_reduce_length					= 0.14,
+		--amortizer_direct_damper_force_factor 	= 2900,
+		--amortizer_back_damper_force_factor 		= 1900,
 		amortizer_direct_damper_force_factor 	= multi2_damp_f,
 		amortizer_back_damper_force_factor 		= multi2_damp_b,
 
@@ -142,6 +144,8 @@ suspension_data =
 		amortizer_spring_force_factor_rate		= multi2,
 		amortizer_static_force					= 2500, --143,  --1120
 		amortizer_reduce_length					= 0.14,
+		--amortizer_direct_damper_force_factor 	= 2900,
+		--amortizer_back_damper_force_factor 		= 1900,
 		amortizer_direct_damper_force_factor 	= multi2_damp_f,
 		amortizer_back_damper_force_factor 		= multi2_damp_b,
 

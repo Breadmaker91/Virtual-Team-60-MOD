@@ -73,7 +73,7 @@ if FM_dll then
 	{
 		[1] = self_ID,
 		[2] = FM_dll,
-		center_of_mass = { -0.11, 0, 0},--{5.8784 - 4.572, -0.7883, 0},
+		center_of_mass = { -0.13, 0, 0},--{5.8784 - 4.572, -0.7883, 0},
 		-- the moment_of_inertia is following the data from nasa
 		-- reverse the axis of y and z
 		-- switched to a new estimation, which should be closer to real
