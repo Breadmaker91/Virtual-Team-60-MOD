@@ -73,10 +73,12 @@ if FM_dll then
 	{
 		[1] = self_ID,
 		[2] = FM_dll,
-		center_of_mass = {0, 0, 0},--{5.8784 - 4.572, -0.7883, 0},
+		center_of_mass = { -0.11, 0, 0},--{5.8784 - 4.572, -0.7883, 0},
 		-- the moment_of_inertia is following the data from nasa
 		-- reverse the axis of y and z
 		-- switched to a new estimation, which should be closer to real
+		--moment_of_inertia = {1200.0, 16000.0, 25000.0, 0.0},
+		--moment_of_inertia = {8000, 19000, 25000, 0},
 		moment_of_inertia = {4101.63245, 5354.650, 3278.804, 283.4},
 		suspension = suspension_data,
 	}

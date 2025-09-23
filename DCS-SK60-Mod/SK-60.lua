@@ -115,6 +115,7 @@ SK_60 =  {
 		length						=	10.8,	--XX
 		height						=	2.7,	--XX
 		crew_size					=	2, 		--XX
+		engine_type					=	1,
 		engines_count				=	2, 		--XX
 		wing_tip_pos 				= 	{ -1 , 0, -4.6},-- wingtip coords for visual effects
 		
@@ -129,18 +130,18 @@ SK_60 =  {
 			pos 		        = {- 2.6, 0.126, 0.7756}, -- nozzle coords
 			elevation           = 0,                -- AFB cone elevation
 			diameter	        = 0.001,                -- AFB cone diameter
-			exhaust_length_ab   = 0.01,                -- lenght in m
+			exhaust_length_ab   = 0,                -- lenght in m
 			exhaust_length_ab_K = 0.1,             -- AB animation
-			smokiness_level 	= 0.1
+			smokiness_level 	= 0
 		},  -- end of [1]
 		[2] = 
 		{
 			pos 		        = {- 2.6, -0.126, -0.7756}, -- -07668 Y = -3469
 			elevation           = 0,                -- AFB cone elevation
 			diameter	        = 0.001,                -- AFB cone diameter
-			exhaust_length_ab   = 0.01,                -- lenght in m
+			exhaust_length_ab   = 0,                -- lenght in m
 			exhaust_length_ab_K = 0.76,             -- AB animation
-			smokiness_level 	= 0.1
+			smokiness_level 	= 0
 		},  -- end of [1]
 	},      -- end of engines_nozzles
 		
@@ -551,7 +552,8 @@ pylons_enumeration = {6, 5, 4, 8, 7, 3, 2, 1},
 		209,
 
 		-- multicrew sync test
-		520,
+		
+		250,
 		521,
 		-- special
 		999,
