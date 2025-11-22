@@ -550,7 +550,8 @@ pylons_enumeration = {6, 5, 4, 8, 7, 3, 2, 1},
 		193, -- launch bar
 		194,
 		209,
-
+		303, -- n2 rpm left
+		304, -- n2 rpm right
 		-- multicrew sync test
 		
 		250,

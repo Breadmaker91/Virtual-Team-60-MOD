@@ -212,8 +212,8 @@ function update()
 
     if get_elec_dc_status() then
         erpm_power:set(1)
-        erpm_ln2:set(sensor_data.getEngineLeftRPM() * 100 / 1.2)
-        erpm_rn2:set(sensor_data.getEngineRightRPM() * 100 / 1.2)
+        erpm_ln2:set(get_aircraft_draw_argument_value(303) * 100)
+        erpm_rn2:set(get_aircraft_draw_argument_value(304) * 100)
         erpm_color:set(1)
     else
         erpm_power:set(0)
