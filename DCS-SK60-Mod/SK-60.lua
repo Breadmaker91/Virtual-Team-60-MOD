@@ -550,16 +550,23 @@ pylons_enumeration = {6, 5, 4, 8, 7, 3, 2, 1},
 		193, -- launch bar
 		194,
 		209,
+		250,
 		303, -- n2 rpm left
 		304, -- n2 rpm right
+		305, -- egt left
+		306, -- egt right
+		354,
 		-- multicrew sync test
-		
-		250,
+		401, -- main power
+		402, -- Left Generator (Inverter 1 Switch?)
+		404, -- Right Generator (Inverter 2 Switch?)
+		417, -- Nav Power Switch
+		418, -- Left Low Fuel Pump Switch
+		420, -- Right Low Fuel Pump Switch
 		521,
 		-- special
 		999,
 	},
-
 
 	--damage , index meaning see in  Scripts\Aircrafts\_Common\Damage.lua
 	Damage = verbose_to_dmg_properties(
