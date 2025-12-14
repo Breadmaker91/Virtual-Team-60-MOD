@@ -555,11 +555,19 @@ pylons_enumeration = {6, 5, 4, 8, 7, 3, 2, 1},
 		304, -- n2 rpm right
 		305, -- egt left
 		306, -- egt right
+		307, -- oil pressure left
+		308, -- oil pressure right
+		309, -- oil temperature left
+		310, -- oil temperature right
 		354,
 		-- multicrew sync test
 		401, -- main power
 		402, -- Left Generator (Inverter 1 Switch?)
 		404, -- Right Generator (Inverter 2 Switch?)
+		405, -- Left Engine Motor Starter
+		406, -- Left Main Fuel Pump
+		407, -- Right Engine Motor Starter
+		408, -- Left Main Fuel Pump
 		417, -- Nav Power Switch
 		418, -- Left Low Fuel Pump Switch
 		420, -- Right Low Fuel Pump Switch

@@ -160,14 +160,14 @@ animation_list = {
     {"PTN_417", 417}, -- Nav Bus
 
     -- Engine
-    {"PTN_405", 405},
-    {"PTN_406", 406},
-    {"PTN_407", 407},
-    {"PTN_408", 408},
-    {"PTN_418", 418},
-    {"PTN_420", 420},
-    {"PTN_604", 604},
-    {"PTN_605", 605},
+    {"PTN_405", 405}, -- Left Engine Motor Starter
+    {"PTN_406", 406}, -- Left Main Fuel Pump
+    {"PTN_407", 407}, -- Right Engine Motor Starter
+    {"PTN_408", 408}, -- Left Main Fuel Pump
+    {"PTN_418", 418}, -- Left Low Pressure Fuel Pump
+    {"PTN_420", 420}, -- Right Low Pressure Fuel Pump
+    {"PTN_604", 604}, -- Left throttle idle
+    {"PTN_605", 605}, -- Right Throttle Idle
 
     -- Weapon panel
     {"PTN_413", 413},
