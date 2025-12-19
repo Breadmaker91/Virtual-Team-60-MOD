@@ -1,23 +1,23 @@
---初始化座舱模型
+--Initialize cockpit model
 shape_name   	   = "Cockpit_SK_60"
 is_EDM			   = true
 new_model_format   = true
 
--- 一些颜色定义，基本没啥用
+-- Some color definitions are basically useless
 ambient_light    = {255,255,255}
 ambient_color_day_texture    = {72, 100, 160}
 ambient_color_night_texture  = {40, 60 ,150}
 ambient_color_from_devices   = {50, 50, 40}
 ambient_color_from_panels	 = {35, 25, 25}
 
--- 一些不用动的数据
+-- Some untouched data
 dusk_border					 = 0.4
 draw_pilot					 = false
 
--- 定义外部舱盖模型的arg值
+-- Define the arg value of the external hatch model
 external_model_canopy_arg	 = 38
 
--- 是否使用外部模型的座舱（指是否默认设置好114隐藏外部模型的座舱
+-- Whether to use the cockpit of the external model (referring to whether 114 is set to hide the cockpit of the external model by default)
 use_external_views = false
 
 local controllers = LoRegisterPanelControls()
@@ -37,6 +37,12 @@ mirrors_data = {
 	far_clip		  	= 60000;	
 	arg_value_when_on 	= 1.0;
 }
+
+local left_oil_pressure = get_param_handle("OP_LEFT")
+local right_oil_pressure = get_param_handle("OP_RIGHT")
+
+local left_oil_temp = get_param_handle("OT_LEFT")
+local right_oil_temp = get_param_handle("OT_RIGHT")
 
 TEMP_VAR = {}
 
@@ -284,3 +290,13 @@ need_to_be_closed = false
 
 --SOUNDS
 dofile(LockOn_Options.common_script_path.."tools.lua")
+
+function update()
+    left_oil_pressure:set(get_aircraft_draw_argument_value(307))
+    right_oil_pressure:set(get_aircraft_draw_argument_value(308))
+
+    left_oil_temp:set(get_aircraft_draw_argument_value(309))
+    right_oil_temp:set(get_aircraft_draw_argument_value(310))
+end
+
+-- get_player_crew_index()  -- this function can be used to get the index of the player crew in a multi-crew aircraft
