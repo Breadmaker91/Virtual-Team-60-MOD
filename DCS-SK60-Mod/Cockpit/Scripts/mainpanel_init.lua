@@ -38,11 +38,6 @@ mirrors_data = {
 	arg_value_when_on 	= 1.0;
 }
 
-local left_oil_pressure = get_param_handle("OP_LEFT")
-local right_oil_pressure = get_param_handle("OP_RIGHT")
-
-local left_oil_temp = get_param_handle("OT_LEFT")
-local right_oil_temp = get_param_handle("OT_RIGHT")
 
 TEMP_VAR = {}
 
@@ -291,12 +286,5 @@ need_to_be_closed = false
 --SOUNDS
 dofile(LockOn_Options.common_script_path.."tools.lua")
 
-function update()
-    left_oil_pressure:set(get_aircraft_draw_argument_value(307))
-    right_oil_pressure:set(get_aircraft_draw_argument_value(308))
-
-    left_oil_temp:set(get_aircraft_draw_argument_value(309))
-    right_oil_temp:set(get_aircraft_draw_argument_value(310))
-end
 
 -- get_player_crew_index()  -- this function can be used to get the index of the player crew in a multi-crew aircraft
