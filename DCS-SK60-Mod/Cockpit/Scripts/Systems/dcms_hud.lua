@@ -62,12 +62,6 @@ local gps_receiver_alt = get_param_handle("GPS_REC_ALT")
 --local ns430_base_page = get_param_handle("NAVU_BASE_ENABLE")
 local temp_dbg = get_param_handle("DBG_OUT_TMP")
 
---local left_oil_pressure = get_param_handle("OP_LEFT")
---local right_oil_pressure = get_param_handle("OP_RIGHT")
-
---local left_oil_temp = get_param_handle("OT_LEFT")
---local right_oil_temp = get_param_handle("OT_RIGHT")
-
 local sensor_data = get_base_data()
 local ias_conversion_to_knots = 1.9504132
 local ias_conversion_to_kmh =  1.9504132 -- easily convert to knots -- 3.6 
@@ -220,26 +214,11 @@ function update()
         erpm_power:set(1)
         erpm_ln2:set(get_aircraft_draw_argument_value(303) * 100)
         erpm_rn2:set(get_aircraft_draw_argument_value(304) * 100)
-
-       -- left_oil_pressure:set(get_aircraft_draw_argument_value(307))
-      --  right_oil_pressure:set(get_aircraft_draw_argument_value(308))
-
-      -- left_oil_temp:set(get_aircraft_draw_argument_value(309))
-       -- right_oil_temp:set(get_aircraft_draw_argument_value(310))
-
-
         erpm_color:set(1)
     else
         erpm_power:set(0)
         erpm_ln2:set(0.0)
         erpm_rn2:set(0.0)
-
-       -- left_oil_pressure:set(0.0)
-      --  right_oil_pressure:set(0.0)
-
-      --  left_oil_temp:set(0.0)
-      --  right_oil_temp:set(0.0)
-
         erpm_color:set(1)
     end
 
