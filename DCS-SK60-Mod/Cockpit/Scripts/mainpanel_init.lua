@@ -125,9 +125,6 @@ animation_list = {
     {"FUEL_QUAN_A_x100", 358},
     {"FUEL_QUAN_A_x10", 359},
     {"FUEL_QUAN_A_x1", 360},
-	{"NoseWPOS_IND", 318},
-	{"MainLWPOS_IND", 319},
-	{"MainRWPOS_IND", 320},
 
     {"Inside_Canopy", 38, {0, 1}, {1, 0}},
     {"RUDDER_PADDLE", 3, {-1, 1}, {1, -1}},
