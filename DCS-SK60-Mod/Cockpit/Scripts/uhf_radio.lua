@@ -8,7 +8,18 @@ dofile(LockOn_Options.script_path.."command_defs.lua")
 local gettext = require("i_18n")
 _ = gettext.translate
 
-local dev 	    = GetSelf()
+local dev = GetSelf()
+
+-- SRS compatibility
+function dev:is_on()
+    local radio_power = get_param_handle("RADIO_POWER")
+    return radio_power:get() > 0.5
+end
+
+function dev:get_frequency()
+    return current_freq
+end
+
 
 local update_time_step = 0.05 --update will be called once per second
 device_timer_dt = update_time_step

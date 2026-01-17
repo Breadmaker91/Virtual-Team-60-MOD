@@ -1,12 +1,21 @@
 dofile(LockOn_Options.script_path.."devices.lua")
 dofile(LockOn_Options.script_path.."command_defs.lua")
- 
-local dev 	    = GetSelf()
+
+local dev = GetSelf()
+
+-- SRS compatibility
+function dev:is_on()
+    return true
+end
+
+function dev:get_frequency()
+    return 0
+end
 
 GUI = {
 }
 
-local update_time_step = 0.05 --update will be called once per second
+local update_time_step = 0.05
 
 if make_default_activity then
     make_default_activity(update_time_step)
@@ -24,6 +33,4 @@ end
 function SetCommand(command,value)
 end
 
-
-need_to_be_closed = false -- close lua state after initialization
-
+need_to_be_closed = false

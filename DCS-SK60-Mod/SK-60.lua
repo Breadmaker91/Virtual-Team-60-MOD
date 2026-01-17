@@ -122,7 +122,7 @@ SK_60 =  {
 		EPLRS 					    = true,--can you be seen on the A-10C TAD Page?
 		TACAN_AA					= true,--I think this will not work for a client slot but AI might add a TACAN for the unit.
 
-	sounderName = "Aircraft/Planes/SK60_Sound",
+	--sounderName = "Aircraft/Planes/SK60_Sound",
 	
 	engines_nozzles = {
 		[1] = 
@@ -594,6 +594,20 @@ pylons_enumeration = {6, 5, 4, 8, 7, 3, 2, 1},
 		["FUSELAGE_BOTTOM"]  	= {critical_damage = 1, args = {-1}, },
 		["ENGINE_1"]			= {args = {160},	critical_damage = 2},
 		["ENGINE_2"]			= {args = {160},	critical_damage = 2},
+		
+		--["ELEVATOR_L"]  		= {critical_damage = 1, args = {-1}, },
+		--["ELEVATOR_R"]  		= {critical_damage = 1, args = {-1}, },
+		--["COCKPIT_WINDSHIELD"]	= {critical_damage = 1.8, args = {-1}, construction = {durability = 0.65, skin = "Aluminum"},},
+		--["KEEL"]  		= {critical_damage = 1, args = {-1}, },
+		--["KEEL_OUT"]  		= {critical_damage = 1, args = {-1}, },
+		--["NOSE_CENTER"]  		= {critical_damage = 1, args = {-1}, },	
+		--["RUDDER"]  		= {critical_damage = 1, args = {-1}, },	
+		--["STABILIZER_L_IN"]  		= {critical_damage = 1, args = {-1}, },	
+		--["STABILIZER_R_IN"]  		= {critical_damage = 1, args = {-1}, },	
+		--["WHEEL_F"]  		= {critical_damage = 1, args = {-1}, },	
+		--["WHEEL_L"]  		= {critical_damage = 1, args = {-1}, },
+		--["WHEEL_R"]  		= {critical_damage = 1, args = {-1}, },
+		
 	}),
 	
 	DamageParts = 
