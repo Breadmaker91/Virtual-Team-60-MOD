@@ -193,8 +193,8 @@ animation_list = {
     {"EFM_RIGHT_THRUST_A", 105},
     {"AIRSPEED_IND", 321},
 
-    {"POD_SMOKE", 900},
-    {"NOZZLE_SMOKE", 901},
+    {"POD_SMOKE", 902},
+    {"NOZZLE_SMOKE", 903},
 
     -- GNS 430
     {"PTN_509", 509},

@@ -8,11 +8,11 @@ local update_time_step = 0.02  --每秒50次刷新
 make_default_activity(update_time_step)
 
 sensor_data = get_base_data()
-local ias_conversion_to_knots = 1.9504132
+local ias_conversion_to_knots = 1  --1.9504132
 local ias_conversion_to_kmh = 3.6 
 local DEGREE_TO_RAD  = 0.0174532925199433
 local RAD_TO_DEGREE  = 57.29577951308233
-local METER_TO_INCH = 3.2808
+local METER_TO_INCH = 1 --3.2808
 
 gauge_count = 0
 function _gauge_counter()

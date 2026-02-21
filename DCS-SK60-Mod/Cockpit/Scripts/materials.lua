@@ -25,8 +25,8 @@ materials["TEST_RED"]     = {255, 0, 0, 140}
 materials["TEST_GREEN"]   = {0, 255, 0, 140}
 
 -- EADI
-materials["SKY_BLUE"] = {0,170,230,255}
-materials["GROUND_YELLOW"] = {42,34,29,255}
+materials["SKY_BLUE"] = {12,110,237,175} --{0,170,230,255}
+materials["GROUND_YELLOW"] = {0,0,0,120} --{42,34,29,255}
 
 -- MENU
 materials["MENU_GREY"]    = {30, 30, 30, 150}

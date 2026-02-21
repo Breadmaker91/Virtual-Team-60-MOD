@@ -1,0 +1,4 @@
+wave = "Effects/Aircrafts/SK-60/SK60_Engine_Ambient"
+inner_radius = 2
+outer_radius = 12
+gain = 0.6

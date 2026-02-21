@@ -129,21 +129,23 @@ SK_60 =  {
 		{
 			pos 		        = {- 2.6, 0.126, 0.7756}, -- nozzle coords
 			elevation           = 0,                -- AFB cone elevation
-			diameter	        = 0.001,                -- AFB cone diameter
-			exhaust_length_ab   = 0.0,                -- lenght in m
-			exhaust_length_ab_K = 0.1,             -- AB animation
-			smokiness_level 	= 0
+			diameter	        = 0.01,                -- AFB cone diameter
+			exhaust_length_ab   = 0.00,                -- lenght in m
+			exhaust_length_ab_K = 0.7,             -- AB animation
+			smokiness_level 	= 0.01
 		},  -- end of [1]
 		[2] = 
 		{
 			pos 		        = {- 2.6, -0.126, -0.7756}, -- -07668 Y = -3469
 			elevation           = 0,                -- AFB cone elevation
-			diameter	        = 0.001,                -- AFB cone diameter
-			exhaust_length_ab   = 0.0,                -- lenght in m
-			exhaust_length_ab_K = 0.76,             -- AB animation
-			smokiness_level 	= 0
+			diameter	        = 0.01,                -- AFB cone diameter
+			exhaust_length_ab   = 0.00,                -- lenght in m
+			exhaust_length_ab_K = 0.7,             -- AB animation
+			smokiness_level 	= 0.01
 		},  -- end of [1]
 	},      -- end of engines_nozzles
+	
+sounderName = "Aircraft/Planes/PlaneSK60",	
 		
 		crew_members = 
 		{
