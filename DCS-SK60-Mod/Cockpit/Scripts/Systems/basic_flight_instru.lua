@@ -107,7 +107,7 @@ function Altitude_Cal()
     local alt_analog = get_param_handle("ALT_XH_ANALOG")
 	alt_analog:set(baro_x100_target/10)
 
-    print_message_to_user(baro_x100_target)
+    --print_message_to_user(baro_x100_target)
 
     Gauge_display_state[Baro_alt_x1k][2] = baro_x1k_target/10
     Gauge_display_state[Baro_alt_x1w][2] = baro_x1w_target/10
