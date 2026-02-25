@@ -284,7 +284,7 @@ pylons_enumeration = {6, 5, 4, 8, 7, 3, 2, 1},
 				{CLSID = "{3d7bfa20-fefe-4642-ba1f-380d5ae4f9c4}", arg_value = 1, arg_increment = 0.1},-- Smokewinder white
 				{CLSID = "{3d7bfa20-fefe-4642-ba1f-380d5ae4f9c5}", arg_value = 1, arg_increment = 0.1},-- Smokewinder yellow
 				{CLSID = "{3d7bfa20-fefe-4642-ba1f-380d5ae4f9c6}", arg_value = 1, arg_increment = 0.1},-- Smokewinder orange
-				{CLSID = "{5d5aa063-a002-4de8-8a89-6eda1e80ee7b}",  arg_value = 1, arg_increment = 0.1, attach_point_position = {0.4, -0.22, 0.0},
+				{CLSID = "{5d5aa063-a002-4de8-8a89-6eda1e80ee7b}",  arg_value = 1, arg_increment = 0.1, attach_point_position = {0, 0, 0},
 					forbidden = {
 						{station = 1, loadout = {"{d694b359-e7a8-4909-88d4-7100b77afd10}"}},
 						{station = 1, loadout = {"{d694b359-e7a8-4909-88d4-7100b77afd11}"}},
@@ -304,9 +304,9 @@ pylons_enumeration = {6, 5, 4, 8, 7, 3, 2, 1},
 				--{CLSID = "{BRU33_2X_MK-82}", arg_value = 0.5}, -- Mk-82 * 2 -- 暂无双联挂架
 
 				--{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd10}", arg_value = 1, arg_increment = 0.1, attach_point_position = { -0.035, 0.07, 0.0}}, -- 145 rocket * 2
-				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd11}", arg_value = 1, arg_increment = 0.1, attach_point_position = { -0.035, 0.07, 0.0}}, -- 145 rocket * 2
-				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd12}", arg_value = 1, arg_increment = 0.1, attach_point_position = { -0.035, 0.07, 0.0}}, -- 145 rocket * 1
-				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd13}", arg_value = 1, arg_increment = 0.1, attach_point_position = { -0.035, 0.07, 0.0}}, -- 135 rocket * 1
+				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd11}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 145 rocket * 2
+				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd12}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 145 rocket * 1
+				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd13}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 135 rocket * 1
 			}
         ),
 
@@ -317,9 +317,9 @@ pylons_enumeration = {6, 5, 4, 8, 7, 3, 2, 1},
 			},
 			{
 				--{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd10}", arg_value = 1, arg_increment = 0.1, attach_point_position = { -0.135, 0.005, 0.0}}, -- 135 rocket * 2
-				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd11}", arg_value = 1, arg_increment = 0.1, attach_point_position = { -0.135, 0.005, 0.0}}, -- 145 rocket * 2
-				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd12}", arg_value = 1, arg_increment = 0.1, attach_point_position = { -0.135, 0.005, 0.0}}, -- 145 rocket * 1
-				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd13}", arg_value = 1, arg_increment = 0.1, attach_point_position = { -0.135, 0.005, 0.0}}, -- 135 rocket * 1
+				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd11}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 145 rocket * 2
+				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd12}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 145 rocket * 1
+				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd13}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 135 rocket * 1
 			}
 		),
 
@@ -330,9 +330,9 @@ pylons_enumeration = {6, 5, 4, 8, 7, 3, 2, 1},
 			},
 			{
 				--{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd10}", arg_value = 1, arg_increment = 0.1, attach_point_position = { -0.135, 0.005, 0.0}}, -- 135 rocket * 2
-				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd11}", arg_value = 1, arg_increment = 0.1, attach_point_position = { -0.135, 0.005, 0.0}}, -- 145 rocket * 2
-				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd12}", arg_value = 1, arg_increment = 0.1, attach_point_position = { -0.135, 0.005, 0.0}}, -- 145 rocket * 1
-				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd13}", arg_value = 1, arg_increment = 0.1, attach_point_position = { -0.135, 0.005, 0.0}}, -- 135 rocket * 1
+				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd11}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 145 rocket * 2
+				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd12}", arg_value = 1, arg_increment = 0.1, attach_point_position = {0, 0, 0}}, -- 145 rocket * 1
+				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd13}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 135 rocket * 1
 			}
 		),
 
@@ -348,7 +348,7 @@ pylons_enumeration = {6, 5, 4, 8, 7, 3, 2, 1},
 				{CLSID = "{3d7bfa20-fefe-4642-ba1f-380d5ae4f9c4}", arg_value = 1, arg_increment = -0.1},-- Smokewinder white
 				{CLSID = "{3d7bfa20-fefe-4642-ba1f-380d5ae4f9c5}", arg_value = 1, arg_increment = -0.1},-- Smokewinder yellow
 				{CLSID = "{3d7bfa20-fefe-4642-ba1f-380d5ae4f9c6}", arg_value = 1, arg_increment = -0.1},-- Smokewinder orange
-				{CLSID = "{5d5aa063-a002-4de8-8a89-6eda1e80ee7b}",  arg_value = 1, arg_increment = 0.1, attach_point_position = {0.4, -0.22, 0.0},
+				{CLSID = "{5d5aa063-a002-4de8-8a89-6eda1e80ee7b}",  arg_value = 1, arg_increment = 0.1, attach_point_position = {0, 0, 0},
 					forbidden = {
 						{station = 4, loadout = {"{d694b359-e7a8-4909-88d4-7100b77afd10}"}},
 						{station = 4, loadout = {"{d694b359-e7a8-4909-88d4-7100b77afd11}"}},
@@ -367,9 +367,9 @@ pylons_enumeration = {6, 5, 4, 8, 7, 3, 2, 1},
 				--{CLSID = "{LYSBOMB}"}, -- Illumination bomb
 				--{CLSID = "{BRU33_2X_MK-82}", arg_value = 0.5}, -- Mk-82 * 2 -- 暂无双联挂架
 				--{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd10}", arg_value = 1, arg_increment = 0.1, attach_point_position = { -0.035, 0.07, 0.0}}, -- 145 rocket * 2
-				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd11}", arg_value = 1, arg_increment = 0.1, attach_point_position = { -0.035, 0.07, 0.0}}, -- 145 rocket * 2
-				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd12}", arg_value = 1, arg_increment = 0.1, attach_point_position = { -0.035, 0.07, 0.0}}, -- 145 rocket * 1
-				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd13}", arg_value = 1, arg_increment = 0.1, attach_point_position = { -0.035, 0.07, 0.0}}, -- 135 rocket * 1
+				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd11}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 145 rocket * 2
+				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd12}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 145 rocket * 1
+				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd13}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 135 rocket * 1
 			}
         ),
 
@@ -472,7 +472,7 @@ pylons_enumeration = {6, 5, 4, 8, 7, 3, 2, 1},
 			MaxRUD	=	1, -- Max state of the throttle
 			MaksRUD	=	1, -- Military power state of the throttle 1 89
 			ForsRUD	=	1, -- Afterburner state of the throttle	94
-			typeng	=	0,
+			typeng	=	4,
 			-- [[
 				-- E_TURBOJET = 0
 				-- E_TURBOJET_AB = 1

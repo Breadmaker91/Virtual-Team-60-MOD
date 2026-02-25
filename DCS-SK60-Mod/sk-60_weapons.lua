@@ -277,7 +277,7 @@ function declear_rocket_pods(_uuid, _display_name, _display_icon, _rocket_num, _
 			},
 		
 			{
-				Position	= {_forwarding + 0.01, - 0.065 - _diameter/2 * 3 - _distance, 0}, --2 0.25
+				Position	= {0,0,0},--{_forwarding + 0.01, - 0.065 - _diameter/2 * 3 - _distance, 0}, --2 0.25
 				ShapeName	= _rocket_shape,
 				Rotation 	= {0,0,-1.5},
 			},
@@ -291,15 +291,15 @@ function declear_rocket_pods(_uuid, _display_name, _display_icon, _rocket_num, _
 			},
 
 			{
-				Position	= {_forwarding, - 0.065 - _diameter/2, 0}, --1 
+				Position	= {0,0,0},--{_forwarding, - 0.065 - _diameter/2, 0}, --1 
 				ShapeName	= _rocket_shape,
-				Rotation 	= {0,0,-1.5},
+				Rotation 	= {0,0,0},
 			},
 		
 			{
-				Position	= {_forwarding + 0.01, - 0.065 - _diameter/2 * 3 - _distance, 0}, --2 0.25
+				Position	= {0, -(_diameter + _distance), 0},--{_forwarding + 0.01, - 0.065 - _diameter/2 * 3 - _distance, 0}, --2 0.25
 				ShapeName	= _rocket_shape,
-				Rotation 	= {0,0,-1.5},
+				Rotation 	= {0,0,0},
 			},
 		}
 	end
