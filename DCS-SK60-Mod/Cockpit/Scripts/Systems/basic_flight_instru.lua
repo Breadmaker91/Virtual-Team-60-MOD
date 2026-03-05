@@ -85,6 +85,19 @@ function Airspeed_Gauge_AOA_G_Cal()
     ]]--
 end
 
+function Mach_Disc_Cal()
+    local mach = 0
+
+    if get_elec_dc_status() == true then
+        mach = sensor_data.getMachNumber()
+    end
+
+    if mach < 0 then mach = 0 end
+    if mach > 1 then mach = 1 end
+
+    Gauge_display_state[mach_ind][2] = mach
+end
+
 function Altitude_Cal()
     local baro_altitude = 0
 
@@ -210,6 +223,7 @@ local baro_altitude_efm = get_param_handle("ALT_XH_ANALOG")
 function update()
     Altitude_Cal()
     Airspeed_Gauge_AOA_G_Cal()
+	Mach_Disc_Cal()        -- Mach disc update
     update_Gyro_Display()
     calculate_Climb_Slide()
     update_HSI_Compass()
