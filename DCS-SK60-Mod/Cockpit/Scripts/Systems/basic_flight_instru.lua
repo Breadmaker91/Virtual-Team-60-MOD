@@ -25,14 +25,6 @@ local mach_ind = _gauge_counter()
 local current_g_ind = _gauge_counter()
 local aoa_ind = _gauge_counter()
 local radar_alt_ind = _gauge_counter()
---local Baro_alt_analog = _gauge_counter()
-local Baro_alt_x100 = _gauge_counter()
-local Baro_alt_x1k = _gauge_counter()
-local Baro_alt_x1w = _gauge_counter()
-local QNH_set_x1k = _gauge_counter()
-local QNH_set_x100 = _gauge_counter()
-local QNH_set_x10 = _gauge_counter()
-local QNH_set_x1 = _gauge_counter()
 local Baro_power = _gauge_counter()
 local gyro_roll = _gauge_counter()
 local gyro_pitch= _gauge_counter()
@@ -46,14 +38,6 @@ Gauge_display_state = { -- last parameter define if it is unneed from 9 to zero
     {current_g_ind, 0, 0, get_param_handle("G_METER"), 1, 0.04},
     {aoa_ind, 0, 0, get_param_handle("AOA_IND"), 1, 0.04},
     {radar_alt_ind, 0, 0, get_param_handle("RADAR_ALT_IND"), 1, 0.04},
-    --{Baro_alt_analog, 0, 0, get_param_handle("ALT_XH_ANALOG"), 0, 0.04},
-    {Baro_alt_x100, 0, 0, get_param_handle("BARO_x1H"), 0, 0.04},
-    {Baro_alt_x1k, 0, 0, get_param_handle("BARO_x1K"), 0, 0.005},
-    {Baro_alt_x1w, 0, 0, get_param_handle("BARO_x1W"), 0, 0.005},
-    {QNH_set_x1k, 0, 0, get_param_handle("QNH_x1K"), 0, 0.005},
-    {QNH_set_x100, 0, 0, get_param_handle("QNH_x100"), 0, 0.005},
-    {QNH_set_x10, 0, 0, get_param_handle("QNH_x10"), 0, 0.005},
-    {QNH_set_x1, 0, 0, get_param_handle("QNH_x1"), 0, 0.005},
     {Baro_power, 0, 0, get_param_handle("BARO_POWER"), 1, 0.005},
     {gyro_roll, 0, 0, get_param_handle("GYRO_ROLL"), 2, 0.04},
     {gyro_pitch, 0, 0, get_param_handle("GYRO_PITCH"), 2, 0.04},
@@ -98,35 +82,6 @@ function Mach_Disc_Cal()
     Gauge_display_state[mach_ind][2] = mach
 end
 
-function Altitude_Cal()
-    local baro_altitude = 0
-
-    local baro_x1k_target = 0
-    local baro_x1w_target = 0
-
-    local baro_x100_target = 0
-
-    if (get_elec_dc_status() == true) then
-        -- dprintf(radar_altitude)
-        baro_altitude = sensor_data.getBarometricAltitude() --* METER_TO_INCH
-
-        baro_x1w_target = math.modf(baro_altitude/10000)
-        baro_x1k_target = math.modf(math.fmod(baro_altitude,10000)/1000)
-        --baro_x100_target = math.modf(math.fmod(baro_altitude, 1000)/100)
-    end
-
-    baro_x100_target = math.fmod(baro_altitude, 1000)/100
-
-    local alt_analog = get_param_handle("ALT_XH_ANALOG")
-	alt_analog:set(baro_x100_target/10)
-
-    --print_message_to_user(baro_x100_target)
-
-    Gauge_display_state[Baro_alt_x1k][2] = baro_x1k_target/10
-    Gauge_display_state[Baro_alt_x1w][2] = baro_x1w_target/10
-    Gauge_display_state[Baro_alt_x100][2] = baro_x100_target/10
-    --Gauge_display_state[Baro_alt_x10][2] = math.fmod(baro_altitude, 1000)/100 / 10-- math.fmod(baro_altitude,100)/100
-end
 
 function update_Gyro_Display()
     if (get_elec_dc_status() == true) then
@@ -137,6 +92,7 @@ function update_Gyro_Display()
         Gauge_display_state[gyro_pitch][2] = 0.3
     end
 end
+
 
 function calculate_Climb_Slide()
     if (get_elec_dc_status() == true) then
@@ -216,12 +172,9 @@ function update_Gauge_Display()
     end
 end
 
-local internal_fuel_value = get_param_handle("EFM_INTERNAL_FUEL")
-
 local baro_altitude_efm = get_param_handle("ALT_XH_ANALOG")
 
 function update()
-    Altitude_Cal()
     Airspeed_Gauge_AOA_G_Cal()
 	Mach_Disc_Cal()        -- Mach disc update
     update_Gyro_Display()
