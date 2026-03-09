@@ -13,12 +13,12 @@ livery = {
 	
 	
 		--BORT NUMBERS---------------------------------------------------------------	
-	{"SK60_BortNumber_0", 0 ,"SK60_BortNumbers",false};
-	--{"SK60_BortNumber_0", DECAL ,"empty",false};
-	{"SK60_BortNumber_10", 0 ,"SK60_BortNumbers",false};
-	--{"SK60_BortNumber_10", DECAL ,"empty",false};
-	{"SK60_BortNumber_100", 0 ,"SK60_BortNumbers",false};
-	--{"SK60_BortNumber_100", DECAL ,"empty",false};
+	{"SK60_BortNumbersxx1", 0 ,"SK60_BortNumbers",false};
+	--{"SK60_BortNumbersxx1", DECAL ,"empty",false};
+	{"SK60_BortNumbersx1x", 0 ,"SK60_BortNumbers",false};
+	--{"SK60_BortNumbersx1x", DECAL ,"empty",false};
+	{"SK60_BortNumbers1xx", 0 ,"SK60_BortNumbers",false};
+	--{"SK60_BortNumbers1xx", DECAL ,"empty",false};
 	
 }
 name = "Austrian Airforce"
