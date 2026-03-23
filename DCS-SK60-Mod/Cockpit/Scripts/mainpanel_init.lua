@@ -27,7 +27,25 @@ night_texture_set_value = 0.1
 
 -- mirror settings
 mirrors_data = {
-    center_point      	= { 0.6, -0.05 , 0.1 }, --F/B,U/D,L/R location of reflection image generation--{ 0.279, 0.4, 0.00 } 0.279, 0.3, 0.00, difference from cockpit_local_point {2.00, 0.2553,-0.2576},
+ center_point        = {0.4, 0.03 , 0.1}, --F/B,U/D,L/R location of reflection image generation--{ 0.279, 0.4, 0.00 } 0.279, 0.3, 0.00, difference from cockpit_local_point {2.00, 0.2553,-0.2576},
+    width               = 2.2, --integrated (keep in mind that mirrors can be none planar old=0.7)
+    aspect              = 2,
+    rotation            = math.rad(-6),
+    animation_speed     = 2.0,
+    near_clip           = 0.10,
+    middle_clip         = 20,
+    far_clip            = 60000,
+    arg_value_when_on   = 1.0,
+}
+
+mirrors_draw                    = CreateGauge()
+mirrors_draw.arg_number         = 16
+mirrors_draw.input              = {0,1}
+mirrors_draw.output             = {1,0}
+mirrors_draw.controller         = controllers.mirrors_draw
+
+
+    --[[center_point      	= { 0.6, -0.05 , 0.1 }, --F/B,U/D,L/R location of reflection image generation--{ 0.279, 0.4, 0.00 } 0.279, 0.3, 0.00, difference from cockpit_local_point {2.00, 0.2553,-0.2576},
     width 			  	= 3.5, --integrated (keep in mind that mirrors can be none planar old=0.7)
     aspect 			  	= 2,--0.8/0.3,
 	rotation 	 	 	= math.rad(12);
@@ -36,7 +54,7 @@ mirrors_data = {
 	middle_clip			= 40;		
 	far_clip		  	= 60000;	
 	arg_value_when_on 	= 1.0;
-}
+} ]]--
 
 
 TEMP_VAR = {}
@@ -185,6 +203,12 @@ animation_list = {
     -- EADI
     {"PTN_501", 501},
     {"PTN_502", 502},
+	
+	-- Backup ADI
+	--{"ATTGYRO_STBY_PITCH", 660, {-180, 180}, {-1, 1}},
+    --{"ATTGYRO_STBY_ROLL", 661, {-180, 180}, {-1, 1}},
+   --{"ATTGYRO_STBY_OFF", 664, {0, 1}, {0, 1}},
+    --{"ATTGYRO_STBY_HORIZ", 665, {-1, 1}, {-1, 1}},
 
     {"RUDDER_PADEL", 3},
     {"STICK_PITCH", 1, {-1, 1}, {1, -1}},

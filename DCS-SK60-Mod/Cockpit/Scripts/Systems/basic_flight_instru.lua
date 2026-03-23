@@ -93,6 +93,39 @@ function update_Gyro_Display()
     end
 end
 
+--[[function update_Backup_ADI()
+    local standby_off_target = 0
+    if get_elec_ac_status() ~= true then
+        standby_off_target = 1
+    end
+
+    attgyro_stby_off:set(standby_off_target)
+    attgyro_stby_horiz:set(standby_adi_horizon)
+
+    -- Freeze the backup ADI when AC power is unavailable.
+    if standby_off_target == 1 then
+        return
+    end
+
+    local pitch = sensor_data.getPitch() * RAD_TO_DEGREE
+    local roll = sensor_data.getRoll() * RAD_TO_DEGREE
+
+    if pitch > 90 then
+        pitch = 90
+    elseif pitch < -90 then
+        pitch = -90
+    end
+
+    if roll > 180 then
+        roll = 180
+    elseif roll < -180 then
+        roll = -180
+    end
+
+    attgyro_stby_pitch:set(-pitch)
+    attgyro_stby_roll:set(roll)
+end ]]--
+
 
 function calculate_Climb_Slide()
     if (get_elec_dc_status() == true) then
@@ -180,6 +213,7 @@ function update()
     update_Gyro_Display()
     calculate_Climb_Slide()
     update_HSI_Compass()
+	--update_Backup_ADI()
     update_Gauge_Display()
     --print_message_to_user(baro_altitude_efm)
 end
