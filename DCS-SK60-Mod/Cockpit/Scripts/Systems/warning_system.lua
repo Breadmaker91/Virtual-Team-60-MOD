@@ -243,16 +243,12 @@ function update()
         updateWarningSignal()
         letTheLightBlink()
         -- warning_display:set(1)
-        if (sensor_data.getIndicatedAirSpeed() > 40 or sensor_data.getWOW_NoseLandingGear() < 0.01) then
-            if (sensor_data.getAngleOfAttack()*RAD_TO_DEGREE > 13.5 and get_aircraft_draw_argument_value(9) < 0.3) then
-                snd_stall_warning:play_continue()
-            elseif (sensor_data.getAngleOfAttack()*RAD_TO_DEGREE > 9 and get_aircraft_draw_argument_value(9) >= 0.3) then
-                snd_stall_warning:play_continue()
-            elseif (sensor_data.getIndicatedAirSpeed() < 40) then
-                snd_stall_warning:play_continue()
-            else
-                snd_stall_warning:stop()
-            end
+              local main_gear_weight_on_wheels = sensor_data.getWOW_LeftMainLandingGear() > 0.01 or sensor_data.getWOW_RightMainLandingGear() > 0.01
+        local angle_of_attack_degrees = sensor_data.getAngleOfAttack() * RAD_TO_DEGREE
+        if (main_gear_weight_on_wheels) then
+            snd_stall_warning:stop()
+        elseif (angle_of_attack_degrees >= 15) then
+            snd_stall_warning:play_continue()
         else
             snd_stall_warning:stop()
         end

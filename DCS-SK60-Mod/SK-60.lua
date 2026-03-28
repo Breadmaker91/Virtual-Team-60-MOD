@@ -70,20 +70,22 @@ SK_60 =  {
 	    --main_gear_amortizer_normal_weight_stroke    =  -0.228,     --  down from main_gear_pos -0.228
 	    --main_gear_wheel_diameter 				    =   0.972, --  in m  
 		
-		nose_gear_pos 				                = {3.5, -1.5, 0},	-- {4.35,	-1.25,	0},
+		nose_gear_pos 				                = {3.5, -1.456, 0},	-- {4.35,	-1.25,	0},
 		--nose_gear_pos 				                = {-0.001,	-1.2,	4.032},   --{6.30,	-1.75,	0},
 	    nose_gear_amortizer_direct_stroke   		=  0,      -- down from nose_gear_pos !!!
 	    nose_gear_amortizer_reversal_stroke  		=  - 0.15,      -- up 
 	    nose_gear_amortizer_normal_weight_stroke 	=  - 0.05,      -- down from nose_gear_pos
-		nose_gear_wheel_diameter 	                =  0.4,  -- in m
+		nose_gear_wheel_diameter 	                =  0.451,  -- in m
 		tand_gear_max								=  0.5774,	-- +- 30 deg for both sides 
 	
-	    main_gear_pos 						 	    = {- 0.428, -1.334, 1.15}, --{0.598,	-1.05,	1.05},
+	    main_gear_pos 						 	    = {- 0.428, -1.395, 1.15}, --{0.598,	-1.05,	1.05},
 		--main_gear_pos 						 	    = {2.380,	-1.32,	-1.598},-- maingear coord
-	    main_gear_amortizer_direct_stroke	 	    =   0,     --  down from main_gear_pos !!!
-	    main_gear_amortizer_reversal_stroke  	    =  - 0.07,     --  up 
-	    main_gear_amortizer_normal_weight_stroke  	=  - 0.035,     --  down from main_gear_pos
-	    main_gear_wheel_diameter 				    =   0.572, --  in m
+	      -- Calibrated for current EDM animation response to avoid visual wheel clipping
+	    -- after touchdown settle (effective visible travel is larger than numeric stroke).
+	    main_gear_amortizer_direct_stroke	 	    =  -0.0300,   -- down from main_gear_pos
+	    main_gear_amortizer_reversal_stroke  	    =   0.0300,   -- up from main_gear_pos
+	    main_gear_amortizer_normal_weight_stroke  	=  -0.0100,   -- nominal on-ground compression
+	    main_gear_wheel_diameter 				    =   0.616, --  in m
 		
 
 		AOA_take_off				=	0.16,	-- AoA in take off (for AI)
