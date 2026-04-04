@@ -45,18 +45,6 @@ mirrors_draw.output             = {1,0}
 mirrors_draw.controller         = controllers.mirrors_draw
 
 
-    --[[center_point      	= { 0.6, -0.05 , 0.1 }, --F/B,U/D,L/R location of reflection image generation--{ 0.279, 0.4, 0.00 } 0.279, 0.3, 0.00, difference from cockpit_local_point {2.00, 0.2553,-0.2576},
-    width 			  	= 3.5, --integrated (keep in mind that mirrors can be none planar old=0.7)
-    aspect 			  	= 2,--0.8/0.3,
-	rotation 	 	 	= math.rad(12);
-	animation_speed  	= 2.0;
-	near_clip 		  	= 0.01;
-	middle_clip			= 40;		
-	far_clip		  	= 60000;	
-	arg_value_when_on 	= 1.0;
-} ]]--
-
-
 TEMP_VAR = {}
 
 -- This is an encapsulated function that sets the cabin animation and binds parameters.
@@ -136,8 +124,8 @@ animation_list = {
     {"HSI_HDG_x100", 351},
     {"HSI_HDG_x10", 352},
     {"HSI_HDG_x1", 353},
-    {"FUEL_QUAN_IN", 354},
-    {"FUEL_QUAN_SEL", 355},
+	{"FUEL_QUAN_LEFT", 354},
+    {"FUEL_QUAN_RIGHT", 355},
     {"FUEL_QUAN_A_x1W", 356},
     {"FUEL_QUAN_A_x1K", 357},
     {"FUEL_QUAN_A_x100", 358},
@@ -203,12 +191,6 @@ animation_list = {
     -- EADI
     {"PTN_501", 501},
     {"PTN_502", 502},
-	
-	-- Backup ADI
-	--{"ATTGYRO_STBY_PITCH", 660, {-180, 180}, {-1, 1}},
-    --{"ATTGYRO_STBY_ROLL", 661, {-180, 180}, {-1, 1}},
-   --{"ATTGYRO_STBY_OFF", 664, {0, 1}, {0, 1}},
-    --{"ATTGYRO_STBY_HORIZ", 665, {-1, 1}, {-1, 1}},
 
     {"RUDDER_PADEL", 3},
     {"STICK_PITCH", 1, {-1, 1}, {1, -1}},
@@ -254,6 +236,7 @@ animation_list = {
     {"GEN_L"        , 512}, 
     {"CONVERT_B"    , 513}, 
     {"GEN_R"        , 514},
+    {"FLAP_GEAR_WARN", 317},
     {"MASTER_WARN"  , 135},
 
     -- ipad model shown
@@ -282,16 +265,18 @@ end
 
 --Controls
 Landinggearhandle					= CreateGauge("parameter")
-Landinggearhandle.arg_number		= 50
+Landinggearhandle.arg_number		= 83
 Landinggearhandle.input				= {0, 1}
 Landinggearhandle.output			= {0, 1}
 Landinggearhandle.parameter_name	= "PTN_083"
 
+--[[
 Fuel								= CreateGauge ()
 Fuel.arg_number						= 354
 Fuel.input							= {0, 1640}
 Fuel.output							= {0, 1}
 Fuel.controller						= controllers.base_gauge_TotalFuelWeight
+]]--
 
 
 PilotDraw                = CreateGauge("parameter")

@@ -42,9 +42,10 @@ local r_eng_hyd     = _switch_counter()
 local l_eng_gen     = _switch_counter()
 local inverterB    = _switch_counter()
 local r_eng_gen     = _switch_counter()
+local flap_gear_warn = _switch_counter()
 local master_cau     = _switch_counter()
 
-local element_name = {"FIRE_L_ENG", "CANOPY", "FIRE_R_ENG", "FUEL_L_ENG", "THRUST_REV", "FUEL_R_ENG", "OIL_L_ENG", "BRAKE", "OIL_R_ENG", "HYDRO_L", "CONVERT_A", "HYDRO_R", "GEN_L", "CONVERT_B", "GEN_R"}
+local element_name = {"FIRE_L_ENG", "CANOPY", "FIRE_R_ENG", "FUEL_L_ENG", "THRUST_REV", "FUEL_R_ENG", "OIL_L_ENG", "BRAKE", "OIL_R_ENG", "HYDRO_L", "CONVERT_A", "HYDRO_R", "GEN_L", "CONVERT_B", "GEN_R", "FLAP_GEAR_WARN"}
 
 target_status = {
     {l_eng_fire , SWITCH_OFF, get_param_handle(element_name[1]), element_name[1]},
@@ -62,6 +63,7 @@ target_status = {
     {l_eng_gen  , SWITCH_OFF, get_param_handle(element_name[13]), element_name[13]},
     {inverterB  , SWITCH_OFF, get_param_handle(element_name[14]), element_name[14]},
     {r_eng_gen  , SWITCH_OFF, get_param_handle(element_name[15]), element_name[15]},
+    {flap_gear_warn, SWITCH_OFF, get_param_handle(element_name[16]), element_name[16]},
     {master_cau , SWITCH_TEST, get_param_handle("MASTER_WARN"), "MASTER_WARN"},
 }
 
@@ -81,6 +83,7 @@ current_status = {
     {l_eng_gen  , SWITCH_OFF, SWITCH_OFF},
     {inverterB  , SWITCH_OFF, SWITCH_OFF},
     {r_eng_gen  , SWITCH_OFF, SWITCH_OFF},
+    {flap_gear_warn, SWITCH_OFF, SWITCH_OFF},
     {master_cau , SWITCH_TEST, SWITCH_TEST},
 }
 
@@ -147,14 +150,17 @@ end
 local parking_brake_status = get_param_handle("PARK_BRAKE")
 local fuel_press_l = get_param_handle("OP_LEFT")
 local fuel_press_r = get_param_handle("OP_RIGHT")
+local gear_state_share = get_param_handle("GEAR_SHARE")
 
 local MasterCautionArmed = 0
+local flapGearWarnActive = 0
 local unarmedCounter = 0
 
 function switchTargetStatus(uid, target)
     current_status[uid][3] = target_status[uid][2]
     target_status[uid][2] = target
-    if target_status[uid][2] > 0.5 then
+    -- Flap/gear warning is intentionally independent and must not trigger master caution.
+    if uid ~= flap_gear_warn and target_status[uid][2] > 0.5 then
         unarmedCounter = unarmedCounter + 1
         if current_status[uid][3] < 0.5 then
             MasterCautionArmed = 1
@@ -217,22 +223,53 @@ function updateWarningSignal()
     else
         switchTargetStatus(r_eng_fuel, SWITCH_ON)
     end
+
+    -- Gear/flap warning is active only when flaps are extended and gear is in.
+    local flap_extended = get_aircraft_draw_argument_value(9) > 0.05
+    local gear_is_in = gear_state_share:get() < 0.5
+
+    -- Flap warning blinks only when flaps are out and gear is in.
+    if flap_extended and gear_is_in then
+        flapGearWarnActive = 1
+        switchTargetStatus(flap_gear_warn, SWITCH_ON)
+    else
+        flapGearWarnActive = 0
+        switchTargetStatus(flap_gear_warn, SWITCH_OFF)
+    end
+
     if unarmedCounter == 0 then
         current_status[master_cau][3] = SWITCH_TEST
     end
 end
 
 blink_rate = 3 -- 3 times per sec
+local blink_phase = 1
+local blink_accumulator = 0
+
 -- sometimes we need some drama function names
 function letTheLightBlink()
+    blink_accumulator = blink_accumulator + update_rate
+    if blink_accumulator >= (1 / (blink_rate * 2)) then
+        blink_accumulator = 0
+        blink_phase = 1 - blink_phase
+    end
+
+    local blink_value = 0.2
+    if blink_phase == 1 then
+        blink_value = 1
+    end
+
     if current_status[master_cau][3] == SWITCH_ON then
-        if current_status[master_cau][2] >= 1 then
-            target_status[master_cau][2] = 0.2
-        elseif current_status[master_cau][2] <= 0.2 then
-            target_status[master_cau][2] = 1
-        end
+        target_status[master_cau][2] = blink_value
     else
         target_status[master_cau][2] = SWITCH_TEST
+    end
+
+    -- Flap/gear warning blinks with the same cadence as master caution.
+    if flapGearWarnActive == 1 then
+        target_status[flap_gear_warn][2] = blink_value
+    else
+        target_status[flap_gear_warn][2] = SWITCH_OFF
     end
 end
 
@@ -243,7 +280,7 @@ function update()
         updateWarningSignal()
         letTheLightBlink()
         -- warning_display:set(1)
-              local main_gear_weight_on_wheels = sensor_data.getWOW_LeftMainLandingGear() > 0.01 or sensor_data.getWOW_RightMainLandingGear() > 0.01
+        local main_gear_weight_on_wheels = sensor_data.getWOW_LeftMainLandingGear() > 0.01 or sensor_data.getWOW_RightMainLandingGear() > 0.01
         local angle_of_attack_degrees = sensor_data.getAngleOfAttack() * RAD_TO_DEGREE
         if (main_gear_weight_on_wheels) then
             snd_stall_warning:stop()

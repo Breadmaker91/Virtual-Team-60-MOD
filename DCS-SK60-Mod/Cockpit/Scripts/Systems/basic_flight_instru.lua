@@ -31,6 +31,8 @@ local gyro_pitch= _gauge_counter()
 local climb_rate_ind = _gauge_counter()
 local slide_rate_ind = _gauge_counter()
 local HSI_compass_ind = _gauge_counter()
+local fuel_left_ind = _gauge_counter()
+local fuel_right_ind = _gauge_counter()
 
 Gauge_display_state = { -- last parameter define if it is unneed from 9 to zero
     {airspeed_ind, 0, 0, get_param_handle("AIR_SPEED"), 1, 0.04},
@@ -44,6 +46,8 @@ Gauge_display_state = { -- last parameter define if it is unneed from 9 to zero
     {climb_rate_ind, 0, 0, get_param_handle("CLIMB_RATE"), 1, 0.04},
     {slide_rate_ind, 0, 0, get_param_handle("SLIDE_IND"), 1, 0.04},
     {HSI_compass_ind, 0, 0, get_param_handle("HSI_COMPASS"), 2, 0.04},
+	{fuel_left_ind, 0, 0, get_param_handle("FUEL_QUAN_LEFT"), 1, 0.02},
+    {fuel_right_ind, 0, 0, get_param_handle("FUEL_QUAN_RIGHT"), 1, 0.02},
 }
 
 function Airspeed_Gauge_AOA_G_Cal()
@@ -152,6 +156,25 @@ function update_HSI_Compass()
     Gauge_display_state[HSI_compass_ind][2] = - temp
 end
 
+function update_Fuel_Gauges()
+    local total_fuel_kg = sensor_data.getTotalFuelWeight()
+    local total_fuel_capacity_kg = 1640
+
+    -- Temporary split rule:
+    -- distribute total fuel equally to left and right needles.
+    local side_fuel_percent = 0
+    if total_fuel_capacity_kg > 0 then
+        side_fuel_percent = total_fuel_kg / total_fuel_capacity_kg
+    end
+
+    if side_fuel_percent < 0 then side_fuel_percent = 0 end
+    if side_fuel_percent > 1 then side_fuel_percent = 1 end
+
+    Gauge_display_state[fuel_left_ind][2] = side_fuel_percent
+    Gauge_display_state[fuel_right_ind][2] = side_fuel_percent
+end
+
+
 function post_initialize()
 
 end
@@ -214,6 +237,7 @@ function update()
     calculate_Climb_Slide()
     update_HSI_Compass()
 	--update_Backup_ADI()
+	update_Fuel_Gauges()
     update_Gauge_Display()
     --print_message_to_user(baro_altitude_efm)
 end

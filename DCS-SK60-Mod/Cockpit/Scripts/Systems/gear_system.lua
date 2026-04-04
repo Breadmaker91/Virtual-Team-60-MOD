@@ -169,28 +169,17 @@ function update()
         end
         set_aircraft_draw_argument_value(3, r_gear_status)
 
-        -- level step slower
-        if (nose_gear_status == 0 and gear_level_pos < 1) then
-            -- lower canopy in increments of time_increse_step (50x per second)
+        -- Move cockpit landing-gear lever toward the commanded position.
+        -- Lever uses opposite sense to gear state: gear down = 0, gear up = 1.
+        local gear_level_target = 1 - nose_gear_status
+        if math.abs(gear_level_target - gear_level_pos) < 0.1 then
+            gear_level_pos = gear_level_target
+        elseif gear_level_pos < gear_level_target then
             gear_level_pos = gear_level_pos + 0.1
-            gear_level:set(gear_level_pos)
-            gear_handle_click_ref:update()
-        elseif (nose_gear_status == 1 and gear_level_pos > 0) then
-            -- lower canopy in increments of time_increse_step (50x per second)
+        else
             gear_level_pos = gear_level_pos - 0.1
-            gear_level:set(gear_level_pos)
-            gear_handle_click_ref:update()
         end
 
-        if math.abs(nose_gear_status - gear_level_pos) < 0.1 then
-            gear_level_pos = nose_gear_status
-        else
-            if (gear_level_pos > nose_gear_status) then
-                gear_level_pos = gear_level_pos + 0.1
-            else
-                gear_level_pos = gear_level_pos - 0.1
-            end
-        end
         gear_level:set(gear_level_pos)
         gear_handle_click_ref:update()
 
