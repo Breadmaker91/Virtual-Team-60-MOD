@@ -45,7 +45,7 @@ matl = {
 
 
 gunsightZOffset = 750
-gunsightYOffset = -0.95 * gunsightZOffset
+gunsightYOffset = -0.85 * gunsightZOffset
 gunsightRotOffset = 40
 gunsightSizeScaler = 150
 
