@@ -40,6 +40,14 @@ local erpm_power = get_param_handle("ERPM_ENABLE")
 local erpm_ln2 = get_param_handle("LRPM_N2_DIGTAL")
 local erpm_rn2 = get_param_handle("RRPM_N2_DIGTAL")
 local erpm_color = get_param_handle("RPM_COLOR")
+local n1rpm_power = get_param_handle("N1RPM_ENABLE")
+local n1rpm_ln1 = get_param_handle("LN1_RPM_DIGITAL")
+local n1rpm_rn1 = get_param_handle("RN1_RPM_DIGITAL")
+local n1rpm_color = get_param_handle("N1RPM_COLOR")
+local itt_power = get_param_handle("ITT_ENABLE")
+local itt_l = get_param_handle("L_ITT_DIGITAL")
+local itt_r = get_param_handle("R_ITT_DIGITAL")
+local itt_color = get_param_handle("ITT_COLOR")
 
 --local gps_base = get_param_handle("NS430_POWER")
 
@@ -70,6 +78,48 @@ local RAD_TO_DEGREE  = 57.29577951308233
 local METER_TO_INCH = 3.2808
 
 local maxG_record = 1
+
+-- Calibrated display targets provided by user
+local engine_display_calibration = {
+    {speed = 0,   elev = 0,    n2 = 0, 		n1 = 0, 		itt = 0},
+    {speed = 0,   elev = 0,    n2 = 20, 	n1 = 2, 		itt = 0},
+    {speed = 0,   elev = 0,    n2 = 32.2, 	n1 = 12.8, 		itt = 530},
+    {speed = 0,   elev = 0,    n2 = 43.5, 	n1 = 20.0, 		itt = 536},
+    {speed = 0,   elev = 0,    n2 = 47.8, 	n1 = 25.2, 		itt = 388},
+    {speed = 0,   elev = 0,    n2 = 67.1, 	n1 = 46.9, 		itt = 450},
+    {speed = 0,   elev = 0,    n2 = 91.0, 	n1 = 96.0, 		itt = 680},
+	{speed = 0,   elev = 0,    n2 = 100.0, 	n1 = 100.0, 	itt = 680},
+    {speed = 210, elev = 30,   n2 = 94.3, 	n1 = 99.1, 		itt = 760},
+    {speed = 400, elev = 1000, n2 = 84.0, 	n1 = 78.0, 		itt = 530},
+    {speed = 520, elev = 3000, n2 = 82.0, 	n1 = 77.0, 		itt = 608},
+    {speed = 465, elev = 6000, n2 = 85.0, 	n1 = 85.0, 		itt = 577},
+}
+
+local N2_SCALE = 100.0
+local SPEED_SCALE = 600.0
+local ELEV_SCALE = 6000.0
+
+local function calibrated_n1(n2_value, speed_kmh, elev_m)
+    local weighted_n1 = 0.0
+    local weighted_total = 0.0
+
+    for _, row in ipairs(engine_display_calibration) do
+        local dn2 = (n2_value - row.n2) / N2_SCALE
+        local dspd = (speed_kmh - row.speed) / SPEED_SCALE
+        local delev = (elev_m - row.elev) / ELEV_SCALE
+        local dist2 = dn2 * dn2 + dspd * dspd + delev * delev
+        local w = 1.0 / (dist2 + 0.0001)
+
+        weighted_n1 = weighted_n1 + row.n1 * w
+        weighted_total = weighted_total + w
+    end
+
+    if weighted_total <= 0.0 then
+        return n2_value
+    end
+
+    return weighted_n1 / weighted_total
+end
 
 dev:listen_command(Keys.COM_Freq_Swap)
 dev:listen_command(Keys.LOC_Freq_Swap)
@@ -109,6 +159,8 @@ function post_initialize()
     hud_maxg_dis:set(1)
     --gps_base:set(1)
     erpm_power:set(0)
+    n1rpm_power:set(0)
+    itt_power:set(0)
 
 end
 
@@ -211,15 +263,44 @@ function update()
     --temp_dbg:set(roll_rate * RAD_TO_DEGREE)
 
     if get_elec_dc_status() then
+        local speed_kmh = sensor_data.getIndicatedAirSpeed()*ias_conversion_to_kmh
+        local elev_m = sensor_data.getBarometricAltitude()
+        local n2_left = get_aircraft_draw_argument_value(303) * 100
+        local n2_right = get_aircraft_draw_argument_value(304) * 100
+        local n1_left = calibrated_n1(n2_left, speed_kmh, elev_m)
+        local n1_right = calibrated_n1(n2_right, speed_kmh, elev_m)
+        local itt_left = get_aircraft_draw_argument_value(305) * 1100
+        local itt_right = get_aircraft_draw_argument_value(306) * 1100
+
         erpm_power:set(1)
-        erpm_ln2:set(get_aircraft_draw_argument_value(303) * 100)
-        erpm_rn2:set(get_aircraft_draw_argument_value(304) * 100)
+        erpm_ln2:set(n2_left)
+        erpm_rn2:set(n2_right)
         erpm_color:set(1)
+
+        n1rpm_power:set(1)
+        n1rpm_ln1:set(n1_left)
+        n1rpm_rn1:set(n1_right)
+        n1rpm_color:set(0)
+
+        itt_power:set(1)
+        itt_l:set(itt_left)
+        itt_r:set(itt_right)
+        itt_color:set(0)
     else
         erpm_power:set(0)
         erpm_ln2:set(0.0)
         erpm_rn2:set(0.0)
         erpm_color:set(1)
+
+        n1rpm_power:set(0)
+        n1rpm_ln1:set(0.0)
+        n1rpm_rn1:set(0.0)
+        n1rpm_color:set(0)
+
+        itt_power:set(0)
+        itt_l:set(0.0)
+        itt_r:set(0.0)
+        itt_color:set(0)
     end
 
     if get_elec_ac_status() then

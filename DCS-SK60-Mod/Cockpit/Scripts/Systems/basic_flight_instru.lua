@@ -229,6 +229,33 @@ function update_Gauge_Display()
 end
 
 local baro_altitude_efm = get_param_handle("ALT_XH_ANALOG")
+local backup_adi_pitch = get_param_handle("BACKUP_ADI_PITCH")
+local backup_adi_bank = get_param_handle("BACKUP_ADI_BANK")
+
+function update_Backup_ADI()
+    local pitch = 0
+    local bank = 0
+
+    if get_elec_dc_status() == true then
+        pitch = sensor_data.getPitch() * RAD_TO_DEGREE / 90
+        bank = sensor_data.getRoll() * RAD_TO_DEGREE / 180
+    end
+
+    if pitch > 1 then
+        pitch = 1
+    elseif pitch < -1 then
+        pitch = -1
+    end
+
+    if bank > 1 then
+        bank = 1
+    elseif bank < -1 then
+        bank = -1
+    end
+
+    backup_adi_pitch:set(pitch)
+    backup_adi_bank:set(bank)
+end
 
 function update()
     Airspeed_Gauge_AOA_G_Cal()
@@ -236,7 +263,7 @@ function update()
     update_Gyro_Display()
     calculate_Climb_Slide()
     update_HSI_Compass()
-	--update_Backup_ADI()
+	update_Backup_ADI()
 	update_Fuel_Gauges()
     update_Gauge_Display()
     --print_message_to_user(baro_altitude_efm)

@@ -124,6 +124,8 @@ animation_list = {
     {"HSI_HDG_x100", 351},
     {"HSI_HDG_x10", 352},
     {"HSI_HDG_x1", 353},
+    {"BACKUP_ADI_PITCH", 660},
+    {"BACKUP_ADI_BANK", 661},
 	{"FUEL_QUAN_LEFT", 354},
     {"FUEL_QUAN_RIGHT", 355},
     {"FUEL_QUAN_A_x1W", 356},

@@ -56,6 +56,14 @@ indicators[#indicators + 1] = {"ccIndicator", LockOn_Options.script_path.."EADI/
 
 -- ERPM
 indicators[#indicators + 1] = {"ccIndicator", LockOn_Options.script_path.."ERPM/ERPM_init.lua",nil,{{"LN2_center","LN2_down","LN2_right"},{sx_l =  -0.0001,}}}
+-- N1 RPM display left
+indicators[#indicators + 1] = {"ccIndicator", LockOn_Options.script_path.."N1RPM/N1RPM_L_init.lua",nil,{{"N1L_center","N1L_down","N1L_right"},{sx_l =  -0.0001,}}}
+-- N1 RPM display right
+indicators[#indicators + 1] = {"ccIndicator", LockOn_Options.script_path.."N1RPM/N1RPM_R_init.lua",nil,{{"N1R_center","N1R_down","N1R_right"},{sx_l =  -0.0001,}}}
+-- ITT display left
+indicators[#indicators + 1] = {"ccIndicator", LockOn_Options.script_path.."ITT/ITT_L_init.lua",nil,{{"ITTL_center","ITTL_down","ITTL_right"},{sx_l =  -0.0001,}}}
+-- ITT display right
+indicators[#indicators + 1] = {"ccIndicator", LockOn_Options.script_path.."ITT/ITT_R_init.lua",nil,{{"ITTR_center","ITTR_down","ITTR_right"},{sx_l =  -0.0001,}}}
 -- TRIM display
 --indicators[#indicators + 1] = {"ccIndicator", LockOn_Options.script_path.."ETRIM/ETRIM_init.lua",nil,{{"T60DISPLAY_center","T60DISPLAY_down","T60DISPLAY_right"},{sx_l =  -0.0001,}}}
 -- NS430 Navigation Control Unit
