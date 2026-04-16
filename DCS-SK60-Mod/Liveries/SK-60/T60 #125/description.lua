@@ -9,6 +9,7 @@ livery = {
 	{"SK60_Tail",				ROUGHNESS_METALLIC	,	"SK60_Tail_roughmet", 			false};
 	{"H166_Helmet",				DIFFUSE				,	"H166_Helmet", 							false};
 	{"H166_Helmet",				SPECULAR			,	"H166_Helmet_roughmet", 				false};
+	{"H166_Helmet",				NORMAL_MAP			,	"H166_Helmet_normal", 				false};
 	{"SK60_PilotFlightSuit",	DIFFUSE				,	"SK60_PilotFlightSuit", 							false};
 	{"SK60_PilotFlightSuit",	SPECULAR			,	"SK60_PilotFlightSuit_Roughmet", 					false};
 	{"SK60_PilotDetails",		DIFFUSE				,	"SK60_PilotDetails", 							false};

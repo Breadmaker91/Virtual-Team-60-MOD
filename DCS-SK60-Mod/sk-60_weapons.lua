@@ -82,18 +82,18 @@ end
 
 declear_smoke_pod('WHITE', '0xffffffff', 255, 255, 255, 200, '3d7bfa20-fefe-4642-ba1f-380d5ae4f9c1')
 declear_smoke_pod('RED', '0xcb1b45ff', 255, 30, 60, 200, '3d7bfa20-fefe-4642-ba1f-380d5ae4f9c2')
-declear_smoke_pod('YELLOW', '0xffc408ff', 255, 196, 8, 200, '3d7bfa20-fefe-4642-ba1f-380d5ae4f9c3')
+declear_smoke_pod('YELLOW', '0xffc408ff', 255, 192, 0, 255, '3d7bfa20-fefe-4642-ba1f-380d5ae4f9c3')
 declear_smoke_pod('ORANGE', '0xffb11bff', 255, 177, 27, 200, '3d7bfa20-fefe-4642-ba1f-380d5ae4f9c4')
 declear_smoke_pod('GREEN', '0x1b813eff', 27, 130, 62, 200, '3d7bfa20-fefe-4642-ba1f-380d5ae4f9c5')
-declear_smoke_pod('BLUE', '0x2ea9dfff', 46, 169, 233, 200, '3d7bfa20-fefe-4642-ba1f-380d5ae4f9c6')
+declear_smoke_pod('BLUE', '0x2ea9dfff', 0, 0, 255, 255, '3d7bfa20-fefe-4642-ba1f-380d5ae4f9c6')
 
 
 declear_smoke_nozzle('WHITE', '0xffffffff', 255, 255, 255, 200, '3d7bfa20-fefe-4642-ba1f-380d5ae4f9d1')
 declear_smoke_nozzle('RED', '0xcb1b45ff', 255, 30, 60, 200, '3d7bfa20-fefe-4642-ba1f-380d5ae4f9d2')
-declear_smoke_nozzle('YELLOW', '0xffc408ff', 255, 196, 8, 200, '3d7bfa20-fefe-4642-ba1f-380d5ae4f9d3')
+declear_smoke_nozzle('YELLOW', '0xffc408ff', 255, 192, 0, 255, '3d7bfa20-fefe-4642-ba1f-380d5ae4f9d3')
 declear_smoke_nozzle('ORANGE', '0xffb11bff', 255, 177, 27, 200, '3d7bfa20-fefe-4642-ba1f-380d5ae4f9d4')
 declear_smoke_nozzle('GREEN', '0x1b813eff', 27, 130, 62, 200, '3d7bfa20-fefe-4642-ba1f-380d5ae4f9d5')
-declear_smoke_nozzle('BLUE', '0x2ea9dfff', 46, 169, 233, 200, '3d7bfa20-fefe-4642-ba1f-380d5ae4f9d6')
+declear_smoke_nozzle('BLUE', '0x2ea9dfff', 0, 0, 255, 255, '3d7bfa20-fefe-4642-ba1f-380d5ae4f9d6')
 
 -- rockets and rocket pods 
 

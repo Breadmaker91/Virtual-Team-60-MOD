@@ -93,5 +93,6 @@ make_view_settings('SK-60', ViewSettings, SnapViews)
 make_flyable('SK-60',current_mod_path..'/Cockpit/Scripts/', FM , current_mod_path..'/Comm.lua')
 -------------------------------------------------------------------------------------
 dofile(current_mod_path..'/SK-60.lua')
+dofile(current_mod_path..'/UnitPayloads/SK-60.lua')
 -------------------------------------------------------------------------------------
 plugin_done()
