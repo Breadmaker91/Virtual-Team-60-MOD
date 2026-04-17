@@ -27,3 +27,4 @@ devices["UP_LINK"]					= counter() --18
 devices["MISCELANIOUS"]				= counter() --19
 devices["animations"]               = counter() --20
 devices["gunsight"]                 = counter()
+devices["NAV_SYSTEM"]               = counter()

@@ -8,7 +8,7 @@ MainPanel = {"ccMainPanel",LockOn_Options.script_path.."mainpanel_init.lua"}
 creators  = {}
 
 -- NAV system
---creators[devices.NAV_SYSTEM] = { "avLuaDevice", LockOn_Options.script_path.."Systems/nav_system.lua"}
+creators[devices.NAV_SYSTEM] = { "avLuaDevice", LockOn_Options.script_path.."Systems/nav_system.lua"}
 -- Basic power module
 creators[devices.ELECTRIC_SYSTEM] ={"avSimpleElectricSystem",LockOn_Options.script_path.."Systems/electric_system.lua"}
 -- Control plane module

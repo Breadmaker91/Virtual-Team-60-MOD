@@ -487,13 +487,15 @@ elements["PTN_134"] = default_axis("Approach Index Light", devices.LIGHT_SYSTEM,
 elements["PTN_534"] = default_axis("Course Selection Knob", devices.HUD_DCMS, Keys.Nav_Course_Sel, 1134, 0, 0.1)
 elements["PTN_541"] = default_axis("Heading Selection Knob", devices.HUD_DCMS, Keys.Nav_Heading_Sel, 1134, 0, 0.1)
 
--- GNS430 Unit
-elements["PTN_509"] = default_axis("Vol/PWR Knob", devices.HUD_DCMS, Keys.Nav_Vol_PWR, 1134, 0, 0.1)
+-- NAV Unit
+--[[elements["PTN_509"] = default_axis("Vol/PWR Knob", devices.HUD_DCMS, Keys.Nav_Vol_PWR, 1134, 0, 0.1)
 elements["PTN_510"] = default_axis("Vol Knob", devices.HUD_DCMS, Keys.Nav_Vol, 1134, 0, 0.1)
 elements["PTN_511"] = default_axis("Freqency MHz Knob", devices.HUD_DCMS, Keys.Freq_Num, 1134, 0, 0.1)
 elements["PTN_512"] = default_axis("Freqency kHz Knob", devices.HUD_DCMS, Keys.Freq_Degi, 1134, 0, 0.1)
 elements["PTN_527"] = default_axis("Right Large Knob", devices.HUD_DCMS, Keys.Nav_Right_Knob_L, 1134, 0, 0.1)
-elements["PTN_528"] = default_axis("Right Small Knob", devices.HUD_DCMS, Keys.Nav_Right_Knob_S, 1134, 0, 0.1)
+elements["PTN_528"] = default_axis("Right Small Knob", devices.HUD_DCMS, Keys.Nav_Right_Knob_S, 1134, 0, 0.1)]]--
+elements["PTN_733"] = default_axis("VOR Frequency MHz Knob", devices.NAV_SYSTEM, Keys.Nav_VOR_MHz, 733, 0, 0.1, true, true)
+elements["PTN_734"] = default_axis("VOR Frequency 0.05 Knob", devices.NAV_SYSTEM, Keys.Nav_VOR_005, 734, 0, 0.1, true, true)
 
 -- UHF R&S GB6500
 elements["PTN_554"] = default_axis("UHF Volume", devices.UHF_RADIO, Keys.UHF_Vol, 1134, 0, 0.1)

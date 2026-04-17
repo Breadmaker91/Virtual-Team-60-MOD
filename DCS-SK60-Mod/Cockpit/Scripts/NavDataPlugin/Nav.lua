@@ -4,9 +4,12 @@
 -- This module is available for PUBLIC mods only, thank you
 -- =====================================================================================
 
-package.path = package.path..";"..LockOn_Options.script_path.."Systems/NavDataPlugin/?.lua"
+package.path = package.path..";"..LockOn_Options.script_path.."NavDataPlugin/?.lua"
 
-require('Nav_Utils')
+local ok = pcall(require, "Nav_Utils")
+if not ok then
+    dofile(LockOn_Options.script_path.."NavDataPlugin/Nav_Utils.lua")
+end
 local Terrain = require('terrain') -- DCS terrain module
 
 local aircraftType = get_aircraft_type() -- this enables me to only use some features for the T-38C
@@ -165,6 +168,64 @@ local function loadRadios()
     end
 end
 
+local function normalizeFrequencyHz(rawFrequency)
+    if type(rawFrequency) == "number" then
+        return rawFrequency
+    end
+
+    if type(rawFrequency) == "table" then
+        if type(rawFrequency.frequency) == "number" then
+            return rawFrequency.frequency
+        end
+        if type(rawFrequency[1]) == "number" then
+            return rawFrequency[1]
+        end
+        if type(rawFrequency[2]) == "number" then
+            return rawFrequency[2]
+        end
+    end
+
+    return nil
+end
+
+local function addVORBeacon(beaconData)
+    if type(beaconData) ~= "table" then
+        return
+    end
+
+    local beaconType = beaconData.type
+    if beaconType ~= BEACON_TYPE_VOR and beaconType ~= BEACON_TYPE_VOR_DME and beaconType ~= BEACON_TYPE_VORTAC then
+        return
+    end
+
+    local frequencyHz = normalizeFrequencyHz(beaconData.frequency)
+    if frequencyHz == nil then
+        return
+    end
+
+    VOR_beacons[frequencyHz] = beaconData
+end
+
+local function loadVORBeacons()
+    VOR_beacons = {}
+
+    if type(beacons) == "table" then
+        for _, beaconData in pairs(beacons) do
+            addVORBeacon(beaconData)
+        end
+    end
+
+    if type(Airdrome) == "table" then
+        for _, airportData in pairs(Airdrome) do
+            if type(airportData) == "table" and type(airportData.airdrome) == "table" then
+                for _, beaconData in pairs(airportData.airdrome) do
+                    addVORBeacon(beaconData)
+                end
+            end
+        end
+    end
+end
+
 
 
 function sortAirportsByDistance(ownPos)
@@ -240,12 +301,11 @@ end
 
 loadRadios()
 loadAirports()
+loadVORBeacons()
 
 -- these will only load if NavDataPluginExtra exists
 supplementAirportData()
 loadICAOData()
-
-
 
 
 
