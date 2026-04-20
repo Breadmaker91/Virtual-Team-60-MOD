@@ -344,9 +344,10 @@ Keys =
     Nav_Right_Knob_Push = 5118,
     Nav_Vol_PWR = 5119,
     Nav_Vol = 5120,
-	Nav_VOR_MHz = 5121,
-    Nav_VOR_005 = 5122,
-    -- SN3500
+		Nav_VOR_MHz = 5121,
+	    Nav_VOR_005 = 5122,
+        Nav_RNAV_PWR = 5123,
+	    -- SN3500
     Nav_Course_Sel = 5150,
     Nav_Heading_Sel = 5151,
     -- EADI

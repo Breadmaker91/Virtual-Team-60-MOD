@@ -1,7 +1,7 @@
 local nav_system = GetSelf()
 dofile(LockOn_Options.script_path .. "command_defs.lua")
 
-local update_time_step = 0.25
+local update_time_step = 0.02
 make_default_activity(update_time_step)
 
 dofile(LockOn_Options.script_path .. "NavDataPlugin/Nav.lua")
@@ -9,6 +9,11 @@ dofile(LockOn_Options.script_path .. "NavDataPlugin/Nav.lua")
 local sensor_data = get_base_data()
 local rmi_needle_arg = 345
 local hsi_tacan_handle = get_param_handle("HSI_TACAN")
+local rnav_display_enable = get_param_handle("RNAV_DISPLAY_ENABLE")
+local rnav_display_frq = get_param_handle("RNAV_DISPLAY_FRQ")
+local rnav_display_rad = get_param_handle("RNAV_DISPLAY_RAD")
+local rnav_display_dst = get_param_handle("RNAV_DISPLAY_DST")
+local rnav_display_power = 0
 
 -- Initial VOR station tuning (MHz). We will replace this with cockpit controls later.
 local tuned_vor_frequency_mhz = 113.00
@@ -22,6 +27,18 @@ local message_interval_seconds = 2.0
 local current_rmi_value = 0
 local target_rmi_value = 0
 local rmi_slew_rate_arg_per_second = 1.2
+local nav_debug_popup_enabled = false
+
+local function nav_debug_popup(message)
+    if nav_debug_popup_enabled then
+        print_message_to_user(message)
+    end
+end
+
+local function set_rnav_display_power(is_on)
+    rnav_display_power = is_on and 1 or 0
+    rnav_display_enable:set(rnav_display_power)
+end
 
 local function normalize_bearing(bearing_deg)
     local bearing = bearing_deg % 360
@@ -49,7 +66,7 @@ local function tune_vor_frequency(delta_mhz)
     local new_frequency = normalize_vor_frequency(tuned_vor_frequency_mhz + delta_mhz)
     if math.abs(new_frequency - tuned_vor_frequency_mhz) > 0.0001 then
         tuned_vor_frequency_mhz = new_frequency
-        print_message_to_user(string.format("VOR Tune: %.2f MHz", tuned_vor_frequency_mhz))
+        nav_debug_popup(string.format("VOR Tune: %.2f MHz", tuned_vor_frequency_mhz))
     end
 end
 
@@ -207,8 +224,13 @@ end
 function post_initialize()
     nav_system:listen_command(Keys.Nav_VOR_MHz)
     nav_system:listen_command(Keys.Nav_VOR_005)
+    nav_system:listen_command(Keys.Nav_RNAV_PWR)
+    set_rnav_display_power(false)
+    rnav_display_frq:set(tuned_vor_frequency_mhz)
+    rnav_display_rad:set(0)
+    rnav_display_dst:set(0)
     set_rmi_needle(0)
-    print_message_to_user(string.format("NAV INIT: Tuned VOR %.2f MHz", tuned_vor_frequency_mhz))
+    nav_debug_popup(string.format("NAV INIT: Tuned VOR %.2f MHz", tuned_vor_frequency_mhz))
 end
 
 function SetCommand(command, value)
@@ -222,30 +244,44 @@ function SetCommand(command, value)
         if clicks ~= 0 then
             tune_vor_frequency(vor_small_step_mhz * clicks)
         end
+    elseif command == Keys.Nav_RNAV_PWR then
+        local clicks = command_value_to_clicks(value)
+        if clicks > 0 then
+            set_rnav_display_power(true)
+        elseif clicks < 0 then
+            set_rnav_display_power(false)
+        end
     end
 end
 
 function update()
+    rnav_display_enable:set(rnav_display_power)
+    rnav_display_frq:set(tuned_vor_frequency_mhz)
+
     local tuned_beacon = get_tuned_vor_beacon()
     if tuned_beacon == nil then
+        rnav_display_rad:set(0)
+        rnav_display_dst:set(0)
         target_rmi_value = current_rmi_value
         update_rmi_slew()
         local now = get_absolute_model_time()
         if now - last_message_time >= message_interval_seconds then
             last_message_time = now
-            print_message_to_user(string.format("VOR %.2f MHz: station not found", tuned_vor_frequency_mhz))
+            nav_debug_popup(string.format("VOR %.2f MHz: station not found", tuned_vor_frequency_mhz))
         end
         return
     end
 
     local vor_data = calculate_vor_data(tuned_beacon)
     if vor_data == nil then
+        rnav_display_rad:set(0)
+        rnav_display_dst:set(0)
         target_rmi_value = current_rmi_value
         update_rmi_slew()
         local now = get_absolute_model_time()
         if now - last_message_time >= message_interval_seconds then
             last_message_time = now
-            print_message_to_user(string.format("VOR %.2f MHz: station data incomplete", tuned_vor_frequency_mhz))
+            nav_debug_popup(string.format("VOR %.2f MHz: station data incomplete", tuned_vor_frequency_mhz))
         end
         return
     end
@@ -254,6 +290,8 @@ function update()
     -- so it must receive absolute bearing-to-station, not relative bearing.
     target_rmi_value = bearing_to_rmi_argument(vor_data.bearing_true)
     update_rmi_slew()
+    rnav_display_rad:set(vor_data.bearing_true)
+    rnav_display_dst:set(vor_data.distance_nm)
 
     local now = get_absolute_model_time()
     if now - last_message_time < message_interval_seconds then
@@ -261,7 +299,7 @@ function update()
     end
     last_message_time = now
 
-    print_message_to_user(string.format(
+    nav_debug_popup(string.format(
         "VOR %.2f | BRG %03.0f° | DME %.1f NM",
         tuned_vor_frequency_mhz,
         vor_data.bearing_true,

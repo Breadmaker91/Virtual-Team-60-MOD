@@ -76,9 +76,10 @@ indicators[#indicators + 1] = {"ccIndicator", LockOn_Options.script_path.."ITT/I
 --indicators[#indicators + 1] = {"ccIndicator", LockOn_Options.script_path.."EHSI/EHSI_init.lua",nil,{{"EHSI_center","EHSI_down","EHSI_right"}}}
 -- Radio display
 indicators[#indicators + 1] = {"ccIndicator", LockOn_Options.script_path.."RSGB6500/Radio_init.lua",nil,{{"T60DISPLAY_center","T60DISPLAY_down","T60DISPLAY_right"},{sx_l =  -0.0001,}}}--{{"COM1_center","COM1_down","COM1_right"}}
--- HUD USE for AUTH display now
--- combined to the custom menu now
-indicators[#indicators + 1] = {"ccIndicator", LockOn_Options.script_path.."HUD/Indicator/hud_init.lua",nil,{{"hud_center","hud_down","hud_right"}}}
+-- RNAV display
+indicators[#indicators + 1] = {"ccIndicator", LockOn_Options.script_path.."RNAV/RNAV_init.lua",nil,{{"RNAV_center","RNAV_down","RNAV_right"},{sx_l =  -0.0001,}}}
+-- HUD indicator was moved out/combined into CustomMenu; keep this disabled to avoid missing-file crash.
+--indicators[#indicators + 1] = {"ccIndicator", LockOn_Options.script_path.."HUD/Indicator/hud_init.lua",nil,{{"hud_center","hud_down","hud_right"}}}
 --Gunsight display
 indicators[#indicators + 1] = {"ccIndicator", LockOn_Options.script_path.."GunSight/gunsight_init.lua",nil,{{"hud_center","hud_down","hud_right"}}}
 -- warning panel disabled as all moved to the animation
