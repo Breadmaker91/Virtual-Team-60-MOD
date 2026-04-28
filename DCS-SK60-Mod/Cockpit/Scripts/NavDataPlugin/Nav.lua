@@ -30,6 +30,7 @@ end
 local ILS_beacons = {}
 local TCN_beacons = {}
 local VOR_beacons = {}
+local NDB_beacons = {}
 
 local FilteredAirportData   = {} -- Data filtered for relevant info and has extra info added from /additionalData
 local ICAO                  = {} -- Data from the ICAO data file
@@ -206,6 +207,49 @@ local function addVORBeacon(beaconData)
     VOR_beacons[frequencyHz] = beaconData
 end
 
+local function addILSBeacon(beaconData)
+    if type(beaconData) ~= "table" then
+        return
+    end
+
+    local frequencyHz = normalizeFrequencyHz(beaconData.frequency)
+    if frequencyHz == nil then
+        return
+    end
+
+    local beaconType = beaconData.type
+    local is_ils_type = (beaconType == BEACON_TYPE_ILS_LOCALIZER or beaconType == BEACON_TYPE_ILS_GLIDESLOPE)
+    local is_ils_freq_band = (frequencyHz >= 108100000 and frequencyHz <= 111950000)
+    if (not is_ils_type) and (not is_ils_freq_band) then
+        return
+    end
+
+    ILS_beacons[frequencyHz] = beaconData
+end
+
+local function addNDBBeacon(beaconData)
+    if type(beaconData) ~= "table" then
+        return
+    end
+
+    local beaconType = beaconData.type
+    if beaconType ~= BEACON_TYPE_HOMER
+        and beaconType ~= BEACON_TYPE_AIRPORT_HOMER
+        and beaconType ~= BEACON_TYPE_AIRPORT_HOMER_WITH_MARKER
+        and beaconType ~= BEACON_TYPE_ILS_FAR_HOMER
+        and beaconType ~= BEACON_TYPE_ILS_NEAR_HOMER
+        and beaconType ~= BEACON_TYPE_BROADCAST_STATION then
+        return
+    end
+
+    local frequencyHz = normalizeFrequencyHz(beaconData.frequency)
+    if frequencyHz == nil then
+        return
+    end
+
+    NDB_beacons[frequencyHz] = beaconData
+end
+
 local function loadVORBeacons()
     VOR_beacons = {}
 
@@ -220,6 +264,46 @@ local function loadVORBeacons()
             if type(airportData) == "table" and type(airportData.airdrome) == "table" then
                 for _, beaconData in pairs(airportData.airdrome) do
                     addVORBeacon(beaconData)
+                end
+            end
+        end
+    end
+end
+
+local function loadILSBeacons()
+    ILS_beacons = {}
+
+    if type(beacons) == "table" then
+        for _, beaconData in pairs(beacons) do
+            addILSBeacon(beaconData)
+        end
+    end
+
+    if type(Airdrome) == "table" then
+        for _, airportData in pairs(Airdrome) do
+            if type(airportData) == "table" and type(airportData.airdrome) == "table" then
+                for _, beaconData in pairs(airportData.airdrome) do
+                    addILSBeacon(beaconData)
+                end
+            end
+        end
+    end
+end
+
+local function loadNDBBeacons()
+    NDB_beacons = {}
+
+    if type(beacons) == "table" then
+        for _, beaconData in pairs(beacons) do
+            addNDBBeacon(beaconData)
+        end
+    end
+
+    if type(Airdrome) == "table" then
+        for _, airportData in pairs(Airdrome) do
+            if type(airportData) == "table" and type(airportData.airdrome) == "table" then
+                for _, beaconData in pairs(airportData.airdrome) do
+                    addNDBBeacon(beaconData)
                 end
             end
         end
@@ -291,6 +375,10 @@ function Get_VOR_beacons()
     return VOR_beacons
 end
 
+function Get_NDB_beacons()
+    return NDB_beacons
+end
+
 function getAirports()
     return FilteredAirportData
 end
@@ -301,13 +389,12 @@ end
 
 loadRadios()
 loadAirports()
+loadILSBeacons()
 loadVORBeacons()
+loadNDBBeacons()
 
 -- these will only load if NavDataPluginExtra exists
 supplementAirportData()
 loadICAOData()
-
-
-
 
 

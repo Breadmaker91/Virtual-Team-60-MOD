@@ -112,6 +112,8 @@ animation_list = {
     {"CLIMB_RATE", 339},
     {"SLIDE_IND", 340},
     {"HSI_COMPASS", 341},
+    {"HSI_CDI", 742},
+    {"HSI_COURSE_NEEDLE", 752},
     {"HSI_COURSE", 3420},
     {"HSI_CRS_TOF", 3430},
     {"HSI_HEADING", 3440},
@@ -221,6 +223,10 @@ animation_list = {
     {"PTN_522", 522},
     {"PTN_523", 523},
     {"PTN_524", 524},
+
+    -- NAV Unit (power knob animations driven by nav_system.lua)
+    {"PTN_718", 718},
+    {"PTN_735", 735},
    
     -- warning panel
     {"FIRE_L_ENG"   , 500}, 

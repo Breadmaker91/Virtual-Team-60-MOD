@@ -496,7 +496,16 @@ elements["PTN_527"] = default_axis("Right Large Knob", devices.HUD_DCMS, Keys.Na
 elements["PTN_528"] = default_axis("Right Small Knob", devices.HUD_DCMS, Keys.Nav_Right_Knob_S, 1134, 0, 0.1)]]--
 elements["PTN_733"] = default_axis("VOR Frequency MHz Knob", devices.NAV_SYSTEM, Keys.Nav_VOR_MHz, 733, 0, 0.1, true, true)
 elements["PTN_734"] = default_axis("VOR Frequency 0.05 Knob", devices.NAV_SYSTEM, Keys.Nav_VOR_005, 734, 0, 0.1, true, true)
+elements["PTN_527"] = default_axis("RNAV Offset Radial Knob", devices.NAV_SYSTEM, Keys.Nav_Right_Knob_L, 527, 0, 0.1, true, true)
+elements["PTN_528"] = default_axis("RNAV Offset Distance Knob", devices.NAV_SYSTEM, Keys.Nav_Right_Knob_S, 528, 0, 0.1, true, true)
+elements["PTN_727"] = default_axis("RNAV Waypoint Select Knob", devices.NAV_SYSTEM, Keys.Nav_RNAV_WPT_CYCLE, 727, 0, 0.1, true, true)
+elements["PTN_RNAVDAT"] = default_button("RNAV Data Segment Select", devices.NAV_SYSTEM, Keys.Nav_RNAV_DAT_CYCLE, 0, 1134)
+elements["PTN_750"] = default_axis("VOR Course Knob", devices.NAV_SYSTEM, Keys.Nav_Course_Sel, 750, 0, 0.1, true, true)
 elements["PTN_735"] = default_axis("RNAV Display Power Knob", devices.NAV_SYSTEM, Keys.Nav_RNAV_PWR, 735, 0, 0.1, true, true)
+elements["PTN_736"] = default_axis("ADF Frequency 100kHz Knob", devices.NAV_SYSTEM, Keys.Nav_ADF_100, 736, 0, 0.1, true, true)
+elements["PTN_737"] = default_axis("ADF Frequency 1kHz Knob", devices.NAV_SYSTEM, Keys.Nav_ADF_1, 737, 0, 0.1, true, true)
+elements["PTN_738"] = default_axis("ADF Display Power Knob", devices.NAV_SYSTEM, Keys.Nav_ADF_PWR, 738, 0, 0.1, true, true)
+elements["PTN_718"] = default_2_position_tumb("DME Display Power Knob", devices.NAV_SYSTEM, Keys.Nav_DME_PWR, 718)
 
 -- UHF R&S GB6500
 elements["PTN_554"] = default_axis("UHF Volume", devices.UHF_RADIO, Keys.UHF_Vol, 1134, 0, 0.1)

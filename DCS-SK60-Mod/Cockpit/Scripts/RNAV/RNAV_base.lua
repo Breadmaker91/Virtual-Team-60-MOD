@@ -44,6 +44,35 @@ local function create_rnav_text(name, x_pos, data_param, data_format)
     Add(text)
 end
 
+local function create_rnav_selection_dot(name, x_pos, segment_param)
+    local dot = CreateElement "ceStringPoly"
+    dot.name = name
+    dot.material = "LCD_font_white"
+    dot.init_pos = {x_pos, 0}
+    dot.alignment = "CenterCenter"
+    dot.stringdefs = {0.8 * 0.0095, 0.8 * 0.0095, 0, 0}
+    dot.value = "."
+    dot.element_params = {segment_param, "RNAV_SEL_BLINK", "RNAV_DISPLAY_ENABLE"}
+    dot.controllers = {
+        {"change_color_when_parameter_equal_to_number", 2, 1, 230 / 255, 40 / 255, 40 / 255},
+        {"opacity_using_parameter", 2},
+        {"parameter_in_range", 0, 0.5, 1.5},
+        {"parameter_in_range", 1, 0.5, 1.5},
+    }
+    dot.collimated = true
+    dot.use_mipfilter = true
+    dot.additive_alpha = true
+    dot.isvisible = true
+    dot.h_clip_relation = h_clip_relations.COMPARE
+    dot.level = RNAV_DEFAULT_NOCLIP_LEVEL
+    dot.parent_element = "rnav_base_clip"
+    Add(dot)
+end
+
 create_rnav_text("rnav_frequency_digits", -0.06, "RNAV_DISPLAY_FRQ", "%.2f")
 create_rnav_text("rnav_bearing_digits",    0.33, "RNAV_DISPLAY_RAD", "%03.0f")
 create_rnav_text("rnav_distance_digits",   0.72, "RNAV_DISPLAY_DST", "%05.1f")
+create_rnav_text("rnav_waypoint_digits",  -0.72, "RNAV_DISPLAY_WPT", "%1.0f")
+create_rnav_selection_dot("rnav_sel_dot_frq", 0.16, "RNAV_SEL_FRQ")
+create_rnav_selection_dot("rnav_sel_dot_rad", 0.47, "RNAV_SEL_RAD")
+create_rnav_selection_dot("rnav_sel_dot_dst", 0.89, "RNAV_SEL_DST")

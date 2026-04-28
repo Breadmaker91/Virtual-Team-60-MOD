@@ -182,6 +182,45 @@ gyro_tex.level                    = EADI_DEFAULT_LEVEL
 gyro_tex.parent_element	          = "eadi_adi_rotate"
 Add(gyro_tex)
 
+-- ILS localizer (vertical) and glideslope (horizontal) guidance bars
+local ils_localizer_bar                 = CreateElement "ceMeshPoly"
+ils_localizer_bar.name                  = create_guid_string()
+ils_localizer_bar.primitivetype         = "triangles"
+ils_localizer_bar.vertices              = EADI_vert_gen(90, 1300)
+ils_localizer_bar.indices               = {0,1,2,0,2,3}
+ils_localizer_bar.material              = "DBG_WHITE"
+ils_localizer_bar.init_pos              = {0, 0, 0}
+ils_localizer_bar.collimated            = true
+ils_localizer_bar.element_params        = {"ILS_LOC_DEV", "ILS_BARS_VISIBLE", "LEADI_DIS_ENABLE"}
+ils_localizer_bar.controllers           = {
+    {"move_left_right_using_parameter", 0, 0.18},
+    {"opacity_using_parameter", 1},
+    {"opacity_using_parameter", 2},
+}
+ils_localizer_bar.h_clip_relation       = h_clip_relations.COMPARE
+ils_localizer_bar.level                 = EADI_DEFAULT_LEVEL + 1
+ils_localizer_bar.parent_element        = "eadi_adi_clip"
+Add(ils_localizer_bar)
+
+local ils_glideslope_bar                = CreateElement "ceMeshPoly"
+ils_glideslope_bar.name                 = create_guid_string()
+ils_glideslope_bar.primitivetype        = "triangles"
+ils_glideslope_bar.vertices             = EADI_vert_gen(1300, 90)
+ils_glideslope_bar.indices              = {0,1,2,0,2,3}
+ils_glideslope_bar.material             = "DBG_WHITE"
+ils_glideslope_bar.init_pos             = {0, 0, 0}
+ils_glideslope_bar.collimated           = true
+ils_glideslope_bar.element_params       = {"ILS_GS_DEV", "ILS_BARS_VISIBLE", "LEADI_DIS_ENABLE"}
+ils_glideslope_bar.controllers          = {
+    {"move_up_down_using_parameter", 0, 0.18},
+    {"opacity_using_parameter", 1},
+    {"opacity_using_parameter", 2},
+}
+ils_glideslope_bar.h_clip_relation      = h_clip_relations.COMPARE
+ils_glideslope_bar.level                = EADI_DEFAULT_LEVEL + 1
+ils_glideslope_bar.parent_element       = "eadi_adi_clip"
+Add(ils_glideslope_bar)
+
 local gyro_tex 				      = CreateElement "ceTexPoly"
 gyro_tex.vertices                 = EADI_vert_gen(2206*2,6276)
 gyro_tex.indices                  = {0,1,2,2,3,0}
