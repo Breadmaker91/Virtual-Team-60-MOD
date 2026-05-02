@@ -353,10 +353,11 @@ Keys =
         Nav_DME_PWR = 5127,
         Nav_RNAV_DAT_CYCLE = 5128,
         Nav_RNAV_WPT_CYCLE = 5129,
-	    -- SN3500
+        Nav_EADI_MODE_CYCLE = 5130,
+	    -- Course/heading selectors
     Nav_Course_Sel = 5150,
     Nav_Heading_Sel = 5151,
-    -- EADI
+    -- Display controls
     Display_Brighter = 5200,
     Display_Darker = 5201,
     EALT_BARO = 5202,

@@ -418,23 +418,6 @@ multi_tumb_click_list = {
     {"PTN_501", "Screen Display Dim-", devices.HUD_DCMS, 501, nil, Keys.Display_Darker},
     {"PTN_502", "Screen Display Dim+", devices.HUD_DCMS, 502, nil, Keys.Display_Brighter},
 
-    -- GNS430
-    {"PTN_513", "VLOC/COM Focus Change", devices.HUD_DCMS, 513, nil, Keys.Freq_Knob_Push},
-    {"PTN_514", "COM frequency Flip-flop", devices.HUD_DCMS, 514, nil, Keys.COM_Freq_Swap},
-    {"PTN_515", "VLOC frequency Flip-flop", devices.HUD_DCMS, 515, nil, Keys.VLOC_Freq_Swap},
-    {"PTN_516", "Change CDI", devices.HUD_DCMS, 516, nil, Keys.Nav_CDI},
-    {"PTN_517", "OBS", devices.HUD_DCMS, 517, nil, Keys.Nav_OBS},
-    {"PTN_518", "Message", devices.HUD_DCMS, 518, nil, Keys.Nav_MSG},
-    {"PTN_519", "Flight Plan", devices.HUD_DCMS, 519, nil, Keys.Nav_FPL},
-    {"PTN_520", "Process", devices.HUD_DCMS, 520, nil, Keys.Nav_PROC},
-    {"PTN_521", "Range decrease", devices.HUD_DCMS, 521, nil, Keys.Nav_Map_range_decrease},
-    {"PTN_522", "Range increase", devices.HUD_DCMS, 522, nil, Keys.Nav_Map_range_increse},
-    {"PTN_523", "Direct To", devices.HUD_DCMS, 523, nil, Keys.Nav_Direct_to},
-    {"PTN_524", "Menu", devices.HUD_DCMS, 524, nil, Keys.Nav_Menu},
-    {"PTN_525", "Clear", devices.HUD_DCMS, 525, nil, Keys.Nav_Clear},
-    {"PTN_526", "Enter", devices.HUD_DCMS, 526, nil, Keys.Nav_Ent},
-    {"PTN_529", "Select Input", devices.HUD_DCMS, 529, nil, Keys.Nav_Right_Knob_Push},
-
     -- R&S GB6500
     -- {"PTN_554", "UHF Volume Change", devices.UHF_RADIO, 554, Keys.UHF_Vol_Up, Keys.UHF_Vol_Down},
     {"PTN_555", "UHF SQL ON/OFF, Acknology", devices.UHF_RADIO, 555, SOUND_DEFAULT_2_WAY_SWITCH , Keys.UHF_Vol_Up, Keys.UHF_Vol_Down},
@@ -483,7 +466,7 @@ elements["PTN_134"] = default_axis("Approach Index Light", devices.LIGHT_SYSTEM,
 --elements["PTN_185"] = default_axis("TACAN Channel x10", devices.RADIO_SYSTEM, Keys.TACANChanA, 1134, 0, 0.1)
 --elements["PTN_186"] = default_axis("TACAN Channel x1", devices.RADIO_SYSTEM, Keys.TACANChanB, 1134, 0, 0.1)
 
--- EHSI SANDEL SN3500
+-- HSI selectors
 elements["PTN_534"] = default_axis("Course Selection Knob", devices.HUD_DCMS, Keys.Nav_Course_Sel, 1134, 0, 0.1)
 elements["PTN_541"] = default_axis("Heading Selection Knob", devices.HUD_DCMS, Keys.Nav_Heading_Sel, 1134, 0, 0.1)
 
@@ -502,6 +485,7 @@ elements["PTN_727"] = default_axis("RNAV Waypoint Select Knob", devices.NAV_SYST
 elements["PTN_RNAVDAT"] = default_button("RNAV Data Segment Select", devices.NAV_SYSTEM, Keys.Nav_RNAV_DAT_CYCLE, 0, 1134)
 elements["PTN_750"] = default_axis("VOR Course Knob", devices.NAV_SYSTEM, Keys.Nav_Course_Sel, 750, 0, 0.1, true, true)
 elements["PTN_735"] = default_axis("RNAV Display Power Knob", devices.NAV_SYSTEM, Keys.Nav_RNAV_PWR, 735, 0, 0.1, true, true)
+elements["PTN_503"] = default_button("EADI MODE Button", devices.NAV_SYSTEM, 5130, 0, 503)
 elements["PTN_736"] = default_axis("ADF Frequency 100kHz Knob", devices.NAV_SYSTEM, Keys.Nav_ADF_100, 736, 0, 0.1, true, true)
 elements["PTN_737"] = default_axis("ADF Frequency 1kHz Knob", devices.NAV_SYSTEM, Keys.Nav_ADF_1, 737, 0, 0.1, true, true)
 elements["PTN_738"] = default_axis("ADF Display Power Knob", devices.NAV_SYSTEM, Keys.Nav_ADF_PWR, 738, 0, 0.1, true, true)

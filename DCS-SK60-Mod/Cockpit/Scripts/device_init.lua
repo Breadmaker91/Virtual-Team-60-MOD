@@ -68,12 +68,7 @@ indicators[#indicators + 1] = {"ccIndicator", LockOn_Options.script_path.."ITT/I
 indicators[#indicators + 1] = {"ccIndicator", LockOn_Options.script_path.."ITT/ITT_R_init.lua",nil,{{"ITTR_center","ITTR_down","ITTR_right"},{sx_l =  -0.0001,}}}
 -- TRIM display
 --indicators[#indicators + 1] = {"ccIndicator", LockOn_Options.script_path.."ETRIM/ETRIM_init.lua",nil,{{"T60DISPLAY_center","T60DISPLAY_down","T60DISPLAY_right"},{sx_l =  -0.0001,}}}
--- NS430 Navigation Control Unit
---indicators[#indicators + 1] = {"ccIndicator", LockOn_Options.script_path.."NS430/NS430_layer_A_init.lua",nil,{{"GPS_center","GPS_down","GPS_right"},{sx_l =  -0.001,}}}
--- E Altimeter
---indicators[#indicators + 1] = {"ccIndicator", LockOn_Options.script_path.."EALT/EALT_init.lua",nil,{{"ALT_center","ALT_down","ALT_right"}}} 
--- SANDEL SN3500 EHSI
---indicators[#indicators + 1] = {"ccIndicator", LockOn_Options.script_path.."EHSI/EHSI_init.lua",nil,{{"EHSI_center","EHSI_down","EHSI_right"}}}
+-- Legacy display indicators were removed from the active cockpit stack.
 -- Radio display
 indicators[#indicators + 1] = {"ccIndicator", LockOn_Options.script_path.."RSGB6500/Radio_init.lua",nil,{{"T60DISPLAY_center","T60DISPLAY_down","T60DISPLAY_right"},{sx_l =  -0.0001,}}}--{{"COM1_center","COM1_down","COM1_right"}}
 -- RNAV display

@@ -224,7 +224,24 @@ local function addILSBeacon(beaconData)
         return
     end
 
-    ILS_beacons[frequencyHz] = beaconData
+    local existing = ILS_beacons[frequencyHz]
+    if existing == nil then
+        ILS_beacons[frequencyHz] = beaconData
+        return
+    end
+
+    if existing.__is_collection == true then
+        existing[#existing + 1] = beaconData
+        return
+    end
+
+    -- Keep all colliding entries for a frequency. Selection (localizer preference + nearest)
+    -- is performed at use-site so maps with reused ILS frequencies still resolve correctly.
+    ILS_beacons[frequencyHz] = {
+        existing,
+        beaconData,
+        __is_collection = true,
+    }
 end
 
 local function addNDBBeacon(beaconData)

@@ -49,25 +49,14 @@ local itt_l = get_param_handle("L_ITT_DIGITAL")
 local itt_r = get_param_handle("R_ITT_DIGITAL")
 local itt_color = get_param_handle("ITT_COLOR")
 
---local gps_base = get_param_handle("NS430_POWER")
-
 local hud_adi_movx = get_param_handle("HUD_ADI_MOVX")
-
-local ehsi_enable = get_param_handle("EHSI_DIS_ENABLE")
-local ehsi_full_compass_enable = get_param_handle("COMPASS_FULL_ENABLE")
 local ehsi_compass = get_param_handle("COMPASS_ROLL")
--- local nav_mode = get_param_handle("ACTIVE_NAV_MOD")
 local ehsi_mag_heading = get_param_handle("EHSI_HEADING")
-local ehsi_course_heading = get_param_handle("EHSI_COURSE")
 
 local gps_receiver_lat = get_param_handle("GPS_REC_LAT")
 local gps_receiver_lon = get_param_handle("GPS_REC_LON")
 local gps_receiver_alt = get_param_handle("GPS_REC_ALT")
 
---NS430 Page Test
---local ns430_logo_page = get_param_handle("NAVU_PAGE1_ENABLE")
---local ns430_info_page = get_param_handle("NAVU_PAGE2_ENABLE")
---local ns430_base_page = get_param_handle("NAVU_BASE_ENABLE")
 local temp_dbg = get_param_handle("DBG_OUT_TMP")
 
 local sensor_data = get_base_data()
@@ -78,6 +67,21 @@ local RAD_TO_DEGREE  = 57.29577951308233
 local METER_TO_INCH = 3.2808
 
 local maxG_record = 1
+
+local n1_needle_left = get_param_handle("N1_NEEDLE_LEFT")
+local n1_needle_right = get_param_handle("N1_NEEDLE_RIGHT")
+local N1_NEEDLE_MAX_PERCENT = 120.0
+
+local function set_n1_needle_param(param_handle, n1_percent)
+    local normalized = n1_percent / N1_NEEDLE_MAX_PERCENT
+    if normalized < 0 then
+        normalized = 0
+    elseif normalized > 1 then
+        normalized = 1
+    end
+
+    param_handle:set(normalized)
+end
 
 -- Calibrated display targets provided by user
 local engine_display_calibration = {
@@ -157,14 +161,11 @@ function post_initialize()
     hud_adi_level_enable:set(1)
     --hud_enable:set(1)
     hud_maxg_dis:set(1)
-    --gps_base:set(1)
     erpm_power:set(0)
     n1rpm_power:set(0)
     itt_power:set(0)
 
 end
-
-NS430_Test_Status = 0;
 
 cursor_v = 0
 cursor_h = 0
@@ -216,7 +217,6 @@ local counter_test = 0
 local is_get_mission_route = 0
 
 function update()
-    --gps_base:set(1)
     hud_adi_rot:set(sensor_data.getRoll())
     show_ias:set(1)
     hud_adi_pitch:set(-sensor_data.getPitch())
@@ -281,6 +281,8 @@ function update()
         n1rpm_ln1:set(n1_left)
         n1rpm_rn1:set(n1_right)
         n1rpm_color:set(0)
+        set_n1_needle_param(n1_needle_left, n1_left)
+        set_n1_needle_param(n1_needle_right, n1_right)
 
         itt_power:set(1)
         itt_l:set(itt_left)
@@ -296,6 +298,8 @@ function update()
         n1rpm_ln1:set(0.0)
         n1rpm_rn1:set(0.0)
         n1rpm_color:set(0)
+        set_n1_needle_param(n1_needle_left, 0.0)
+        set_n1_needle_param(n1_needle_right, 0.0)
 
         itt_power:set(0)
         itt_l:set(0.0)
@@ -320,30 +324,8 @@ function update()
     --print_message_to_user("minI:"..temp_dbg2:get())
     --left_n1:set(sensor_data.getEngineLeftRPM())
     --print_message_to_user(left_n1:get())
-    --ehsi_enable:set(1)
-    --ehsi_full_compass_enable:set(1)
-    --ehsi_course_heading:set(0 * RAD_TO_DEGREE)
-    --nav_mode:set(1)
-    --[[
-    if (NS430_Test_Status == 0) then
-        ns430_logo_page:set(1)
-        ns430_info_page:set(0)
-        ns430_base_page:set(0)
-    elseif (NS430_Test_Status == 1) then
-        ns430_logo_page:set(0)
-        ns430_info_page:set(1)
-        ns430_base_page:set(0)
-    else
-        ns430_logo_page:set(0)
-        ns430_info_page:set(0)
-        ns430_base_page:set(1)
-    end
-    ]]
     -- print_message_to_user(line1_lat:get())
     -- print_message_to_user(line1_lon:get())
-    -- local temp_dbg2 = get_param_handle("NS430_FPL_ACT_DISPLAY")
-    -- temp_dbg2:set(1)
-    -- print_message_to_user(temp_dbg2:get())
 end
 
 need_to_be_closed = false

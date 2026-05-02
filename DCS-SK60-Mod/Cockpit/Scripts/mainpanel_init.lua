@@ -71,8 +71,8 @@ function _counter()
 end
 
 animation_list = {
-    {"AOA_IND", 301},
-    {"RADAR_ALT_IND", 302},
+    {"N1_NEEDLE_LEFT", 301},
+    {"N1_NEEDLE_RIGHT", 302},
     {"RPM_LEFT", 303},
     {"RPM_RIGHT", 304},
     {"EGT_LEFT", 305},

@@ -19,8 +19,8 @@ local hsi_tacan_handle = get_param_handle("HSI_TACAN")
 local hsi_adf_handle = get_param_handle("HSI_ADF")
 local hsi_course_needle_handle = get_param_handle("HSI_COURSE_NEEDLE")
 local hsi_cdi_handle = get_param_handle("HSI_CDI")
-local ehsi_course_roll = get_param_handle("COURSE_ROLL")
-local ehsi_course_heading = get_param_handle("EHSI_COURSE")
+local hsi_course_roll = get_param_handle("COURSE_ROLL")
+local hsi_course_heading = get_param_handle("EHSI_COURSE")
 local rnav_display_enable = get_param_handle("RNAV_DISPLAY_ENABLE")
 local rnav_display_frq = get_param_handle("RNAV_DISPLAY_FRQ")
 local rnav_display_rad = get_param_handle("RNAV_DISPLAY_RAD")
@@ -35,6 +35,9 @@ local rnav_ils_mode = get_param_handle("RNAV_ILS_MODE")
 local ils_bars_visible = get_param_handle("ILS_BARS_VISIBLE")
 local ils_loc_dev = get_param_handle("ILS_LOC_DEV")
 local ils_gs_dev = get_param_handle("ILS_GS_DEV")
+local eadi_ils_overlay_enable = get_param_handle("EADI_ILS_OVERLAY_ENABLE")
+local eadi_ils_dots_enable = get_param_handle("EADI_ILS_DOTS_ENABLE")
+local eadi_ils_overlay_mode = 0 -- 0=all off, 1=bars+dots, 2=bars only
 local rnav_display_power = 0
 local adf_display_enable = get_param_handle("ADF_DISPLAY_ENABLE")
 local adf_display_freq = get_param_handle("ADF_DISPLAY_FREQ")
@@ -46,7 +49,7 @@ local dme_display_time = get_param_handle("DME_DISPLAY_TIME")
 local dme_data_valid = get_param_handle("DME_DATA_VALID")
 local dme_power_knob_anim = get_param_handle("PTN_718")
 local nav_main_power_switch = get_param_handle("PTN_401")
-local nav_converter_switch = get_param_handle("PTN_402")
+local nav_bus_power_switch = get_param_handle("PTN_417")
 local dme_display_power = 0
 local selected_vor_course_deg = 0
 local selected_offset_radial_deg = 0
@@ -87,8 +90,11 @@ local target_ils_loc_value = 0
 local current_ils_gs_value = 0
 local target_ils_gs_value = 0
 local ils_bar_slew_per_second = 0.7
+local VOR_DME_MAX_RANGE_NM = 200
+local ILS_LOCALIZER_MAX_RANGE_NM = 18
 local nav_debug_popup_enabled = false
 local last_announced_ils_frequency_hz = nil
+local last_magnetic_variation_deg = 0
 
 local function nav_debug_popup(message)
     if nav_debug_popup_enabled then
@@ -122,7 +128,7 @@ local function set_dme_display_power(is_on)
 end
 
 local function is_nav_units_power_available()
-    return nav_main_power_switch:get() > 0.5 and nav_converter_switch:get() > 0.5
+    return nav_main_power_switch:get() > 0.5 and nav_bus_power_switch:get() > 0.5
 end
 
 local function enforce_nav_units_power_dependency()
@@ -165,16 +171,19 @@ local function get_magnetic_variation_deg()
         return nil
     end
 
-    -- In DCS sensor API, true heading uses opposite turn sign versus magnetic heading.
-    -- Convert true heading convention first, then compute (true - magnetic).
-    local true_converted_rad = (2 * math.pi) - true_heading_rad
-    local variation = (true_converted_rad - magnetic_heading_rad) * RAD_TO_DEGREE
-    if variation > 180 then
-        variation = variation - 360
-    elseif variation < -180 then
-        variation = variation + 360
+    local function norm180(angle_deg)
+        return (angle_deg + 180) % 360 - 180
     end
-    return variation
+
+    -- In DCS avionics device scripts, getHeading() is commonly mirrored relative
+    -- to cockpit compass convention. Convert it before comparing to magnetic.
+    local true_heading_deg = normalize_bearing((360.0 - (true_heading_rad * RAD_TO_DEGREE)))
+    local magnetic_heading_deg = normalize_bearing(magnetic_heading_rad * RAD_TO_DEGREE)
+
+    -- Variation is (true - magnetic), signed in [-180, 180).
+    local variation_deg = norm180(true_heading_deg - magnetic_heading_deg)
+    last_magnetic_variation_deg = variation_deg
+    return variation_deg
 end
 
 local function true_to_magnetic(true_bearing_deg)
@@ -455,8 +464,8 @@ end
 
 local function set_selected_vor_course(course_deg)
     selected_vor_course_deg = normalize_bearing(course_deg)
-    ehsi_course_roll:set(selected_vor_course_deg)
-    ehsi_course_heading:set(selected_vor_course_deg)
+    hsi_course_roll:set(selected_vor_course_deg)
+    hsi_course_heading:set(selected_vor_course_deg)
     set_course_needle(selected_vor_course_deg)
 end
 
@@ -557,17 +566,43 @@ local function get_beacon_position(beacon)
 
     if type(beacon.position) == "table" then
         local bx = beacon.position.x or beacon.position[1]
-        local bz = beacon.position.z or beacon.position.y or beacon.position[3] or beacon.position[2]
+        -- Horizontal plane in DCS world coordinates is X/Z.
+        -- Do NOT fall back to .y here; .y is altitude and causes lateral/nav bearing bias.
+        local bz = beacon.position.z or beacon.position[3]
         if bx ~= nil and bz ~= nil then
             return bx, bz
         end
     end
 
-    if beacon.x ~= nil and (beacon.z ~= nil or beacon.y ~= nil) then
-        return beacon.x, (beacon.z or beacon.y)
+    if beacon.x ~= nil and beacon.z ~= nil then
+        return beacon.x, beacon.z
     end
 
     return nil, nil
+end
+
+local function get_beacon_distance_nm(beacon)
+    local own_x, _, own_z = sensor_data.getSelfCoordinates()
+    if own_x == nil or own_z == nil then
+        return nil
+    end
+
+    local bx, bz = get_beacon_position(beacon)
+    if bx == nil or bz == nil then
+        return nil
+    end
+
+    local dx = bx - own_x
+    local dz = bz - own_z
+    return math.sqrt((dx * dx) + (dz * dz)) * 0.0005399568
+end
+
+local function is_beacon_within_range(beacon, max_range_nm)
+    local distance_nm = get_beacon_distance_nm(beacon)
+    if distance_nm == nil then
+        return false
+    end
+    return distance_nm <= max_range_nm
 end
 
 local function get_tuned_vor_beacon()
@@ -577,7 +612,32 @@ local function get_tuned_vor_beacon()
     end
 
     local tuned_frequency_hz = math.floor((tuned_vor_frequency_mhz * 1000000) + 0.5)
-    return vor_beacons[tuned_frequency_hz]
+    local beacon = vor_beacons[tuned_frequency_hz]
+    if not is_beacon_within_range(beacon, VOR_DME_MAX_RANGE_NM) then
+        return nil
+    end
+    return beacon
+end
+
+local function get_beacon_course_deg_for_selection(beacon)
+    if type(beacon) ~= "table" then
+        return nil
+    end
+
+    local direction = beacon.direction or beacon.course or beacon.runway_course
+    if type(direction) ~= "number" and type(beacon.position) == "table" then
+        direction = beacon.position.direction
+    end
+
+    if type(direction) ~= "number" then
+        return nil
+    end
+
+    if math.abs(direction) <= (2 * math.pi + 0.01) then
+        direction = direction * RAD_TO_DEGREE
+    end
+
+    return normalize_bearing(direction)
 end
 
 local function get_tuned_ils_beacon()
@@ -587,11 +647,83 @@ local function get_tuned_ils_beacon()
     end
 
     local tuned_frequency_hz = math.floor((tuned_vor_frequency_mhz * 1000000) + 0.5)
-    return ils_beacons[tuned_frequency_hz]
+    local entry = ils_beacons[tuned_frequency_hz]
+    if type(entry) ~= "table" then
+        return nil
+    end
+
+    if entry.__is_collection ~= true then
+        if not is_beacon_within_range(entry, ILS_LOCALIZER_MAX_RANGE_NM) then
+            return nil
+        end
+        return entry
+    end
+
+    local own_x, _, own_z = sensor_data.getSelfCoordinates()
+    local best_localizer = nil
+    local best_localizer_dist_nm = math.huge
+    local best_any = nil
+    local best_any_dist_nm = math.huge
+
+    for i = 1, #entry do
+        local beacon = entry[i]
+        if type(beacon) == "table" then
+            local bx, bz = get_beacon_position(beacon)
+            local dist_nm = 9999
+            if own_x ~= nil and own_z ~= nil and bx ~= nil and bz ~= nil then
+                local dx = bx - own_x
+                local dz = bz - own_z
+                dist_nm = math.sqrt((dx * dx) + (dz * dz)) * 0.0005399568
+            end
+
+            if dist_nm < best_any_dist_nm then
+                best_any = beacon
+                best_any_dist_nm = dist_nm
+            end
+
+            if beacon.type == BEACON_TYPE_ILS_LOCALIZER then
+                local score = dist_nm
+                local track_true = nil
+                local vel_x, _, vel_z = sensor_data.getSelfVelocity()
+                if vel_x ~= nil and vel_z ~= nil then
+                    local gs_mps = math.sqrt((vel_x * vel_x) + (vel_z * vel_z))
+                    if gs_mps > 5.0 then
+                        track_true = normalize_bearing(math.deg(math.atan2(vel_x, vel_z)))
+                    end
+                end
+
+                local beacon_course = get_beacon_course_deg_for_selection(beacon)
+                if track_true ~= nil and beacon_course ~= nil then
+                    local direct_err = math.abs(shortest_angle_delta(track_true, beacon_course))
+                    local recip_err = math.abs(shortest_angle_delta(track_true, normalize_bearing(beacon_course + 180)))
+                    local course_err = math.min(direct_err, recip_err)
+                    score = score + (0.10 * course_err)
+                end
+
+                if score < best_localizer_dist_nm then
+                    best_localizer = beacon
+                    best_localizer_dist_nm = score
+                end
+            end
+        end
+    end
+
+    local chosen = best_localizer or best_any
+    if not is_beacon_within_range(chosen, ILS_LOCALIZER_MAX_RANGE_NM) then
+        return nil
+    end
+    return chosen
 end
 
 local function is_ils_frequency_selected(freq_mhz)
-    return freq_mhz >= 108.10 and freq_mhz <= 111.95
+    local freq_khz = math.floor((freq_mhz * 1000) + 0.5)
+    if freq_khz < 108100 or freq_khz > 111950 then
+        return false
+    end
+
+    -- ILS channels live on odd tenth blocks (e.g. 108.10/108.15, 108.30/108.35, ...).
+    local tenth_digit = math.floor(freq_khz / 100) % 10
+    return (tenth_digit % 2) == 1
 end
 
 local function get_beacon_display_name(beacon)
@@ -621,11 +753,19 @@ local function get_ils_course_deg(beacon)
 
     local direction = beacon.direction or beacon.course or beacon.runway_course
     if type(direction) == "number" then
+        -- Some beacon tables provide course in radians, others in degrees.
+        if math.abs(direction) <= (2 * math.pi + 0.01) then
+            direction = direction * RAD_TO_DEGREE
+        end
         return normalize_bearing(direction)
     end
 
     if type(beacon.position) == "table" and type(beacon.position.direction) == "number" then
-        return normalize_bearing(beacon.position.direction)
+        local direction = beacon.position.direction
+        if math.abs(direction) <= (2 * math.pi + 0.01) then
+            direction = direction * RAD_TO_DEGREE
+        end
+        return normalize_bearing(direction)
     end
 
     return nil
@@ -650,44 +790,157 @@ local function get_beacon_altitude_m(beacon)
     return 0
 end
 
+local function get_ils_inbound_course_magnetic(beacon)
+    local ils_course_magnetic = get_ils_course_deg(beacon)
+    if ils_course_magnetic == nil then
+        return nil
+    end
+
+    -- DCS ILS/localizer course data is magnetic. Keep localizer deviation
+    -- calculations fully magnetic to match SK60 cockpit navigation references.
+    return normalize_bearing(ils_course_magnetic)
+end
+
+local function resolve_ils_front_course_deg(inbound_course_deg, beacon_x, beacon_z, own_x, own_z)
+    if inbound_course_deg == nil or beacon_x == nil or beacon_z == nil or own_x == nil or own_z == nil then
+        return inbound_course_deg
+    end
+
+    -- Resolve front/reciprocal using the same local-coordinate geometry frame
+    -- used by DCS beacon position data (x/z plane).
+    local dx = own_x - beacon_x
+    local dz = own_z - beacon_z
+    local bearing_from_beacon = normalize_bearing(math.deg(math.atan2(dz, dx)))
+
+    local direct_course = normalize_bearing(inbound_course_deg)
+    local reciprocal_course = normalize_bearing(inbound_course_deg + 180.0)
+    local direct_err = math.abs(shortest_angle_delta(direct_course, bearing_from_beacon))
+    local reciprocal_err = math.abs(shortest_angle_delta(reciprocal_course, bearing_from_beacon))
+
+    if reciprocal_err < direct_err then
+        return reciprocal_course
+    end
+    return direct_course
+end
+
+local function get_tuned_ils_glideslope_beacon(preferred_course_deg)
+    local ils_beacons = Get_ILS_beacons()
+    if type(ils_beacons) ~= "table" then
+        return nil
+    end
+
+    local tuned_frequency_hz = math.floor((tuned_vor_frequency_mhz * 1000000) + 0.5)
+    local entry = ils_beacons[tuned_frequency_hz]
+    if type(entry) ~= "table" then
+        return nil
+    end
+
+    local own_x, _, own_z = sensor_data.getSelfCoordinates()
+    local best = nil
+    local best_score = math.huge
+
+    local function score_candidate(beacon)
+        if type(beacon) ~= "table" or beacon.type ~= BEACON_TYPE_ILS_GLIDESLOPE then
+            return
+        end
+
+        local score = 0
+        local gs_course = get_ils_course_deg(beacon)
+        if preferred_course_deg ~= nil and gs_course ~= nil then
+            local course_err = math.abs(shortest_angle_delta(preferred_course_deg, normalize_bearing(gs_course)))
+            local recip_err = math.abs(shortest_angle_delta(preferred_course_deg, normalize_bearing(gs_course + 180.0)))
+            score = score + math.min(course_err, recip_err) * 10.0
+        end
+
+        local bx, bz = get_beacon_position(beacon)
+        if own_x ~= nil and own_z ~= nil and bx ~= nil and bz ~= nil then
+            local dx = bx - own_x
+            local dz = bz - own_z
+            local dist_nm = math.sqrt((dx * dx) + (dz * dz)) * 0.0005399568
+            score = score + dist_nm
+        end
+
+        if score < best_score then
+            best = beacon
+            best_score = score
+        end
+    end
+
+    if entry.__is_collection == true then
+        for i = 1, #entry do
+            score_candidate(entry[i])
+        end
+    else
+        score_candidate(entry)
+    end
+
+    return best
+end
+
 local function calculate_ils_deviation(beacon)
     local beacon_x, beacon_z = get_beacon_position(beacon)
     if beacon_x == nil or beacon_z == nil then
-        return 0, 0, 0, 0
+        return 0, 0, 0, 0, nil, nil
     end
 
     local own_x, own_y, own_z = sensor_data.getSelfCoordinates()
     if own_x == nil or own_z == nil then
-        return 0, 0, 0, 0
+        return 0, 0, 0, 0, nil, nil
     end
 
     local own_geo = lo_to_geo_coords(own_x, own_z)
     local beacon_geo = lo_to_geo_coords(beacon_x, beacon_z)
     if own_geo == nil or beacon_geo == nil then
-        return 0, 0, 0, 0
+        return 0, 0, 0, 0, nil, nil
     end
 
-    local ils_course = get_ils_course_deg(beacon)
-    if ils_course == nil then
-        return 0, 0, 0, 0
+    local inbound_course_deg = get_ils_inbound_course_magnetic(beacon)
+    if inbound_course_deg == nil then
+        return 0, 0, 0, 0, nil, nil
     end
 
-    -- Localizer full scale deflection ≈ 2.5 deg.
-    local bearing_to_station = normalize_bearing(getBearing(own_geo.lat, own_geo.lon, beacon_geo.lat, beacon_geo.lon))
-    local loc_delta_deg = shortest_angle_delta(bearing_to_station, ils_course)
+    local resolved_front_course_deg = resolve_ils_front_course_deg(inbound_course_deg, beacon_x, beacon_z, own_x, own_z)
 
-    local loc_norm = clamp(loc_delta_deg / 2.5, -1, 1)
+    local dx = own_x - beacon_x
+    local dz = own_z - beacon_z
+    local bearing_from_beacon_deg = normalize_bearing(math.deg(math.atan2(dz, dx)))
 
-    -- Glideslope full scale deflection ≈ 1.4 deg around 3 deg nominal.
-    local horizontal_distance_m = math.sqrt((beacon_x - own_x)^2 + (beacon_z - own_z)^2)
-    local beacon_alt_m = get_beacon_altitude_m(beacon)
-    local own_alt_m = own_y or beacon_alt_m
-    local vertical_delta_m = own_alt_m - beacon_alt_m
-    local current_slope_deg = math.deg(math.atan2(vertical_delta_m, math.max(horizontal_distance_m, 1)))
-    local gs_error_deg = current_slope_deg - 3.0
-    local gs_norm = clamp((-gs_error_deg) / 1.4, -1, 1)
+    -- Localizer CDI should represent angular displacement from the inbound
+    -- front-course line using local x/z geometry to match DCS beacon data frame.
+    local loc_delta_deg = shortest_angle_delta(resolved_front_course_deg, bearing_from_beacon_deg)
 
-    return loc_norm, gs_norm, loc_delta_deg, gs_error_deg
+    -- Localizer full scale deflection is ±3 deg.
+    local loc_norm = clamp(loc_delta_deg / 3.0, -1, 1)
+
+    -- Compute GS from the dedicated glideslope transmitter geometry.
+    -- This matches real ILS layout (GS near threshold, LOC at far end).
+    local gs_error_deg = 999
+    local gs_norm = 0
+    local gs_beacon = get_tuned_ils_glideslope_beacon(resolved_front_course_deg)
+    if gs_beacon ~= nil then
+        local gs_x, gs_z = get_beacon_position(gs_beacon)
+        if gs_x ~= nil and gs_z ~= nil then
+            local horizontal_distance_m = math.sqrt((gs_x - own_x)^2 + (gs_z - own_z)^2)
+            if horizontal_distance_m >= 1.0 then
+                local gs_alt_m = get_beacon_altitude_m(gs_beacon)
+                local own_alt_m = own_y or gs_alt_m
+                local vertical_delta_m = own_alt_m - gs_alt_m
+                local current_slope_deg = math.deg(math.atan2(vertical_delta_m, horizontal_distance_m))
+                gs_error_deg = current_slope_deg - 3.0
+
+                -- Treat large error as invalid/lost GS signal.
+                if math.abs(gs_error_deg) <= 5.0 then
+                    gs_norm = clamp((-gs_error_deg) / 0.7, -1, 1)
+                else
+                    gs_error_deg = 999
+                    gs_norm = 0
+                end
+            end
+        end
+    end
+
+    local bearing_to_station_true = normalize_bearing(getBearing(own_geo.lat, own_geo.lon, beacon_geo.lat, beacon_geo.lon))
+    return loc_norm, gs_norm, loc_delta_deg, gs_error_deg, resolved_front_course_deg, bearing_to_station_true
 end
 
 local function update_ils_bar_slew()
@@ -806,6 +1059,7 @@ function post_initialize()
     nav_system:listen_command(Keys.Nav_ADF_PWR)
     nav_system:listen_command(Keys.Nav_DME_PWR)
     nav_system:listen_command(Keys.Nav_RNAV_PWR)
+    nav_system:listen_command(Keys.Nav_EADI_MODE_CYCLE)
     set_rnav_display_power(false)
     rnav_ils_mode:set(0)
     ils_bars_visible:set(0)
@@ -815,6 +1069,9 @@ function post_initialize()
     target_ils_loc_value = 0
     current_ils_gs_value = 0
     target_ils_gs_value = 0
+    eadi_ils_overlay_mode = 0
+    eadi_ils_overlay_enable:set(0)
+    eadi_ils_dots_enable:set(0)
     set_adf_display_power(false)
     set_dme_display_power(false)
     adf_display_freq:set(tuned_ndb_frequency_khz)
@@ -958,6 +1215,25 @@ function SetCommand(command, value)
                 set_dme_display_power(false)
             end
         end
+    elseif command == Keys.Nav_EADI_MODE_CYCLE then
+        if value == nil or value > 0 then
+            eadi_ils_overlay_mode = (eadi_ils_overlay_mode + 1) % 3
+            if eadi_ils_overlay_mode == 0 then
+    -- 0: OFF
+    eadi_ils_overlay_enable:set(0)
+    eadi_ils_dots_enable:set(0)
+
+elseif eadi_ils_overlay_mode == 1 then
+    -- 1: BARS ONLY
+    eadi_ils_overlay_enable:set(1)
+    eadi_ils_dots_enable:set(0)
+
+elseif eadi_ils_overlay_mode == 2 then
+    -- 2: BARS + DOTS
+    eadi_ils_overlay_enable:set(1)
+    eadi_ils_dots_enable:set(1)
+end
+        end
     elseif command == Keys.Nav_RNAV_PWR then
         local clicks = command_value_to_clicks(value)
         if clicks > 0 then
@@ -1010,11 +1286,15 @@ function update()
     update_rnav_selection_indicator()
     set_selected_vor_course(selected_vor_course_deg)
 
-    local tuned_ils = get_tuned_ils_beacon()
-    if tuned_ils ~= nil and is_ils_frequency_selected(tuned_vor_frequency_mhz) then
+    local ils_mode_active = is_ils_frequency_selected(tuned_vor_frequency_mhz)
+    local tuned_ils = ils_mode_active and get_tuned_ils_beacon() or nil
+    if ils_mode_active then
         rnav_ils_mode:set(1)
         ils_bars_visible:set(1)
-        local loc_norm, gs_norm, loc_delta_deg, gs_error_deg = calculate_ils_deviation(tuned_ils)
+        local loc_norm, gs_norm, loc_delta_deg, gs_error_deg, loc_inbound_true, loc_bearing_true = 0, 0, 0, 0, nil, nil
+        if tuned_ils ~= nil then
+            loc_norm, gs_norm, loc_delta_deg, gs_error_deg, loc_inbound_true, loc_bearing_true = calculate_ils_deviation(tuned_ils)
+        end
 
         if math.abs(loc_delta_deg) <= 30 then
             target_ils_loc_value = loc_norm
@@ -1029,23 +1309,39 @@ function update()
         end
 
         update_ils_bar_slew()
-        local tuned_frequency_hz = math.floor((tuned_vor_frequency_mhz * 1000000) + 0.5)
-        if last_announced_ils_frequency_hz ~= tuned_frequency_hz then
-            last_announced_ils_frequency_hz = tuned_frequency_hz
-            print_message_to_user(string.format(
-                "ILS Tuned: %.2f MHz - %s",
-                tuned_vor_frequency_mhz,
-                get_beacon_display_name(tuned_ils)
-            ))
+        if tuned_ils ~= nil then
+            local tuned_frequency_hz = math.floor((tuned_vor_frequency_mhz * 1000000) + 0.5)
+            if last_announced_ils_frequency_hz ~= tuned_frequency_hz then
+                last_announced_ils_frequency_hz = tuned_frequency_hz
+                print_message_to_user(string.format(
+                    "ILS Tuned: %.2f MHz - %s",
+                    tuned_vor_frequency_mhz,
+                    get_beacon_display_name(tuned_ils)
+                ))
+            end
+        else
+            last_announced_ils_frequency_hz = nil
         end
+
+        local hsi_ils_cdi_norm = clamp(loc_delta_deg / 3.0, -1, 1)
+        set_hsi_cdi(hsi_ils_cdi_norm)
 
         local now = get_absolute_model_time()
         if now - last_ils_message_time >= ils_message_interval_seconds then
             last_ils_message_time = now
+            local inbound_true = loc_inbound_true or 0
+            local inbound_mag = true_to_magnetic(inbound_true)
+            local bearing_true = loc_bearing_true or 0
+            local bearing_mag = true_to_magnetic(bearing_true)
             print_message_to_user(string.format(
-                "ILS DEV | LOC %+05.1f° | GS %+05.1f°",
+                "ILS DEV | LOC %+05.1f° | GS %+05.1f° | HSI %+04.1f° | CRS %03.0fT/%03.0fM | BRG %03.0fT/%03.0fM",
                 loc_delta_deg,
-                gs_error_deg
+                gs_error_deg,
+                clamp(loc_delta_deg, -3, 3),
+                inbound_true,
+                inbound_mag,
+                bearing_true,
+                bearing_mag
             ))
         end
     else
@@ -1059,15 +1355,62 @@ function update()
     end
 
     local tuned_beacon = get_tuned_vor_beacon()
-    if tuned_beacon == nil then
+    local dme_source_beacon = tuned_beacon
+    if ils_mode_active and tuned_ils ~= nil then
+        dme_source_beacon = tuned_ils
+    elseif dme_source_beacon == nil and tuned_ils ~= nil then
+        dme_source_beacon = tuned_ils
+    end
+
+    if dme_source_beacon ~= nil then
+        local dme_data = calculate_vor_data(dme_source_beacon)
+        if dme_data ~= nil then
+            local closing_speed_kts = calculate_closing_speed_to_target(dme_data.target_geo)
+            if closing_speed_kts == nil then
+                closing_speed_kts = 0
+            end
+
+            local eta_min = 99
+            if closing_speed_kts > 0.5 then
+                eta_min = (dme_data.distance_nm / closing_speed_kts) * 60.0
+            end
+
+            dme_display_dist:set(clamp(dme_data.distance_nm, 0, 999.9))
+            dme_display_gs:set(clamp(closing_speed_kts, 0, 999))
+            dme_display_time:set(clamp(eta_min, 0, 99))
+            dme_data_valid:set(1)
+        else
+            dme_data_valid:set(0)
+        end
+    else
         dme_data_valid:set(0)
-        target_rmi_value = current_rmi_value
-        set_hsi_cdi(0)
+    end
+
+    if tuned_beacon == nil then
+        if ils_mode_active and tuned_ils ~= nil then
+            local ils_rmi_data = calculate_vor_data(tuned_ils)
+            if ils_rmi_data ~= nil then
+                local ils_bearing_for_display = ils_rmi_data.bearing_magnetic or true_to_magnetic(ils_rmi_data.bearing_true)
+                target_rmi_value = bearing_to_rmi_argument(ils_bearing_for_display)
+            else
+                target_rmi_value = current_rmi_value
+            end
+        else
+            target_rmi_value = current_rmi_value
+        end
+
+        if not ils_mode_active then
+            set_hsi_cdi(0)
+        end
         update_rmi_slew()
         local now = get_absolute_model_time()
         if now - last_message_time >= message_interval_seconds then
             last_message_time = now
-            nav_debug_popup(string.format("VOR %.2f MHz: station not found", tuned_vor_frequency_mhz))
+            if ils_mode_active then
+                nav_debug_popup(string.format("ILS %.2f MHz active", tuned_vor_frequency_mhz))
+            else
+                nav_debug_popup(string.format("VOR %.2f MHz: station not found", tuned_vor_frequency_mhz))
+            end
         end
         return
     end
@@ -1088,27 +1431,12 @@ function update()
     end
 
     -- RMI should always point at the selected waypoint and must not be affected by HSI course selection.
-    local vor_bearing_for_display = vor_data.bearing_magnetic or vor_data.bearing_true
+    local vor_bearing_for_display = vor_data.bearing_magnetic or true_to_magnetic(vor_data.bearing_true)
     target_rmi_value = bearing_to_rmi_argument(vor_bearing_for_display)
     update_rmi_slew()
     local cdi_deviation_deg = shortest_angle_delta(selected_vor_course_deg, vor_bearing_for_display)
     local cdi_norm = clamp(cdi_deviation_deg / 10.0, -1, 1)
     set_hsi_cdi(cdi_norm)
-    local closing_speed_kts = calculate_closing_speed_to_target(vor_data.target_geo)
-    if closing_speed_kts == nil then
-        closing_speed_kts = 0
-    end
-
-    local eta_min = 99
-    if closing_speed_kts > 0.5 then
-        eta_min = (vor_data.distance_nm / closing_speed_kts) * 60.0
-    end
-
-    dme_display_dist:set(clamp(vor_data.distance_nm, 0, 999.9))
-    dme_display_gs:set(clamp(closing_speed_kts, 0, 999))
-    dme_display_time:set(clamp(eta_min, 0, 99))
-    dme_data_valid:set(1)
-
     local now = get_absolute_model_time()
     if now - last_message_time < message_interval_seconds then
         return

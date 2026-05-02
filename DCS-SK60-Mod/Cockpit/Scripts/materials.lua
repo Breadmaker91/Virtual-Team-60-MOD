@@ -31,6 +31,7 @@ materials["GROUND_YELLOW"] = {0,0,0,120} --{42,34,29,255}
 -- MENU
 materials["MENU_GREY"]    = {30, 30, 30, 150}
 materials["DBG_WHITE"] = {200,200,200,255}
+materials["DBG_MAGENTA_ILS"] = {255,0,245,255}
 
 -- BS430
 materials["BS430_PURPLE"] 	= {217,40,113,255}
