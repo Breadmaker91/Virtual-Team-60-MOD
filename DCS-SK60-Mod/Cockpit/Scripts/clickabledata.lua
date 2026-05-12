@@ -78,6 +78,24 @@ function default_2_position_tumb(hint_, device_, command_, arg_, sound_, animati
     }
 end
 
+function left_right_command_button(hint_, device_, left_command_, right_command_, arg_, sound_, animation_speed_)
+    local animation_speed_ = animation_speed_ or anim_speed_default
+    return {
+        class           = {class_type.BTN, class_type.BTN},
+        hint            = hint_,
+        device          = device_,
+        action          = {left_command_, right_command_},
+        arg             = {arg_, arg_},
+        arg_value       = {1, -1},
+        arg_lim         = {{0, 1}, {0, 1}},
+        updatable       = true,
+        use_OBB         = true,
+        animated        = {true, true},
+        animation_speed = {animation_speed_, animation_speed_},
+        sound           = sound_ and {{sound_, sound_}} or nil
+    }
+end
+
 function default_multi_position_tumb(hint_, device_, command1_, command2_, arg_, sound_, animation_speed_)
     local animation_speed_ = animation_speed_ or anim_speed_default
     return {
@@ -374,6 +392,8 @@ elements["FLAP_LEVEL"] = default_multi_position_tumb("Flap handle", devices.BREA
 
 elements["PARKING_BREAK"] = default_2_position_tumb("Parking Break", devices.BREAK_SYSTEM, Keys.ParkingBrakes, 432)
 
+elements["PTN_51"] = default_multi_position_tumb(_("Ejection Seat Safety Lever"), devices.animations, Keys.EjectionSeatSafetyLeverOn, Keys.EjectionSeatSafetyLeverOff, 51, SOUND_DEFAULT_2_WAY_SWITCH, 1)
+
 --elements["PTN_118"] = default_button("Boost Pump Test", devices.FUEL_SYSTEM, Keys.BoostPumpTestUP, Keys.BoostPumpTestDOWN, 118)
 
 -- elements["PTN_405"] = default_button("Left Engine Motor Starter", devices.HUD_DCMS, Keys.L_STARTER_PRESS, Keys.L_STARTER_RELEASE, 405, SOUND_DEFAULT_2_WAY_SWITCH )
@@ -482,6 +502,9 @@ elements["PTN_734"] = default_axis("VOR Frequency 0.05 Knob", devices.NAV_SYSTEM
 elements["PTN_527"] = default_axis("RNAV Offset Radial Knob", devices.NAV_SYSTEM, Keys.Nav_Right_Knob_L, 527, 0, 0.1, true, true)
 elements["PTN_528"] = default_axis("RNAV Offset Distance Knob", devices.NAV_SYSTEM, Keys.Nav_Right_Knob_S, 528, 0, 0.1, true, true)
 elements["PTN_727"] = default_axis("RNAV Waypoint Select Knob", devices.NAV_SYSTEM, Keys.Nav_RNAV_WPT_CYCLE, 727, 0, 0.1, true, true)
+elements["PTN_728"] = default_button("RNAV USE Button", devices.NAV_SYSTEM, Keys.Nav_RNAV_USE, 0, 728)
+elements["PTN_729"] = default_button("RNAV RTN Button", devices.NAV_SYSTEM, Keys.Nav_RNAV_RTN, 0, 729)
+elements["PTN_731"] = default_button("RNAV CHK Button", devices.NAV_SYSTEM, Keys.Nav_RNAV_CHK_PRESS, Keys.Nav_RNAV_CHK_RELEASE, 731)
 elements["PTN_RNAVDAT"] = default_button("RNAV Data Segment Select", devices.NAV_SYSTEM, Keys.Nav_RNAV_DAT_CYCLE, 0, 1134)
 elements["PTN_750"] = default_axis("VOR Course Knob", devices.NAV_SYSTEM, Keys.Nav_Course_Sel, 750, 0, 0.1, true, true)
 elements["PTN_735"] = default_axis("RNAV Display Power Knob", devices.NAV_SYSTEM, Keys.Nav_RNAV_PWR, 735, 0, 0.1, true, true)
@@ -489,7 +512,7 @@ elements["PTN_503"] = default_button("EADI MODE Button", devices.NAV_SYSTEM, 513
 elements["PTN_736"] = default_axis("ADF Frequency 100kHz Knob", devices.NAV_SYSTEM, Keys.Nav_ADF_100, 736, 0, 0.1, true, true)
 elements["PTN_737"] = default_axis("ADF Frequency 1kHz Knob", devices.NAV_SYSTEM, Keys.Nav_ADF_1, 737, 0, 0.1, true, true)
 elements["PTN_738"] = default_axis("ADF Display Power Knob", devices.NAV_SYSTEM, Keys.Nav_ADF_PWR, 738, 0, 0.1, true, true)
-elements["PTN_718"] = default_2_position_tumb("DME Display Power Knob", devices.NAV_SYSTEM, Keys.Nav_DME_PWR, 718)
+elements["PTN_718"] = left_right_command_button("DME Display Power Knob", devices.NAV_SYSTEM, Keys.Nav_DME_PWR_ON, Keys.Nav_DME_PWR_OFF, 718)
 
 -- UHF R&S GB6500
 elements["PTN_554"] = default_axis("UHF Volume", devices.UHF_RADIO, Keys.UHF_Vol, 1134, 0, 0.1)

@@ -131,20 +131,22 @@ SK_60 =  {
 		{
 			pos 		        = {- 2.6, 0.126, 0.7756}, -- nozzle coords
 			elevation           = 0,                -- AFB cone elevation
-			diameter	        = 0.01,                -- AFB cone diameter
-			exhaust_length_ab   = 0.00,                -- lenght in m
+			diameter	        = 0.28,                -- Heat blur diameter for one small SK60 nozzle
+			exhaust_length_ab   = 0.01,                -- Minimal length enables heat blur without a large plume
 			exhaust_length_ab_K = 0.7,             -- AB animation
-			smokiness_level 	= 0.01
+			smokiness_level 	= 0.01,
+			afterburner_circles_count = 0
 		},  -- end of [1]
-		[2] = 
+		[2] =
 		{
-			pos 		        = {- 2.6, -0.126, -0.7756}, -- -07668 Y = -3469
+			pos 		        = {- 2.6, 0.126, -0.7756}, -- nozzle coords
 			elevation           = 0,                -- AFB cone elevation
-			diameter	        = 0.01,                -- AFB cone diameter
-			exhaust_length_ab   = 0.00,                -- lenght in m
+			diameter	        = 0.28,                -- Heat blur diameter for one small SK60 nozzle
+			exhaust_length_ab   = 0.01,                -- Minimal length enables heat blur without a large plume
 			exhaust_length_ab_K = 0.7,             -- AB animation
-			smokiness_level 	= 0.01
-		},  -- end of [1]
+			smokiness_level 	= 0.01,
+			afterburner_circles_count = 0
+		},  -- end of [2]
 	},      -- end of engines_nozzles
 	
 sounderName = "Aircraft/Planes/PlaneSK60",	
@@ -154,30 +156,32 @@ sounderName = "Aircraft/Planes/PlaneSK60",
 			[1] = 
 			{
 				ejection_seat_name	=	17,--17=FA-18 58=F-15
-				drop_canopy_name	=	0;  --need to update this .EDM file for it to work again.
-				pos = 	{6.49,	0.94,	- 0.4},
+				-- No drop_canopy_name: SK60 ejects through closed canopy glass,
+				-- so DCS must not wait for a jettisoned/open canopy.
+				pos = 	{2.6,	0.94,	- 0.4}, -- DCS body-axis ejection station; keep near cockpit to avoid pitch impulse
 				g_suit 			    =  6,
 				can_be_playable   	= true,
-				canopy_arg          = 38,
+				-- No canopy_arg here: SK60 ejects through closed canopy glass,
+				-- so the normal canopy animation must not gate ejection.
 				ejection_through_canopy = true,
-				ejection_order    	= 2,
-				ejection_added_speed= {-3,15,-3}, --pilot on the left
+				ejection_order    	= 1,
 				role      			= "pilot",
 				role_display_name   = _("Pilot"),
 			}, -- end of [1]
-			[2] = 
+			[2] =
 			{
 				ejection_seat_name	=	17,--17=FA-18 58=F-15
-				drop_canopy_name	=	0;  --need to update this .EDM file for it to work again.
-				pos = 	{6.49,	0.94,	0.4},
+				-- No drop_canopy_name: SK60 ejects through closed canopy glass,
+				-- so DCS must not wait for a jettisoned/open canopy.
+				pos = 	{2.6,	0.94,	0.4}, -- DCS body-axis ejection station; keep near cockpit to avoid pitch impulse
 				g_suit 			    =  6,
 				can_be_playable   	= true,
-				canopy_arg          = 38,
+				-- No canopy_arg here: SK60 ejects through closed canopy glass,
+				-- so the normal canopy animation must not gate ejection.
 				ejection_through_canopy = true,
 				ejection_order    	= 2,
-				ejection_added_speed= {-3,15,-3}, --pilot on the right
-				role      			= "pilot",
-				role_display_name   = _("Pilot"),
+				role      			= "instructor",
+				role_display_name   = _("Instructor"),
 			},
 		},
 		
@@ -207,7 +211,7 @@ sounderName = "Aircraft/Planes/PlaneSK60",
 				dir = 	{0,	0,	0},
 				pos = 	{-1.453,	-0.406,	1.467}, --{-1.453,	-0.206,	1.467},
 			}, 
-			[2] = 
+			[2] =
 			{
 				dir = 	{0,	0,	0},
 				pos = 	{-1.453,	-0.406,	-1.467}, --{-3.776,	-2.0,	0.422},
@@ -597,19 +601,20 @@ pylons_enumeration = {6, 5, 4, 8, 7, 3, 2, 1},
 		["CREW_2"]              = {critical_damage = 4, args = {-1}, construction = {durability = 0.50, skin = "Fabric"},},
 		["MAIN"]  				= {critical_damage = 4, args = {-1}, construction = {durability = 1, skin = "Aluminum"},},
 		["TAIL_BOTTOM"]  		= {critical_damage = 1, args = {-1}, },
+		["TAIL"]  		= {critical_damage = 2.5, args = {208}, construction = {durability = 1.00, skin = "Aluminum"}, deps_cells = {"KEEL", "KEEL_OUT", "RUDDER", "STABILIZER_L_IN", "STABILIZER_R_IN"},},
 		["FUSELAGE_BOTTOM"]  	= {critical_damage = 1, args = {-1}, },
 		["ENGINE_1"]			= {args = {160},	critical_damage = 2},
 		["ENGINE_2"]			= {args = {160},	critical_damage = 2},
 		
-		--["ELEVATOR_L"]  		= {critical_damage = 1, args = {-1}, },
-		--["ELEVATOR_R"]  		= {critical_damage = 1, args = {-1}, },
+		["ELEVATOR_L"]  		= {critical_damage = 1.2, args = {-1}, construction = {durability = 0.65, skin = "Aluminum"},},
+		["ELEVATOR_R"]  		= {critical_damage = 1.2, args = {-1}, construction = {durability = 0.65, skin = "Aluminum"},},
 		--["COCKPIT_WINDSHIELD"]	= {critical_damage = 1.8, args = {-1}, construction = {durability = 0.65, skin = "Aluminum"},},
-		--["KEEL"]  		= {critical_damage = 1, args = {-1}, },
-		--["KEEL_OUT"]  		= {critical_damage = 1, args = {-1}, },
+		["KEEL"]  		= {critical_damage = 2.0, args = {207}, construction = {durability = 0.90, skin = "Aluminum"}, deps_cells = {"RUDDER", "STABILIZER_L_IN", "STABILIZER_R_IN"},},
+		["KEEL_OUT"]  		= {critical_damage = 1.5, args = {206}, construction = {durability = 0.80, skin = "Aluminum"}, deps_cells = {"RUDDER", "STABILIZER_L_IN", "STABILIZER_R_IN"},},
 		--["NOSE_CENTER"]  		= {critical_damage = 1, args = {-1}, },	
-		--["RUDDER"]  		= {critical_damage = 1, args = {-1}, },	
-		--["STABILIZER_L_IN"]  		= {critical_damage = 1, args = {-1}, },	
-		--["STABILIZER_R_IN"]  		= {critical_damage = 1, args = {-1}, },	
+		["RUDDER"]  		= {critical_damage = 1.0, args = {-1}, construction = {durability = 0.55, skin = "Aluminum"},},
+		["STABILIZER_L_IN"]  		= {critical_damage = 1.8, args = {204}, construction = {durability = 0.80, skin = "Aluminum"}, deps_cells = {"ELEVATOR_L"},},
+		["STABILIZER_R_IN"]  		= {critical_damage = 1.8, args = {205}, construction = {durability = 0.80, skin = "Aluminum"}, deps_cells = {"ELEVATOR_R"},},
 		--["WHEEL_F"]  		= {critical_damage = 1, args = {-1}, },	
 		--["WHEEL_L"]  		= {critical_damage = 1, args = {-1}, },
 		--["WHEEL_R"]  		= {critical_damage = 1, args = {-1}, },

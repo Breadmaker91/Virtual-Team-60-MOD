@@ -205,9 +205,16 @@ function SetCommand(command,value)
             electric_system:AC_Generator_2_on(true)
         end
     elseif command == Keys.Nav_Main_Power then
-        target_status[main_nav_switch][2] = 1 - target_status[main_nav_switch][2]
-        nav_switch_transfer:set(target_status[main_nav_switch][2])
-        dispatch_action(devices.SOUND_SYSTEM, Keys.SND_LEFT_PANEL, cockpit_sound.basic_switch)
+        local requested_status = 1 - target_status[main_nav_switch][2]
+        if value ~= nil then
+            requested_status = value > 0.5 and 1 or 0
+        end
+
+        if target_status[main_nav_switch][2] ~= requested_status then
+            target_status[main_nav_switch][2] = requested_status
+            nav_switch_transfer:set(target_status[main_nav_switch][2])
+            dispatch_action(devices.SOUND_SYSTEM, Keys.SND_LEFT_PANEL, cockpit_sound.basic_switch)
+        end
     end
     --[[
     if target_status[left_gen_switch][2] < 0.5 then

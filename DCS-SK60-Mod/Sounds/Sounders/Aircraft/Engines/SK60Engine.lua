@@ -57,6 +57,7 @@ function SK60Engine:new()
     o.number = 1
     o.sounds = {}
     o.prev_fan_rpm = 0.0
+    o.startup_initialized = false
     o.startup_armed = true
     o.startup_sound = nil
     o.sndCptLo = nil
@@ -68,6 +69,7 @@ end
 function SK60Engine:init(number_, host)
     self.number = number_
     self.prev_fan_rpm = 0.0
+    self.startup_initialized = false
     self.startup_armed = true
 
     self.sounds = {
@@ -207,6 +209,13 @@ end
 
 function SK60Engine:handleStartup(fanRPM)
     local fan = fanRPM or 0.0
+
+    if not self.startup_initialized then
+        self.prev_fan_rpm = fan
+        self.startup_armed = fan <= STARTUP_FAN_RPM_RESET
+        self.startup_initialized = true
+        return
+    end
 
     if self.startup_armed and self.prev_fan_rpm < STARTUP_FAN_RPM_TRIGGER and fan >= STARTUP_FAN_RPM_TRIGGER then
         if self.startup_sound ~= nil then

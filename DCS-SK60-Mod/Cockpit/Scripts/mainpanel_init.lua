@@ -149,6 +149,7 @@ animation_list = {
     {"PTN_115", 115},
     {"PTN_116", 116},
     {"PTN_117", 117},
+    {"PTN_51", 51, {0, 1}, {0, 1}}, -- Ejection seat safety lever
 	{"PTN_131", 131}, --{0, 1}, {0.12, 0.19}},
     {"PTN_132", 132}, --{0, 1}, {0.7, 1}},
 
@@ -227,6 +228,7 @@ animation_list = {
     -- NAV Unit (power knob animations driven by nav_system.lua)
     {"PTN_718", 718},
     {"PTN_735", 735},
+    {"RNAV_EDIT_SEGMENT_CARD", 736, {0, 1}, {0, 1}},
    
     -- warning panel
     {"FIRE_L_ENG"   , 500}, 

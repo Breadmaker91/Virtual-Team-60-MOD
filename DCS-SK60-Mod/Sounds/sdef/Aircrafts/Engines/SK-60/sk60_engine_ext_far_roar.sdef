@@ -7,8 +7,8 @@ release = 0.5
 
 silent_radius = 50
 peak_radius = 200
-inner_radius = 320
-outer_radius = 5000
+inner_radius = 100
+outer_radius = 8000
 
 position = {-2.0, 0.0, 0.0}
 

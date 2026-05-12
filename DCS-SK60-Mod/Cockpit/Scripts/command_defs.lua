@@ -317,6 +317,12 @@ Keys =
     Flap_Pos_Half = 5073,
     Flap_Pos_Down = 5074,
 
+    -- Ejection seat safety lever and gated ejection
+    EjectionSeatSafetyLever = 5075,
+    EjectionSeatSafetyLeverOn = 5076,
+    EjectionSeatSafetyLeverOff = 5077,
+    EjectionSeatEject = 5078,
+
     -- CustomMenu Trigger
     Custom_Menu = 5090,
     Custom_Menu_Enter = 5091,
@@ -351,9 +357,15 @@ Keys =
         Nav_ADF_1 = 5125,
         Nav_ADF_PWR = 5126,
         Nav_DME_PWR = 5127,
+        Nav_DME_PWR_ON = 5135,
+        Nav_DME_PWR_OFF = 5136,
         Nav_RNAV_DAT_CYCLE = 5128,
         Nav_RNAV_WPT_CYCLE = 5129,
         Nav_EADI_MODE_CYCLE = 5130,
+        Nav_RNAV_USE = 5131,
+        Nav_RNAV_CHK_PRESS = 5132,
+        Nav_RNAV_CHK_RELEASE = 5133,
+        Nav_RNAV_RTN = 5134,
 	    -- Course/heading selectors
     Nav_Course_Sel = 5150,
     Nav_Heading_Sel = 5151,
