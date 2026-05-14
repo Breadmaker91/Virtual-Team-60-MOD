@@ -15,10 +15,12 @@ local dme_power_knob_arg = 718
 local rmi_needle_arg = 345
 local adf_needle_arg = 346
 local hsi_course_needle_arg = 752
+local hsi_heading_bug_arg = 753
 local hsi_cdi_arg = 742
 local hsi_tacan_handle = get_param_handle("HSI_TACAN")
 local hsi_adf_handle = get_param_handle("HSI_ADF")
 local hsi_course_needle_handle = get_param_handle("HSI_COURSE_NEEDLE")
+local hsi_heading_bug_handle = get_param_handle("HSI_HEADING_BUG")
 local hsi_cdi_handle = get_param_handle("HSI_CDI")
 local hsi_course_roll = get_param_handle("COURSE_ROLL")
 local hsi_course_heading = get_param_handle("EHSI_COURSE")
@@ -53,6 +55,7 @@ local nav_main_power_switch = get_param_handle("PTN_401")
 local nav_bus_power_switch = get_param_handle("PTN_417")
 local dme_display_power = 0
 local selected_vor_course_deg = 0
+local selected_heading_bug_deg = 0
 local selected_offset_radial_deg = 0
 local selected_offset_distance_nm = 0
 local rnav_check_pressed = false
@@ -644,6 +647,17 @@ local function set_course_needle(course_deg)
     end
 end
 
+local function set_heading_bug(heading_deg)
+    selected_heading_bug_deg = normalize_bearing(heading_deg)
+    local arg_value = course_deg_to_hsi_argument(selected_heading_bug_deg)
+    hsi_heading_bug_handle:set(arg_value)
+    set_aircraft_draw_argument_value(hsi_heading_bug_arg, arg_value)
+
+    if type(set_cockpit_draw_argument_value) == "function" then
+        set_cockpit_draw_argument_value(hsi_heading_bug_arg, arg_value)
+    end
+end
+
 local function set_hsi_cdi(value)
     local clamped = clamp(value, -1, 1)
     hsi_cdi_handle:set(clamped)
@@ -721,6 +735,7 @@ local function initialize_default_nav_unit_state()
     active_waypoint.offset_distance_nm = selected_offset_distance_nm
     active_rnav_edit_segment = EDIT_SEGMENT_FRQ
     selected_vor_course_deg = 0
+    selected_heading_bug_deg = 0
     tuned_ndb_frequency_khz = 350
 end
 
@@ -747,6 +762,7 @@ persist_nav_unit_state = function()
         selected_offset_distance_nm = clamp(sanitize_number(selected_offset_distance_nm, 0, 0, 999.9), 0, 999.9),
         active_rnav_edit_segment = sanitize_edit_segment(active_rnav_edit_segment),
         selected_vor_course_deg = normalize_bearing(sanitize_number(selected_vor_course_deg, 0)),
+        selected_heading_bug_deg = normalize_bearing(sanitize_number(selected_heading_bug_deg, 0)),
         tuned_ndb_frequency_khz = sanitize_number(tuned_ndb_frequency_khz, 350, ndb_min_frequency_khz, ndb_max_frequency_khz),
     }
     write_nav_unit_state_to_file(nav_unit_persistence.state)
@@ -776,6 +792,7 @@ local function restore_nav_unit_state()
     set_offset_distance(sanitize_number(state.selected_offset_distance_nm, waypoint_slots[current_waypoint_index].offset_distance_nm, 0, 999.9))
     active_rnav_edit_segment = sanitize_edit_segment(state.active_rnav_edit_segment)
     selected_vor_course_deg = normalize_bearing(sanitize_number(state.selected_vor_course_deg, 0))
+    selected_heading_bug_deg = normalize_bearing(sanitize_number(state.selected_heading_bug_deg, 0))
     tuned_ndb_frequency_khz = sanitize_number(state.tuned_ndb_frequency_khz, 350, ndb_min_frequency_khz, ndb_max_frequency_khz)
 
     persist_nav_unit_state()
@@ -1439,6 +1456,7 @@ end
 
 function post_initialize()
     nav_system:listen_command(Keys.Nav_Course_Sel)
+    nav_system:listen_command(Keys.Nav_Heading_Sel)
     nav_system:listen_command(Keys.Nav_Right_Knob_L)
     nav_system:listen_command(Keys.Nav_Right_Knob_S)
     nav_system:listen_command(Keys.Nav_RNAV_DAT_CYCLE)
@@ -1484,6 +1502,7 @@ function post_initialize()
     rnav_wpt_active:set(current_waypoint_index == active_waypoint.index and 1 or 0)
     rnav_wpt_pending:set(current_waypoint_index == active_waypoint.index and 0 or 1)
     set_selected_vor_course(selected_vor_course_deg)
+    set_heading_bug(selected_heading_bug_deg)
     set_hsi_cdi(0)
     set_rmi_needle(0)
     set_adf_needle(0)
@@ -1530,6 +1549,12 @@ function SetCommand(command, value)
         local delta_degrees = course_knob_value_to_degrees(value)
         if delta_degrees ~= 0 then
             set_selected_vor_course(selected_vor_course_deg + delta_degrees)
+            persist_nav_unit_state()
+        end
+    elseif command == Keys.Nav_Heading_Sel then
+        local delta_degrees = course_knob_value_to_degrees(value)
+        if delta_degrees ~= 0 then
+            set_heading_bug(selected_heading_bug_deg + delta_degrees)
             persist_nav_unit_state()
         end
     elseif command == Keys.Nav_Right_Knob_L then
@@ -1691,7 +1716,10 @@ function update()
     if tuned_ndb ~= nil then
         local ndb_data = calculate_vor_data(tuned_ndb)
         if ndb_data ~= nil then
-            target_adf_value = bearing_to_rmi_argument(ndb_data.bearing_true)
+            -- Match the RMI compass card/VOR needle convention: the ADF pointer
+            -- must use magnetic bearing, not raw true/geodetic bearing.
+            local adf_bearing_for_display = ndb_data.bearing_magnetic or true_to_magnetic(ndb_data.bearing_true)
+            target_adf_value = bearing_to_rmi_argument(adf_bearing_for_display)
         else
             target_adf_value = current_adf_value
         end
@@ -1704,6 +1732,7 @@ function update()
     update_rnav_display_values()
     update_rnav_selection_indicator()
     set_selected_vor_course(selected_vor_course_deg)
+    set_heading_bug(selected_heading_bug_deg)
 
     local ils_mode_active = is_ils_frequency_selected(active_waypoint.vor_frequency_mhz)
     local tuned_ils = ils_mode_active and get_tuned_ils_beacon(active_waypoint.vor_frequency_mhz) or nil

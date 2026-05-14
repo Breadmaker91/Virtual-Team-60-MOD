@@ -80,7 +80,8 @@ if FM_dll then
 		-- switched to a new estimation, which should be closer to real
 		--moment_of_inertia = {1200.0, 16000.0, 25000.0, 0.0},
 		--moment_of_inertia = {8000, 19000, 25000, 0},
-		moment_of_inertia = {4101.63245, 5354.650, 3278.804, 283.4},
+		--moment_of_inertia = {4101.63245, 5354.650, 3278.804, 283.4},
+		moment_of_inertia = {10000, 20000, 3278.804, 285},
 		suspension = suspension_data,
 	}
 else

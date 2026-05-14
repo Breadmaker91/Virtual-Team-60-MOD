@@ -114,6 +114,7 @@ animation_list = {
     {"HSI_COMPASS", 341},
     {"HSI_CDI", 742},
     {"HSI_COURSE_NEEDLE", 752},
+    {"HSI_HEADING_BUG", 753},
     {"HSI_COURSE", 3420},
     {"HSI_CRS_TOF", 3430},
     {"HSI_HEADING", 3440},

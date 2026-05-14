@@ -10,9 +10,10 @@ return {
             ["vor_frequency_mhz"] = 113.60000000000001,
         },
         ["current_waypoint_index"] = 1,
+        ["selected_heading_bug_deg"] = 98,
         ["selected_offset_distance_nm"] = 21.900000000000013,
         ["selected_offset_radial_deg"] = 196,
-        ["selected_vor_course_deg"] = 99,
+        ["selected_vor_course_deg"] = 142,
         ["tuned_ndb_frequency_khz"] = 350,
         ["tuned_vor_frequency_mhz"] = 113.60000000000001,
         ["version"] = 1,
@@ -40,7 +41,7 @@ return {
             [5] = {
                 ["offset_distance_nm"] = 0,
                 ["offset_radial_deg"] = 0,
-                ["vor_frequency_mhz"] = 111.5,
+                ["vor_frequency_mhz"] = 111.65000000000001,
             },
             [6] = {
                 ["offset_distance_nm"] = 0,

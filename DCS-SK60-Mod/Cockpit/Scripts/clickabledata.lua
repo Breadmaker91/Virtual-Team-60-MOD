@@ -512,7 +512,7 @@ elements["PTN_134"] = default_axis("Approach Index Light", devices.LIGHT_SYSTEM,
 
 -- HSI selectors
 elements["PTN_534"] = default_axis("Course Selection Knob", devices.HUD_DCMS, Keys.Nav_Course_Sel, 1134, 0, 0.1)
-elements["PTN_541"] = default_axis("Heading Selection Knob", devices.HUD_DCMS, Keys.Nav_Heading_Sel, 1134, 0, 0.1)
+elements["PTN_541"] = default_axis("Heading Selection Knob", devices.NAV_SYSTEM, Keys.Nav_Heading_Sel, 1134, 0, 0.1)
 
 -- NAV Unit
 --[[elements["PTN_509"] = default_axis("Vol/PWR Knob", devices.HUD_DCMS, Keys.Nav_Vol_PWR, 1134, 0, 0.1)
@@ -531,6 +531,7 @@ elements["PTN_729"] = default_button("RNAV RTN Button", devices.NAV_SYSTEM, Keys
 elements["PTN_731"] = default_button("RNAV CHK Button", devices.NAV_SYSTEM, Keys.Nav_RNAV_CHK_PRESS, Keys.Nav_RNAV_CHK_RELEASE, 731)
 elements["PTN_RNAVDAT"] = default_button("RNAV Data Segment Select", devices.NAV_SYSTEM, Keys.Nav_RNAV_DAT_CYCLE, 0, 1134)
 elements["PTN_750"] = default_axis("VOR Course Knob", devices.NAV_SYSTEM, Keys.Nav_Course_Sel, 750, 0, 0.1, true, true)
+elements["PTN_751"] = default_axis("HSI Heading Bug Knob", devices.NAV_SYSTEM, Keys.Nav_Heading_Sel, 751, 0, 0.1, true, true)
 elements["PTN_735"] = default_axis("RNAV Display Power Knob", devices.NAV_SYSTEM, Keys.Nav_RNAV_PWR, 735, 0, 0.1, true, true)
 elements["PTN_503"] = default_button("EADI MODE Button", devices.NAV_SYSTEM, 5130, 0, 503)
 elements["PTN_736"] = default_axis("ADF Frequency 100kHz Knob", devices.NAV_SYSTEM, Keys.Nav_ADF_100, 736, 0, 0.1, true, true)
