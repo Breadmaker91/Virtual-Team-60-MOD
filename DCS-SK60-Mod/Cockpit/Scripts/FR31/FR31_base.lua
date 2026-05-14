@@ -15,19 +15,32 @@ clip.controllers = {{"opacity_using_parameter",0}}
 clip.isvisible = SHOW_MASKS
 Add(clip)
 
-local freq = CreateElement "ceStringPoly"
-freq.name = "fr31_freq"
-freq.material = "LCD_font_white"
-freq.init_pos = {0.0, 0.0}
-freq.alignment = "CenterCenter"
-freq.stringdefs = {0.8 * 0.0095, 0.8 * 0.0095, 0, 0}
-freq.formats = {"%s"}
-freq.element_params = {"FR31_ACTIVE_FREQ", "FR31_DSP_ENABLE"}
-freq.controllers = {{"text_using_parameter",0},{"change_color_when_parameter_equal_to_number",1,1,230/255,40/255,40/255},{"opacity_using_parameter",1}}
-freq.collimated = true
-freq.use_mipfilter = true
-freq.additive_alpha = true
-freq.h_clip_relation = h_clip_relations.COMPARE
-freq.level = RNAV_DEFAULT_NOCLIP_LEVEL
-freq.parent_element = "fr31_base_clip"
-Add(freq)
+local digit_positions = {-0.78, -0.39, 0.0, 0.39, 0.78}
+local FR31_FONT_SIZE = 1.55 * 0.0095
+
+local function add_digit(index, x_pos)
+    local digit = CreateElement "ceStringPoly"
+    digit.name = "fr31_digit_" .. index
+    digit.material = "FR31_radio_font"
+    digit.init_pos = {x_pos, 0.0}
+    digit.alignment = "CenterCenter"
+    digit.stringdefs = {FR31_FONT_SIZE, FR31_FONT_SIZE, 0, 0}
+    digit.formats = {"%.0f"}
+    digit.element_params = {"FR31_DIGIT_" .. index, "FR31_DIGIT_" .. index .. "_ENABLE", "FR31_DSP_ENABLE"}
+    digit.controllers = {
+        {"text_using_parameter", 0},
+        {"parameter_in_range", 1, 0.5, 1.5},
+        {"opacity_using_parameter", 2},
+    }
+    digit.collimated = true
+    digit.use_mipfilter = true
+    digit.additive_alpha = true
+    digit.h_clip_relation = h_clip_relations.COMPARE
+    digit.level = RNAV_DEFAULT_NOCLIP_LEVEL
+    digit.parent_element = "fr31_base_clip"
+    Add(digit)
+end
+
+for index,x_pos in ipairs(digit_positions) do
+    add_digit(index, x_pos)
+end

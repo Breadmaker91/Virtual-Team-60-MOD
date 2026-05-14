@@ -2,6 +2,8 @@ local cscripts = folder.."../../../Cockpit/Scripts/"
 dofile(cscripts.."devices.lua")
 dofile(cscripts.."command_defs.lua")
 
+local iCommandPlaneIntercomUHFPress = 1172
+
 local kneeboard_id = 100
 if devices and devices.KNEEBOARD then
 	kneeboard_id = devices.KNEEBOARD
@@ -42,6 +44,7 @@ return {
     {combos = {{key = 'D', reformers = {'LWin'}}},					down = iCommandPlane_EngageAirDefenses,			name = _('Flight - Attack air defenses'),			category = _('Communications')},
     {combos = {{key = 'B', reformers = {'LWin'}}},					down = iCommandPlane_EngageBandits,				name = _('Flight - Engage Bandits'),				category = _('Communications')},
     {combos = {{key = '\\'}},										down = iCommandToggleCommandMenu,				name = _('Communication menu'),						category = _('Communications')},
+    {combos = {{key = '\\', reformers = {'RAlt'}}},						down = iCommandPlaneIntercomUHFPress,		name = _('FR31/UHF Radio menu'),					category = _('Communications')},
     {combos = {{key = '\\', reformers = {'LShift'}}},				down = ICommandSwitchDialog,					name = _('Switch dialog'),							category = _('Communications')},
     {combos = {{key = '\\', reformers = {'LCtrl'}}},				down = ICommandSwitchToCommonDialog,			name = _('Switch to main menu'),					category = _('Communications')},
     
@@ -316,10 +319,8 @@ return {
     {combos = {{key = 'P'}},							down = iCommandPlaneParachute,				name = _('Dragging Chute'),							category = _('Systems') , features = {"dragchute"}},
     {combos = {{key = 'N', reformers = {'RShift'}}},	down = iCommandPlaneResetMasterWarning,		name = _('Audible Warning Reset'),					category = _('Systems')},
     {combos = {{key = 'W', reformers = {'LCtrl'}}},		down = iCommandPlaneJettisonWeapons,up = iCommandPlaneJettisonWeaponsUp, name = _('Weapons Jettison'), category = _('Systems')},
-    {combos = {{key = 'E', reformers = {'LCtrl'}}},		down = Keys.EjectionSeatEject,			name = _('Eject (3 times, safety lever armed)'),	category = _('Systems')},
-    {												down = Keys.EjectionSeatSafetyLever,		name = _('Ejection Seat Safety Lever Toggle'),		category = _('Systems')},
-    {												down = Keys.EjectionSeatSafetyLeverOn,		name = _('Ejection Seat Safety Lever ARM'),		category = _('Systems')},
-    {												down = Keys.EjectionSeatSafetyLeverOff,	name = _('Ejection Seat Safety Lever SAFE'),		category = _('Systems')},
+    {															down = Keys.EjectionSeatSafetyLever,			name = _('Ejection Seat Safety Handle'),			category = _('Systems')},
+    {combos = {{key = 'E', reformers = {'LCtrl'}}},		down = iCommandPlaneEject,					name = _('Eject (3 times)'),						category = _('Systems')},
     {combos = {{key = 'C', reformers = {'RShift'}}},	down = iCommandFlightClockReset,			name = _('Flight Clock Start/Stop/Reset'),			category = _('Systems') , features = {"flightclock"}},
     {													down = iCommandClockElapsedTimeReset,		name = _('Elapsed Time Clock Start/Stop/Reset'),	category = _('Systems') , features = {"flightclock"}},
     {combos = {{key = 'Home', reformers = {'RShift'}}}, down = iCommandEnginesStart,				name = _('Engines Start'),							category = _('Systems')},

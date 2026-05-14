@@ -392,7 +392,7 @@ elements["FLAP_LEVEL"] = default_multi_position_tumb("Flap handle", devices.BREA
 
 elements["PARKING_BREAK"] = default_2_position_tumb("Parking Break", devices.BREAK_SYSTEM, Keys.ParkingBrakes, 432)
 
-elements["PTN_51"] = default_multi_position_tumb(_("Ejection Seat Safety Lever"), devices.animations, Keys.EjectionSeatSafetyLeverOn, Keys.EjectionSeatSafetyLeverOff, 51, SOUND_DEFAULT_2_WAY_SWITCH, 1)
+elements["PTN_51"] = default_multi_position_tumb(_("Ejection Seat Safety Handle"), devices.animations, Keys.EjectionSeatSafetyLeverOn, Keys.EjectionSeatSafetyLeverOff, 51, SOUND_DEFAULT_2_WAY_SWITCH, 1)
 
 --elements["PTN_118"] = default_button("Boost Pump Test", devices.FUEL_SYSTEM, Keys.BoostPumpTestUP, Keys.BoostPumpTestDOWN, 118)
 
@@ -438,23 +438,24 @@ multi_tumb_click_list = {
     {"PTN_501", "Screen Display Dim-", devices.HUD_DCMS, 501, nil, Keys.Display_Darker},
     {"PTN_502", "Screen Display Dim+", devices.HUD_DCMS, 502, nil, Keys.Display_Brighter},
 
-    -- R&S GB6500
-    -- {"PTN_554", "UHF Volume Change", devices.UHF_RADIO, 554, Keys.UHF_Vol_Up, Keys.UHF_Vol_Down},
-    {"PTN_555", "UHF SQL ON/OFF, Acknology", devices.UHF_RADIO, 555, SOUND_DEFAULT_2_WAY_SWITCH , Keys.UHF_Vol_Up, Keys.UHF_Vol_Down},
-    {"PTN_556", "UHF Mode Selection", devices.UHF_RADIO, 556, nil, Keys.UHF_Mode_Left, Keys.UHF_Mode_Right},
-    -- keyboard
-    {"PTN_542", "UHF Key 1 (TONE)", devices.UHF_RADIO, 542, nil, Keys.UHF_Key_1},
-    {"PTN_543", "UHF Key 2 (-)", devices.UHF_RADIO, 543, nil, Keys.UHF_Key_2},
-    {"PTN_544", "UHF Key 3 (+)", devices.UHF_RADIO, 544, nil, Keys.UHF_Key_3},
-    {"PTN_545", "UHF Key 4 (H)", devices.UHF_RADIO, 545, nil, Keys.UHF_Key_4},
-    {"PTN_546", "UHF Key 5 (A)", devices.UHF_RADIO, 546, nil, Keys.UHF_Key_5},
-    {"PTN_547", "UHF Key 6 (M)", devices.UHF_RADIO, 547, nil, Keys.UHF_Key_6},
-    {"PTN_548", "UHF Key 7 (P)", devices.UHF_RADIO, 548, nil, Keys.UHF_Key_7},
-    {"PTN_549", "UHF Key 8 (C)", devices.UHF_RADIO, 549, nil, Keys.UHF_Key_8},
-    {"PTN_550", "UHF Key 9 (T)", devices.UHF_RADIO, 550, nil, Keys.UHF_Key_9},
-    {"PTN_551", "UHF Key < (Manual)", devices.UHF_RADIO, nil, 551, Keys.UHF_Key_MAN},
-    {"PTN_552", "UHF Key 0 (Preset)", devices.UHF_RADIO, nil, 552, Keys.UHF_Key_0},
-    {"PTN_553", "UHF Key > (Enter)", devices.UHF_RADIO, nil, 553, Keys.UHF_Key_ENT},
+    -- FR31 radio
+    {"PTN_555", "FR31 Volume", devices.UHF_RADIO, 555, SOUND_DEFAULT_2_WAY_SWITCH , Keys.UHF_Vol_Up, Keys.UHF_Vol_Down},
+    {"PTN_556", "FR31 UHF Radio Mode Selection", devices.UHF_RADIO, 556, nil, Keys.UHF_Mode_Left, Keys.UHF_Mode_Right},
+    {"PTN_717", "FR31 AM/FM Mode", devices.FR31_RADIO, 717, SOUND_DEFAULT_2_WAY_SWITCH, Keys.FR31_Mode},
+    {"PTN_551", "FR31 MHz Manual Mode", devices.FR31_RADIO, 551, nil, Keys.FR31_Manual_Mode},
+    {"PTN_712", "FR31 NR Mode", devices.FR31_RADIO, 712, nil, Keys.FR31_NR_Mode},
+    {"PTN_715", "FR31 Clear", devices.FR31_RADIO, 715, nil, Keys.FR31_Clear},
+    -- FR31 numeric frequency keypad
+    {"PTN_542", "FR31 Key 1", devices.FR31_RADIO, 542, nil, Keys.FR31_Key_1},
+    {"PTN_543", "FR31 Key 2", devices.FR31_RADIO, 543, nil, Keys.FR31_Key_2},
+    {"PTN_544", "FR31 Key 3", devices.FR31_RADIO, 544, nil, Keys.FR31_Key_3},
+    {"PTN_545", "FR31 Key 4", devices.FR31_RADIO, 545, nil, Keys.FR31_Key_4},
+    {"PTN_546", "FR31 Key 5", devices.FR31_RADIO, 546, nil, Keys.FR31_Key_5},
+    {"PTN_547", "FR31 Key 6", devices.FR31_RADIO, 547, nil, Keys.FR31_Key_6},
+    {"PTN_548", "FR31 Key 7", devices.FR31_RADIO, 548, nil, Keys.FR31_Key_7},
+    {"PTN_549", "FR31 Key 8", devices.FR31_RADIO, 549, nil, Keys.FR31_Key_8},
+    {"PTN_550", "FR31 Key 9", devices.FR31_RADIO, 550, nil, Keys.FR31_Key_9},
+    {"PTN_552", "FR31 Key 0", devices.FR31_RADIO, 552, nil, Keys.FR31_Key_0},
 
     {"PTN_601", "Canopy Handle", devices.CANOPY, 601, nil, 71}, -- iCommandPlaneCanopy
 
@@ -470,6 +471,29 @@ for k,v in pairs(multi_tumb_click_list) do
         elements[multi_tumb_click_list[k][1]] = default_multi_position_tumb( multi_tumb_click_list[k][2],multi_tumb_click_list[k][3],multi_tumb_click_list[k][6],multi_tumb_click_list[k][7],multi_tumb_click_list[k][4],multi_tumb_click_list[k][5])
         elements[multi_tumb_click_list[k][1]].sound	= {{multi_tumb_click_list[k][5], multi_tumb_click_list[k][5]}}
     end
+end
+
+-- FR31 keypad buttons are momentary pushbuttons. Override the generic
+-- two-position tumbler entries from multi_tumb_click_list so each click sends
+-- a positive key press that fr31_radio.lua can buffer as a digit.
+local fr31_keypad_buttons = {
+    {"PTN_551", "FR31 MHz Manual Mode", Keys.FR31_Manual_Mode, 551},
+    {"PTN_712", "FR31 NR Mode", Keys.FR31_NR_Mode, 712},
+    {"PTN_715", "FR31 Clear", Keys.FR31_Clear, 715},
+    {"PTN_542", "FR31 Key 1", Keys.FR31_Key_1, 542},
+    {"PTN_543", "FR31 Key 2", Keys.FR31_Key_2, 543},
+    {"PTN_544", "FR31 Key 3", Keys.FR31_Key_3, 544},
+    {"PTN_545", "FR31 Key 4", Keys.FR31_Key_4, 545},
+    {"PTN_546", "FR31 Key 5", Keys.FR31_Key_5, 546},
+    {"PTN_547", "FR31 Key 6", Keys.FR31_Key_6, 547},
+    {"PTN_548", "FR31 Key 7", Keys.FR31_Key_7, 548},
+    {"PTN_549", "FR31 Key 8", Keys.FR31_Key_8, 549},
+    {"PTN_550", "FR31 Key 9", Keys.FR31_Key_9, 550},
+    {"PTN_552", "FR31 Key 0", Keys.FR31_Key_0, 552},
+}
+
+for _,button in ipairs(fr31_keypad_buttons) do
+    elements[button[1]] = default_button(button[2], devices.FR31_RADIO, button[3], nil, button[4], SOUND_DEFAULT_2_WAY_SWITCH)
 end
 
 elements["PTN_132"] = default_axis("Instrument Light", devices.LIGHT_SYSTEM, Keys.LightInstruBRT, 1132, 0, 0.1)

@@ -9,17 +9,20 @@ local gettext = require("i_18n")
 _ = gettext.translate
 
 local dev = GetSelf()
+local iCommandPlaneIntercomUHFPress = 1172
+local radio_power = get_param_handle("RADIO_POWER")
+local function update_radio_power()
+    -- Keep the native radio available to DCS/SRS like the old SK60 did.
+    -- The FR31 display can still follow aircraft electrical power, but dropping
+    -- RADIO_POWER when PTN_401 is off makes SRS lose the aircraft shortly after
+    -- spawn.
+    radio_power:set(1.0)
+end
 
 -- SRS compatibility
 function dev:is_on()
-    local radio_power = get_param_handle("RADIO_POWER")
     return radio_power:get() > 0.5
 end
-
-function dev:get_frequency()
-    return current_freq
-end
-
 
 local update_time_step = 0.05 --update will be called once per second
 device_timer_dt = update_time_step
@@ -41,16 +44,17 @@ agr = {
 }
 
 GUI = {
-	range = {min = 225E6, max = 399.975E6, step = 25E3}, --Hz
-	displayName = _('UHF Radio AN/ARC-164'),
+	range = {min = 104E6, max = 407.975E6, step = 25E3}, --Hz
+	displayName = _('FR31 Radio'),
 	AM = true,
 	FM = false,
 }
 -- end of block
 
-local current_freq = 256E6
+local current_freq = 124.8E6
 
 dev:listen_command(Keys.RadioUpdate)
+dev:listen_command(iCommandPlaneIntercomUHFPress)
 
 function check_frequency_change()
 	-- check if override by efm radio system
@@ -80,7 +84,7 @@ function post_initialize()
 	-- initialize the radio system
 	local wake_radio = get_param_handle("RADIO_SYSTEM_AVAIL")
 	wake_radio:set(0.0)
-	dev:set_frequency(256E6) -- Sochi
+	dev:set_frequency(current_freq)
   	dev:set_modulation(MODULATION_AM)
   	local intercom = GetDevice(devices.INTERCOM)
   	intercom:set_communicator(devices.UHF_RADIO)
@@ -90,9 +94,8 @@ function post_initialize()
   	str_ptr = string.sub(tostring(dev.link),10)
   	local set_radio_pointer = get_param_handle("RADIO_POINTER")
 	set_radio_pointer:set(str_ptr)
-	local radio_power = get_param_handle("RADIO_POWER")
 	wake_radio:set(1.0)
-	radio_power:set(1.0)
+	update_radio_power()
 
 	local freq_efm_signal = get_param_handle("RADIO_EFM_CHANGED")
 	local freq_uplink_signal = get_param_handle("RADIO_2EFM_CHANGED")
@@ -102,11 +105,15 @@ end
 
 
 function SetCommand(command,value)
+	-- avUHF_ARC_164 handles iCommandPlaneIntercomUHFPress internally once this
+	-- Lua side listens to it. Keep SetCommand lightweight so the native radio
+	-- command can open the airborne communications menu.
 	check_frequency_change()
 end
 
 function update()
-	
+	update_radio_power()
+	check_frequency_change()
 end
 
 

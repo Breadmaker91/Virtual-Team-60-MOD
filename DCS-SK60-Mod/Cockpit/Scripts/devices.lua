@@ -5,10 +5,11 @@ local function counter()
 end
 -------DEVICE ID----------
 devices = {}
+-- Keep the original SK60 device IDs stable. SRS and the EFM depend on fixed
+-- numeric IDs for the native UHF radio and sound system.
 devices["ELECTRIC_SYSTEM"]			= counter() --1
 devices["PRISURFACE"]         		= counter() --2
 devices["CANOPY"]         			= counter() --3
-devices["General_Device"]			= counter() -- test
 devices["BREAK_SYSTEM"]				= counter() --4
 devices["WEAPON_SYSTEM"]			= counter() --5
 devices["UHF_RADIO"]				= counter() --6
@@ -22,9 +23,11 @@ devices["LIGHT_SYSTEM"]				= counter() --13
 devices["SOUND_SYSTEM"]     		= counter()	--14
 devices["WARNING_SYSTEM"]			= counter() --15
 --devices["IPAD_SYSTEM"]				= counter() --16
+devices["General_Device"]			= counter() --16 reserved legacy slot
 devices["MENU_SYSTEM"]				= counter() --17
 devices["UP_LINK"]					= counter() --18
 devices["MISCELANIOUS"]				= counter() --19
 devices["animations"]               = counter() --20
-devices["gunsight"]                 = counter()
-devices["NAV_SYSTEM"]               = counter()
+devices["gunsight"]                 = counter() --21
+devices["NAV_SYSTEM"]               = counter() --22
+devices["FR31_RADIO"]               = counter() --23 FR31 controller

@@ -351,6 +351,14 @@ MPCD_size_mult_2048 = 2.66666667
 MPCD_xsize_2k = 34 * MPCD_size_mult_2048	-- 29
 MPCD_ysize_2k = 64 * MPCD_size_mult_2048
 
+fontdescription["font_FR31_RADIO"] = {
+	texture		= IndicationFontPath.."radio_font.dds",
+	size		= fontdescription["font_LCD"].size,
+	resolution	= fontdescription["font_LCD"].resolution,
+	default		= fontdescription["font_LCD"].default,
+	chars		= fontdescription["font_LCD"].chars,
+}
+
 fontdescription["font_Pixel"] = {
 	texture		= IndicationFontPath.."pixel_font.dds",
 	size		= {12, 12},
@@ -469,6 +477,8 @@ fontdescription["unicodeCN"]	=	font_unicode(IndicationFontPath.."Font_UTF.dds")
 	fonts["EADI_font"]				= {fontdescription["font_EADI"], 10, {200,200,200,255} }
 	fonts["EADI_font_black"]		= {fontdescription["font_EADI"], 10, {0,0,0,255} }
 	fonts["LCD_font_white"]			= {fontdescription["font_LCD"], 10, {200,200,200,255} }
+	fonts["LCD_font_red"]			= {fontdescription["font_LCD"], 10, {227,34,50,255} }
+	fonts["FR31_radio_font"]		= {fontdescription["font_FR31_RADIO"], 10, {204,27,50,255} }
 	fonts["EHSI_font_white"]		= {fontdescription["font_EADI"], 10, {200,200,200,255} }
 	fonts["EHSI_font_green"]		= {fontdescription["font_EADI"], 10, {4,239,113,255} }
 	fonts["EHSI_font_purple"]		= {fontdescription["font_EADI"], 10, {217,40,113,255} }

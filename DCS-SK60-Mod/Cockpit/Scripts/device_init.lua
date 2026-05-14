@@ -22,6 +22,7 @@ creators[devices.WEAPON_SYSTEM]	  ={"avSimpleWeaponSystem"  ,LockOn_Options.scri
 -- These two are for calling ground staff
 creators[devices.INTERCOM]        ={"avIntercom"            ,LockOn_Options.script_path.."Intercom.lua", {devices.UHF_RADIO} }
 creators[devices.UHF_RADIO]       ={"avUHF_ARC_164"         ,LockOn_Options.script_path.."uhf_radio.lua", {devices.INTERCOM, devices.ELECTRIC_SYSTEM} }
+creators[devices.FR31_RADIO]      ={"avLuaDevice"           ,LockOn_Options.script_path.."Systems/fr31_radio.lua"}
 -- radar module
 creators[devices.RADAR_RAW]		  ={"avSimpleRadar"			,LockOn_Options.script_path.."avRadar/Device/Radar_init.lua"}
 -- hud Display processor
@@ -71,6 +72,7 @@ indicators[#indicators + 1] = {"ccIndicator", LockOn_Options.script_path.."ITT/I
 -- Legacy display indicators were removed from the active cockpit stack.
 -- Radio display
 indicators[#indicators + 1] = {"ccIndicator", LockOn_Options.script_path.."RSGB6500/Radio_init.lua",nil,{{"T60DISPLAY_center","T60DISPLAY_down","T60DISPLAY_right"},{sx_l =  -0.0001,}}}--{{"COM1_center","COM1_down","COM1_right"}}
+indicators[#indicators + 1] = {"ccIndicator", LockOn_Options.script_path.."FR31/FR31_init.lua",nil,{{"FR31_center","FR31_down","FR31_right"},{sx_l =  -0.0001,}}}
 -- RNAV display
 indicators[#indicators + 1] = {"ccIndicator", LockOn_Options.script_path.."RNAV/RNAV_init.lua",nil,{{"RNAV_center","RNAV_down","RNAV_right"},{sx_l =  -0.0001,}}}
 -- ADF display

@@ -416,6 +416,22 @@ Keys =
     UHF_Key_ENT = 5621,
     RadioUpdate = 5622,
 
+    -- 5701 - 5750 for FR31 radio
+    FR31_Key_0 = 5701,
+    FR31_Key_1 = 5702,
+    FR31_Key_2 = 5703,
+    FR31_Key_3 = 5704,
+    FR31_Key_4 = 5705,
+    FR31_Key_5 = 5706,
+    FR31_Key_6 = 5707,
+    FR31_Key_7 = 5708,
+    FR31_Key_8 = 5709,
+    FR31_Key_9 = 5710,
+    FR31_Mode = 5711,
+    FR31_Clear = 5712,
+    FR31_Manual_Mode = 5713,
+    FR31_NR_Mode = 5714,
+
     -- 6000 - 6100 for sound trigger
     SND_LEFT_PANEL = 6001,
     SND_CENTER_PANEL = 6002,

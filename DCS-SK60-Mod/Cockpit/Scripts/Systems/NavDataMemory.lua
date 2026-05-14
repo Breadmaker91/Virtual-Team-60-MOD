@@ -12,7 +12,7 @@ return {
         ["current_waypoint_index"] = 1,
         ["selected_offset_distance_nm"] = 21.900000000000013,
         ["selected_offset_radial_deg"] = 196,
-        ["selected_vor_course_deg"] = 92,
+        ["selected_vor_course_deg"] = 99,
         ["tuned_ndb_frequency_khz"] = 350,
         ["tuned_vor_frequency_mhz"] = 113.60000000000001,
         ["version"] = 1,

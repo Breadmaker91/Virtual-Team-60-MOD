@@ -2,6 +2,8 @@ local cscripts = folder.."../../../Cockpit/Scripts/"
 dofile(cscripts.."devices.lua")
 dofile(cscripts.."command_defs.lua")
 
+local iCommandPlaneIntercomUHFPress = 1172
+
 
 local kneeboard_id = 100
 if devices and devices.KNEEBOARD then
@@ -76,10 +78,8 @@ keyCommands = {
     {down = iCommandPlaneParachute,				name = _('Dragging Chute'),				category = _('Systems'),	features = {"dragchute"}},
     {down = iCommandPlaneResetMasterWarning,	name = _('Audible Warning Reset'),		category = _('Systems')},
     {down = iCommandPlaneJettisonWeapons,up = iCommandPlaneJettisonWeaponsUp,	name = _('Weapons Jettison'),	category = _('Systems')},
-    {down = Keys.EjectionSeatEject,			name = _('Eject (3 times, safety lever armed)'),	category = _('Systems')},
-    {down = Keys.EjectionSeatSafetyLever,		name = _('Ejection Seat Safety Lever Toggle'),		category = _('Systems')},
-    {down = Keys.EjectionSeatSafetyLeverOn,		name = _('Ejection Seat Safety Lever ARM'),		category = _('Systems')},
-    {down = Keys.EjectionSeatSafetyLeverOff,	name = _('Ejection Seat Safety Lever SAFE'),		category = _('Systems')},
+    {down = Keys.EjectionSeatSafetyLever,			name = _('Ejection Seat Safety Handle'),	category = _('Systems')},
+    {down = iCommandPlaneEject,					name = _('Eject (3 times)'),			category = _('Systems')},
     {down = iCommandFlightClockReset,			name = _('Flight Clock Start/Stop/Reset'),						category = _('Systems') , features = {"flightclock"}},
     {down = iCommandClockElapsedTimeReset,		name = _('Elapsed Time Clock Start/Stop/Reset'),				category = _('Systems') , features = {"flightclock"}},
     {down = iCommandEnginesStart,				name = _('Engines Start'),				category = _('Systems')},
@@ -156,6 +156,7 @@ keyCommands = {
     {	down = iCommandPlane_EngageAirDefenses,			name = _('Flight - Attack air defenses'),			category = _('Communications')},
     {	down = iCommandPlane_EngageBandits,				name = _('Flight - Engage Bandits'),				category = _('Communications')},
     {	down = iCommandToggleCommandMenu,				name = _('Communication menu'),						category = _('Communications')},
+    {	down = iCommandPlaneIntercomUHFPress,		name = _('FR31/UHF Radio menu'),					category = _('Communications')},
     {	down = ICommandSwitchDialog,					name = _('Switch dialog'),							category = _('Communications')},
     {	down = ICommandSwitchToCommonDialog,			name = _('Switch to main menu'),					category = _('Communications')},
 

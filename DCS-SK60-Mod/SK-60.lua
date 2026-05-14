@@ -252,10 +252,10 @@ ECM 			= "AN/ALQ-135"--F15
 			{ id = 'mfd',  		label = _('MFD'), 		enable = false, hh = 0, mm = 0, mmint = 1, prob = 100 },		
 	},
 	HumanRadio = {
-		frequency 		= 243,  -- Radio Freq
+		frequency 		= 124.800,  -- FR31 default radio frequency
 		editable 		= true,
-		minFrequency	= 103.000,
-		maxFrequency 	= 399.950,
+		minFrequency	= 104.000,
+		maxFrequency 	= 407.975,
 		modulation 		= MODULATION_AM
 	},
 
