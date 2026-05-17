@@ -108,13 +108,11 @@ animation_list = {
     {"QNH_x100", 335},
     {"QNH_x10", 336},
     {"QNH_x1", 337},
-    {"BARO_POWER", 338},
     {"CLIMB_RATE", 339},
-    {"SLIDE_IND", 340},
+    {"SLIDE_IND", 340}, -- slip indicator
     {"HSI_COMPASS", 341},
     {"HSI_CDI", 742},
     {"HSI_COURSE_NEEDLE", 752},
-    {"HSI_HEADING_BUG", 753},
     {"HSI_COURSE", 3420},
     {"HSI_CRS_TOF", 3430},
     {"HSI_HEADING", 3440},
@@ -204,6 +202,7 @@ animation_list = {
     {"EFM_LEFT_THRUST_A", 104},
     {"EFM_RIGHT_THRUST_A", 105},
     {"AIRSPEED_IND", 321},
+    {"TURN_RATE_IND", 338},
 
     {"POD_SMOKE", 902},
     {"NOZZLE_SMOKE", 903},

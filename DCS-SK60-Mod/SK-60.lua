@@ -259,6 +259,28 @@ ECM 			= "AN/ALQ-135"--F15
 		modulation 		= MODULATION_AM
 	},
 
+	panelRadio = {
+		[1] = {
+			name = _("FR31"),
+			range = {
+				{min = 104.000, max = 161.975},
+				{min = 223.000, max = 407.975},
+			},
+			channels = {
+				[1] = { name = _("FR31 NR 100"), default = 243.000, modulation = _("AM"), connect = true},
+				[2] = { name = _("FR31 NR 101"), default = 261.000, modulation = _("AM")},
+				[3] = { name = _("FR31 NR 102"), default = 251.000, modulation = _("AM")},
+				[4] = { name = _("FR31 NR 103"), default = 250.000, modulation = _("AM")},
+				[5] = { name = _("FR31 NR 104"), default = 261.500, modulation = _("AM")},
+				[6] = { name = _("FR31 NR 105"), default = 273.000, modulation = _("AM")},
+				[7] = { name = _("FR31 NR 106"), default = 130.000, modulation = _("AM")},
+				[8] = { name = _("FR31 NR 107"), default = 131.000, modulation = _("AM")},
+				[9] = { name = _("FR31 NR 108"), default = 132.000, modulation = _("AM")},
+				[10] = { name = _("FR31 NR 109"), default = 133.000, modulation = _("AM")},
+			}
+		},
+	},
+
 --Guns = {gun_mount("M_61", { count = 480 },{muzzle_pos = {0.50000, 0.500000, -0.000000}})},   --M_61 is F-15C Mounted Gun
 
 --pylons_enumeration = {1, 11, 10, 2, 3, 9, 4, 8, 5, 7, 6},

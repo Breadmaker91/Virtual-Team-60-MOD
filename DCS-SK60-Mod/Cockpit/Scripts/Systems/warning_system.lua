@@ -19,7 +19,14 @@ local SWITCH_OFF = 0
 local SWITCH_ON = 1
 local SWITCH_TEST = -1
 
-local RAD_TO_DEGREE  = 57.29577951308233
+local IAS_TO_KMH = 3.6
+
+-- Stall warning is driven by indicated airspeed margin instead of AoA.
+-- Values are the configured 1G stall speeds in km/h for the SK-60 flap schedule.
+local STALL_WARNING_MARGIN_KMH = 20
+local STALL_SPEED_CLEAN_KMH = 195
+local STALL_SPEED_TAKEOFF_KMH = 180
+local STALL_SPEED_LANDING_KMH = 165
 
 switch_count = 0
 function _switch_counter()
@@ -156,6 +163,23 @@ local MasterCautionArmed = 0
 local flapGearWarnActive = 0
 local unarmedCounter = 0
 
+function getConfiguredStallSpeedKmh()
+    local flap_position = get_aircraft_draw_argument_value(9)
+    local base_stall_speed_kmh = STALL_SPEED_CLEAN_KMH
+    if flap_position <= 0.5 then
+        base_stall_speed_kmh = STALL_SPEED_CLEAN_KMH + (STALL_SPEED_TAKEOFF_KMH - STALL_SPEED_CLEAN_KMH) * (flap_position / 0.5)
+    else
+        base_stall_speed_kmh = STALL_SPEED_TAKEOFF_KMH + (STALL_SPEED_LANDING_KMH - STALL_SPEED_TAKEOFF_KMH) * ((flap_position - 0.5) / 0.5)
+    end
+
+    local load_factor = sensor_data.getVerticalAcceleration()
+    if load_factor < 1 then
+        load_factor = 1
+    end
+
+    return base_stall_speed_kmh * math.sqrt(load_factor)
+end
+
 function switchTargetStatus(uid, target)
     current_status[uid][3] = target_status[uid][2]
     target_status[uid][2] = target
@@ -281,10 +305,13 @@ function update()
         letTheLightBlink()
         -- warning_display:set(1)
         local main_gear_weight_on_wheels = sensor_data.getWOW_LeftMainLandingGear() > 0.01 or sensor_data.getWOW_RightMainLandingGear() > 0.01
-        local angle_of_attack_degrees = sensor_data.getAngleOfAttack() * RAD_TO_DEGREE
+        local indicated_airspeed_kmh = sensor_data.getIndicatedAirSpeed() * IAS_TO_KMH
+        local stall_warning_speed_kmh = getConfiguredStallSpeedKmh() + STALL_WARNING_MARGIN_KMH
+        local stall_warning_active = indicated_airspeed_kmh <= stall_warning_speed_kmh
+        -- The flap/gear warning drives only the warning-panel light; keep the stall tone tied to stall speed.
         if (main_gear_weight_on_wheels) then
             snd_stall_warning:stop()
-        elseif (angle_of_attack_degrees >= 15) then
+        elseif (stall_warning_active) then
             snd_stall_warning:play_continue()
         else
             snd_stall_warning:stop()

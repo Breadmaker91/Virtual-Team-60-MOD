@@ -12,6 +12,7 @@ local ias_conversion_to_knots = 1  --1.9504132
 local ias_conversion_to_kmh = 3.6 
 local DEGREE_TO_RAD  = 0.0174532925199433
 local RAD_TO_DEGREE  = 57.29577951308233
+local MAX_TURN_RATE_DEG_PER_SEC = 6
 local METER_TO_INCH = 1 --3.2808
 
 gauge_count = 0
@@ -25,12 +26,12 @@ local mach_ind = _gauge_counter()
 local current_g_ind = _gauge_counter()
 local aoa_ind = _gauge_counter()
 local radar_alt_ind = _gauge_counter()
-local Baro_power = _gauge_counter()
 local gyro_roll = _gauge_counter()
 local gyro_pitch= _gauge_counter()
 local climb_rate_ind = _gauge_counter()
 local slide_rate_ind = _gauge_counter()
 local HSI_compass_ind = _gauge_counter()
+local turn_rate_ind = _gauge_counter()
 local fuel_left_ind = _gauge_counter()
 local fuel_right_ind = _gauge_counter()
 
@@ -40,12 +41,12 @@ Gauge_display_state = { -- last parameter define if it is unneed from 9 to zero
     {current_g_ind, 0, 0, get_param_handle("G_METER"), 1, 0.04},
     {aoa_ind, 0, 0, get_param_handle("AOA_IND"), 1, 0.04},
     {radar_alt_ind, 0, 0, get_param_handle("RADAR_ALT_IND"), 1, 0.04},
-    {Baro_power, 0, 0, get_param_handle("BARO_POWER"), 1, 0.005},
     {gyro_roll, 0, 0, get_param_handle("GYRO_ROLL"), 2, 0.04},
     {gyro_pitch, 0, 0, get_param_handle("GYRO_PITCH"), 2, 0.04},
     {climb_rate_ind, 0, 0, get_param_handle("CLIMB_RATE"), 1, 0.04},
     {slide_rate_ind, 0, 0, get_param_handle("SLIDE_IND"), 1, 0.04},
     {HSI_compass_ind, 0, 0, get_param_handle("HSI_COMPASS"), 2, 0.04},
+    {turn_rate_ind, 0, 0, get_param_handle("TURN_RATE_IND"), 1, 0.04},
 	{fuel_left_ind, 0, 0, get_param_handle("FUEL_QUAN_LEFT"), 1, 0.02},
     {fuel_right_ind, 0, 0, get_param_handle("FUEL_QUAN_RIGHT"), 1, 0.02},
 }
@@ -134,12 +135,22 @@ end ]]--
 function calculate_Climb_Slide()
     if (get_elec_dc_status() == true) then
         local climb_rate = sensor_data.getVerticalVelocity() / 40
-        local slide_rate = sensor_data.getRateOfYaw() * RAD_TO_DEGREE / 90
+        local yaw_rate_degrees = sensor_data.getRateOfYaw() * RAD_TO_DEGREE
+        local slide_rate = yaw_rate_degrees / 90
+        -- DCS yaw rate is positive opposite the cockpit turn-rate needle convention.
+        local turn_rate = -yaw_rate_degrees / MAX_TURN_RATE_DEG_PER_SEC
+        if turn_rate > 1 then
+            turn_rate = 1
+        elseif turn_rate < -1 then
+            turn_rate = -1
+        end
         Gauge_display_state[climb_rate_ind][2] = climb_rate
         Gauge_display_state[slide_rate_ind][2] = slide_rate
+        Gauge_display_state[turn_rate_ind][2] = turn_rate
     else
         Gauge_display_state[climb_rate_ind][2] = 0
         Gauge_display_state[slide_rate_ind][2] = 0
+        Gauge_display_state[turn_rate_ind][2] = 0
     end
 end
 

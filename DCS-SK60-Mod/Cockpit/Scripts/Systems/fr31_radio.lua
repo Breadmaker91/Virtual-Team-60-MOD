@@ -26,6 +26,9 @@ local MODE_MANUAL = 1
 local MODE_NR = 2
 local DEFAULT_NR_PRESET = 0
 local NR_DISPLAY_PREFIX = "10"
+
+local NR_PRESET_COUNT = 10
+local MISSION_RADIO_INDEX = 1
 local digit_buffer = ""
 local entry_active = false
 local current_freq_hz = DEFAULT_FREQ_HZ
@@ -178,6 +181,70 @@ local function get_nr_preset_frequency(preset)
     return FR31_PRESETS[preset]
 end
 
+local function normalise_mission_frequency(freq)
+    if freq == nil then
+        return nil
+    end
+
+    local numeric_freq = tonumber(freq)
+    if numeric_freq == nil then
+        return nil
+    end
+
+    -- DCS mission radio channel data is normally stored in MHz, while the
+    -- FR31 preset table uses Hz. Accept Hz as well so hand-built mission data
+    -- or future DCS changes do not require another conversion path.
+    if numeric_freq < 1E6 then
+        return numeric_freq * 1E6
+    end
+
+    return numeric_freq
+end
+
+local function set_nr_preset_if_valid(preset, freq)
+    local freq_hz = normalise_mission_frequency(freq)
+    if is_valid_fr31_frequency(freq_hz) then
+        FR31_PRESETS[preset] = freq_hz
+        return true
+    end
+
+    return false
+end
+
+local function get_mission_radio_channels()
+    if get_aircraft_mission_data == nil then
+        return nil
+    end
+
+    local mission_radio_data = get_aircraft_mission_data("Radio")
+    if mission_radio_data == nil or mission_radio_data[MISSION_RADIO_INDEX] == nil then
+        return nil
+    end
+
+    return mission_radio_data[MISSION_RADIO_INDEX].channels
+end
+
+local function load_nr_presets_from_mission()
+    if FR31_PRESETS == nil then
+        FR31_PRESETS = {}
+    end
+
+    local mission_channels = get_mission_radio_channels()
+    if mission_channels == nil then
+        return false
+    end
+
+    local loaded_any = false
+    local has_zero_based_channels = mission_channels[0] ~= nil
+
+    for preset = 0, NR_PRESET_COUNT - 1 do
+        local channel_index = has_zero_based_channels and preset or preset + 1
+        loaded_any = set_nr_preset_if_valid(preset, mission_channels[channel_index]) or loaded_any
+    end
+
+    return loaded_any
+end
+
 local function select_nr_preset(preset)
     local preset_freq_hz = get_nr_preset_frequency(preset)
     if not is_valid_fr31_frequency(preset_freq_hz) then
@@ -227,6 +294,7 @@ local function update_display()
 end
 
 function post_initialize()
+    load_nr_presets_from_mission()
     select_nr_preset(current_nr_preset)
     if not is_valid_fr31_frequency(current_freq_hz) then
         set_radio_frequency(DEFAULT_FREQ_HZ)
