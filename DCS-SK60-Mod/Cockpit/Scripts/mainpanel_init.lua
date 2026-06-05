@@ -113,6 +113,7 @@ animation_list = {
     {"HSI_COMPASS", 341},
     {"HSI_CDI", 742},
     {"HSI_COURSE_NEEDLE", 752},
+    {"HSI_HEADING_BUG", 753},
     {"HSI_COURSE", 3420},
     {"HSI_CRS_TOF", 3430},
     {"HSI_HEADING", 3440},
@@ -228,6 +229,7 @@ animation_list = {
     -- NAV Unit (power knob animations driven by nav_system.lua)
     {"PTN_718", 718},
     {"PTN_735", 735},
+    {"PTN_751", 751},
     {"RNAV_EDIT_SEGMENT_CARD", 736, {0, 1}, {0, 1}},
    
     -- warning panel

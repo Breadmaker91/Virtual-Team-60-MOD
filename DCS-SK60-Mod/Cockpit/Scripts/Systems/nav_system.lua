@@ -599,6 +599,13 @@ local function course_knob_value_to_degrees(value)
     return degrees
 end
 
+local function heading_bug_knob_value_to_degrees(value)
+    -- PTN_751 is a mouse-wheel driven relative knob. Treat each wheel detent as
+    -- one click so the selected heading indicator advances exactly 1° per scroll
+    -- in either direction.
+    return command_value_to_clicks(value)
+end
+
 local function bearing_to_rmi_argument(bearing_deg)
     local normalized = normalize_bearing(bearing_deg)
     local signed = normalized
@@ -1552,7 +1559,7 @@ function SetCommand(command, value)
             persist_nav_unit_state()
         end
     elseif command == Keys.Nav_Heading_Sel then
-        local delta_degrees = course_knob_value_to_degrees(value)
+        local delta_degrees = heading_bug_knob_value_to_degrees(value)
         if delta_degrees ~= 0 then
             set_heading_bug(selected_heading_bug_deg + delta_degrees)
             persist_nav_unit_state()
