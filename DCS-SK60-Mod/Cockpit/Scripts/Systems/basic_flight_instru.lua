@@ -13,6 +13,22 @@ local ias_conversion_to_kmh = 3.6
 local DEGREE_TO_RAD  = 0.0174532925199433
 local RAD_TO_DEGREE  = 57.29577951308233
 local MAX_TURN_RATE_DEG_PER_SEC = 6
+local AIRSPEED_NEEDLE_CALIBRATION = {
+    { speed = 100, arg = 0.0 },
+    { speed = 150, arg = 0.081280 }, -- measured 150 km/h dial at 164 km/h IAS
+    { speed = 200, arg = 0.171450 }, -- measured 200 km/h dial at 235 km/h IAS
+    { speed = 250, arg = 0.217170 }, -- measured 250 km/h dial at 271 km/h IAS
+    { speed = 300, arg = 0.250190 }, -- measured 300 km/h dial at 297 km/h IAS
+    { speed = 350, arg = 0.298450 }, -- measured 350 km/h dial at 335 km/h IAS
+    { speed = 400, arg = 0.330200 }, -- measured 400 km/h dial at 360 km/h IAS
+    { speed = 450, arg = 0.379730 }, -- measured 450 km/h dial at 399 km/h IAS
+    { speed = 500, arg = 0.420370 }, -- measured 500 km/h dial at 431 km/h IAS
+    { speed = 550, arg = 0.461010 }, -- measured 550 km/h dial at 463 km/h IAS
+    { speed = 600, arg = 0.501650 }, -- measured 600 km/h dial at 495 km/h IAS
+    { speed = 650, arg = 0.537210 }, -- measured 650 km/h dial at 523 km/h IAS
+    { speed = 700, arg = 0.580390 }, -- measured 700 km/h dial at 557 km/h IAS
+    { speed = 1200, arg = 0.95 },
+}
 local METER_TO_INCH = 1 --3.2808
 
 gauge_count = 0
@@ -51,6 +67,23 @@ Gauge_display_state = { -- last parameter define if it is unneed from 9 to zero
     {fuel_right_ind, 0, 0, get_param_handle("FUEL_QUAN_RIGHT"), 1, 0.02},
 }
 
+local function get_airspeed_needle_arg(speed_kmh)
+    if speed_kmh <= AIRSPEED_NEEDLE_CALIBRATION[1].speed then
+        return AIRSPEED_NEEDLE_CALIBRATION[1].arg
+    end
+
+    for i = 2, #AIRSPEED_NEEDLE_CALIBRATION do
+        local current_point = AIRSPEED_NEEDLE_CALIBRATION[i]
+        if speed_kmh <= current_point.speed then
+            local previous_point = AIRSPEED_NEEDLE_CALIBRATION[i - 1]
+            local speed_fraction = (speed_kmh - previous_point.speed) / (current_point.speed - previous_point.speed)
+            return previous_point.arg + speed_fraction * (current_point.arg - previous_point.arg)
+        end
+    end
+
+    return AIRSPEED_NEEDLE_CALIBRATION[#AIRSPEED_NEEDLE_CALIBRATION].arg
+end
+
 function Airspeed_Gauge_AOA_G_Cal()
     local current_speed = 0
     local vertical_acc = 1
@@ -58,13 +91,7 @@ function Airspeed_Gauge_AOA_G_Cal()
         current_speed = sensor_data.getIndicatedAirSpeed() * ias_conversion_to_kmh
         vertical_acc = sensor_data.getVerticalAcceleration()
     end
-    if current_speed < 600 then
-        Gauge_display_state[airspeed_ind][2] = (current_speed / 600) * 0.635
-    elseif current_speed < 1200 then
-        Gauge_display_state[airspeed_ind][2] = ((current_speed - 600) / 600) * 0.315 + 0.635
-    else
-        Gauge_display_state[airspeed_ind][2] = 0.95
-    end
+    Gauge_display_state[airspeed_ind][2] = get_airspeed_needle_arg(current_speed)
     --[[
     if vertical_acc > 0 then
         Gauge_display_state[current_g_ind][2] = vertical_acc/8*0.889

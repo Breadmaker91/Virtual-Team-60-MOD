@@ -202,7 +202,9 @@ animation_list = {
     {"STICK_ROLL", 2},
     {"EFM_LEFT_THRUST_A", 104},
     {"EFM_RIGHT_THRUST_A", 105},
-    {"AIRSPEED_IND", 321},
+    -- Use the Lua metric IAS calibration from basic_flight_instru.lua.
+    -- AIRSPEED_IND is driven by the EFM's knot-based fallback curve and under-reads the km/h gauge.
+    {"AIR_SPEED", 321},
     {"TURN_RATE_IND", 338},
 
     {"POD_SMOKE", 902},
