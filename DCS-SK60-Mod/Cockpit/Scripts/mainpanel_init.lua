@@ -100,14 +100,14 @@ animation_list = {
     {"CLOCK_S", 344},
 
     {"OXY_QUAN", 329},
-    {"ALT_XH_ANALOG", 330},
-    {"BARO_x1H", 331},
-    {"BARO_x1K", 332},
-    {"BARO_x1W", 333},
-    {"QNH_x1K", 334},
-    {"QNH_x100", 335},
-    {"QNH_x10", 336},
-    {"QNH_x1", 337},
+    {"ALT_XH_ANALOG", 430},
+    {"BARO_x1H", 431},
+    {"BARO_x1K", 432},
+    {"BARO_x1W", 433},
+    {"QNH_x1K", 434},
+    {"QNH_x100", 435},
+    {"QNH_x10", 436},
+    {"QNH_x1", 437},
     {"CLIMB_RATE", 339},
     {"SLIDE_IND", 340}, -- slip indicator
     {"HSI_COMPASS", 341},
@@ -253,8 +253,14 @@ animation_list = {
     {"FLAP_GEAR_WARN", 317},
     {"MASTER_WARN"  , 135},
 
-    -- ipad model shown
-    {"IPAD_SHOWN", 950},
+    -- FR33 frequency rolls
+    {"FR33_DIAL_100MHZ", 950, {0, 1}, {0, 1}},
+    {"FR33_DIAL_10MHZ", 951, {0, 1}, {0, 1}},
+    {"FR33_DIAL_1MHZ", 952, {0, 1}, {0, 1}},
+    {"FR33_DIAL_100KHZ", 953, {0, 1}, {0, 1}},
+    {"FR33_DIAL_10KHZ", 954, {0, 1}, {0, 1}},
+    {"FR33_DIAL_1KHZ", 955, {0, 1}, {0, 1}},
+
     -- show the ias panel
     {"IAS_TEXT", 900},
 }
@@ -293,11 +299,27 @@ Fuel.controller						= controllers.base_gauge_TotalFuelWeight
 ]]--
 
 
-PilotDraw                = CreateGauge("parameter")
-PilotDraw.arg_number     = 3100
-PilotDraw.input          = {0, 1}
-PilotDraw.output         = {0, 1}
-PilotDraw.parameter_name = "pilotToggle"
+local function create_parameter_gauge(parameter_name, arg_number, input_range, output_range)
+    local gauge = CreateGauge("parameter")
+    gauge.arg_number = arg_number
+    gauge.input = input_range
+    gauge.output = output_range
+    gauge.parameter_name = parameter_name
+    return gauge
+end
+
+local visibility_range = {0, 1}
+local head_motion_range = {-1, 1}
+
+PilotDraw = create_parameter_gauge("pilotToggle", 3100, visibility_range, visibility_range)
+LeftPilotBodyDraw = create_parameter_gauge("LEFT_PILOT_BODY_VISIBLE", 3101, visibility_range, visibility_range)
+LeftPilotHeadDraw = create_parameter_gauge("LEFT_PILOT_HEAD_VISIBLE", 3102, visibility_range, visibility_range)
+RightPilotBodyDraw = create_parameter_gauge("RIGHT_PILOT_BODY_VISIBLE", 3103, visibility_range, visibility_range)
+RightPilotHeadDraw = create_parameter_gauge("RIGHT_PILOT_HEAD_VISIBLE", 3104, visibility_range, visibility_range)
+
+CockpitLeftPilotHeadLR = create_parameter_gauge("COCKPIT_LEFT_PILOT_HEAD_LR", 40, head_motion_range, head_motion_range)
+CockpitLeftPilotHeadUD = create_parameter_gauge("COCKPIT_LEFT_PILOT_HEAD_UD", 100, head_motion_range, head_motion_range)
+CockpitRightPilotHeadLR = create_parameter_gauge("COCKPIT_RIGHT_PILOT_HEAD_LR", 336, head_motion_range, head_motion_range)
 
 
 

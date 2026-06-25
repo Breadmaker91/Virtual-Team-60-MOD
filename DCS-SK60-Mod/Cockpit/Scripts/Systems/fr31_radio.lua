@@ -9,6 +9,13 @@ local fr31_display_enable = get_param_handle("FR31_DSP_ENABLE")
 local fr31_active_freq = get_param_handle("FR31_ACTIVE_FREQ")
 local fr31_mode = get_param_handle("FR31_MODULATION")
 local fr31_freq_hz = get_param_handle("FR31_FREQ_HZ")
+local fr31_powered = get_param_handle("FR31_POWERED")
+local fr31_backing_available = get_param_handle("FR31_BACKING_AVAILABLE")
+local fr31_operating_mode = get_param_handle("FR31_OPERATING_MODE")
+local fr31_nr_preset = get_param_handle("FR31_NR_PRESET")
+local fr31_entry_active = get_param_handle("FR31_ENTRY_ACTIVE")
+local fr31_entry_length = get_param_handle("FR31_ENTRY_LENGTH")
+local fr31_frequency_valid = get_param_handle("FR31_FREQ_VALID")
 local DISPLAY_DIGIT_COUNT = 5
 local fr31_digits = {}
 local fr31_digit_enables = {}
@@ -35,6 +42,11 @@ local current_freq_hz = DEFAULT_FREQ_HZ
 local current_modulation = 0 -- 0 = AM, 1 = FM
 local operating_mode = MODE_MANUAL
 local current_nr_preset = DEFAULT_NR_PRESET
+local last_backing_radio_available = 0
+
+local function bool_to_number(value)
+    return value and 1 or 0
+end
 
 local function frequencies_differ(left_hz, right_hz)
     return math.abs(left_hz - right_hz) >= 1
@@ -113,31 +125,59 @@ local function is_valid_fr31_frequency(freq_hz)
     return math.floor((freq_hz / FREQ_STEP_HZ) + 0.5) * FREQ_STEP_HZ == freq_hz
 end
 
-local function get_backing_radio_frequency()
+local function get_backing_radio()
     local uhf_radio = GetDevice(devices.UHF_RADIO)
+    if uhf_radio ~= nil then
+        last_backing_radio_available = 1
+        return uhf_radio
+    end
+
+    last_backing_radio_available = 0
+    return nil
+end
+
+local function get_backing_radio_frequency()
+    local uhf_radio = get_backing_radio()
     if uhf_radio ~= nil then
         local ok, radio_freq_hz = pcall(function()
             return uhf_radio:get_frequency()
         end)
 
         if ok then
+            last_backing_radio_available = 1
             return radio_freq_hz
         end
     end
 
+    last_backing_radio_available = 0
     return nil
+end
+
+local function publish_fr31_state()
+    fr31_freq_hz:set(current_freq_hz)
+    fr31_active_freq:set(current_freq_hz / 1E6)
+    fr31_mode:set(current_modulation)
+    fr31_powered:set(bool_to_number(is_powered()))
+    fr31_backing_available:set(last_backing_radio_available)
+    fr31_operating_mode:set(operating_mode)
+    fr31_nr_preset:set(current_nr_preset)
+    fr31_entry_active:set(bool_to_number(entry_active))
+    fr31_entry_length:set(string.len(digit_buffer))
+    fr31_frequency_valid:set(bool_to_number(is_valid_fr31_frequency(current_freq_hz)))
 end
 
 local function apply_fr31_frequency(freq_hz)
     current_freq_hz = freq_hz
-    fr31_freq_hz:set(freq_hz)
-    fr31_active_freq:set(freq_hz / 1E6)
+    publish_fr31_state()
 end
 
 local function apply_radio_device_frequency(freq_hz)
-    local uhf_radio = GetDevice(devices.UHF_RADIO)
+    local uhf_radio = get_backing_radio()
     if uhf_radio ~= nil then
-        uhf_radio:set_frequency(freq_hz)
+        local ok = pcall(function()
+            uhf_radio:set_frequency(freq_hz)
+        end)
+        last_backing_radio_available = bool_to_number(ok)
     end
 
     local freqency_EFM_exchange = get_param_handle("RADIO_UHF_FREQ_EXC")
@@ -154,9 +194,19 @@ local function set_radio_frequency(freq_hz)
 end
 
 local function sync_from_backing_radio()
+    -- Keep the FR31 control head authoritative while the pilot is entering
+    -- digits. The backing DCS radio can still update FR31 when an external
+    -- radio-menu action changes the communicator frequency, but it must not
+    -- erase an in-progress keypad entry.
+    if entry_active then
+        return
+    end
+
     local radio_freq_hz = get_backing_radio_frequency()
     if is_valid_fr31_frequency(radio_freq_hz) and frequencies_differ(radio_freq_hz, current_freq_hz) then
         apply_fr31_frequency(radio_freq_hz)
+    else
+        publish_fr31_state()
     end
 end
 
@@ -167,10 +217,15 @@ local function set_radio_modulation(modulation)
     -- Keep the backing ARC-164 in AM. SRS reads the FR31 AM/FM switch from
     -- the exporter, and forcing FM into this native UHF device can destabilize
     -- DCS builds that only implement AM for avUHF_ARC_164.
-    local uhf_radio = GetDevice(devices.UHF_RADIO)
+    local uhf_radio = get_backing_radio()
     if uhf_radio ~= nil then
-        uhf_radio:set_modulation(MODULATION_AM or 0)
+        local ok = pcall(function()
+            uhf_radio:set_modulation(MODULATION_AM or 0)
+        end)
+        last_backing_radio_available = bool_to_number(ok)
     end
+
+    publish_fr31_state()
 end
 
 local function get_nr_preset_frequency(preset)
@@ -275,7 +330,7 @@ end
 
 local function update_display()
     local powered = is_powered()
-    fr31_display_enable:set(powered and 1 or 0)
+    fr31_display_enable:set(bool_to_number(powered))
 
     -- Do not gate the DCS/SRS radio availability on the FR31 display power.
     -- The old SK60 kept RADIO_POWER on after initialization; tying this shared
@@ -291,10 +346,13 @@ local function update_display()
     else
         set_display_text(format_frequency_text(current_freq_hz))
     end
+
+    publish_fr31_state()
 end
 
 function post_initialize()
     load_nr_presets_from_mission()
+    get_backing_radio()
     select_nr_preset(current_nr_preset)
     if not is_valid_fr31_frequency(current_freq_hz) then
         set_radio_frequency(DEFAULT_FREQ_HZ)

@@ -432,6 +432,11 @@ Keys =
     FR31_Manual_Mode = 5713,
     FR31_NR_Mode = 5714,
 
+    -- 5751 - 5760 for FR33 radio
+    FR33_MHz = 5751,
+    FR33_100kHz = 5752,
+    FR33_25kHz = 5753,
+
     -- 6000 - 6100 for sound trigger
     SND_LEFT_PANEL = 6001,
     SND_CENTER_PANEL = 6002,

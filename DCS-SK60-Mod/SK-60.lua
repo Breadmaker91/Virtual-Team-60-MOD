@@ -251,6 +251,16 @@ ECM 			= "AN/ALQ-135"--F15
 			{ id = 'hud',  		label = _('HUD'), 		enable = false, hh = 0, mm = 0, mmint = 1, prob = 100 },
 			{ id = 'mfd',  		label = _('MFD'), 		enable = false, hh = 0, mm = 0, mmint = 1, prob = 100 },		
 	},
+	AddPropAircraft = {
+		{
+			id = "SoloFlight",
+			control = "checkbox",
+			label = _("Solo flight"),
+			defValue = false,
+			weightWhenOn = 0,
+			arg = 50,
+		},
+	},
 	HumanRadio = {
 		frequency 		= 124.800,  -- FR31 default radio frequency
 		editable 		= true,
@@ -279,6 +289,13 @@ ECM 			= "AN/ALQ-135"--F15
 				[10] = { name = _("FR31 NR 109"), default = 133.000, modulation = _("AM")},
 			}
 		},
+		[2] = {
+			name = _("FR33"),
+			range = {{min = 118.000, max = 135.975}},
+			channels = {
+				[1] = { name = _("FR33 Default"), default = 124.800, modulation = _("AM"), connect = true},
+			}
+		},
 	},
 
 --Guns = {gun_mount("M_61", { count = 480 },{muzzle_pos = {0.50000, 0.500000, -0.000000}})},   --M_61 is F-15C Mounted Gun
@@ -299,6 +316,8 @@ pylons_enumeration = {6, 5, 4, 8, 7, 3, 2, 1},
 				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd11}", arg_value = 1, arg_increment = 0.1}, -- 145 rocket * 2
 				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd12}", arg_value = 1, arg_increment = 0.1}, -- 145 rocket * 1
 				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd13}", arg_value = 1, arg_increment = 0.1}, -- 135 rocket * 1
+				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd60}", arg_value = 1, arg_increment = 0.1}, -- 60mm OeRAK m/70 practice rocket (special pylon arg 1002)
+				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd63}", arg_value = 1, arg_increment = 0.1}, -- 63mm SOeRAK m/70 smoke rocket (special pylon arg 1002)
             }
         ),
 
@@ -337,6 +356,8 @@ pylons_enumeration = {6, 5, 4, 8, 7, 3, 2, 1},
 				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd11}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 145 rocket * 2
 				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd12}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 145 rocket * 1
 				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd13}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 135 rocket * 1
+				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd60}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 60mm OeRAK m/70 practice rocket (special pylon arg 1001)
+				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd63}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 63mm SOeRAK m/70 smoke rocket (special pylon arg 1001)
 			}
         ),
 
@@ -350,6 +371,8 @@ pylons_enumeration = {6, 5, 4, 8, 7, 3, 2, 1},
 				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd11}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 145 rocket * 2
 				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd12}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 145 rocket * 1
 				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd13}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 135 rocket * 1
+				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd60}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 60mm OeRAK m/70 practice rocket (special pylon arg 1000)
+				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd63}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 63mm SOeRAK m/70 smoke rocket (special pylon arg 1000)
 			}
 		),
 
@@ -363,6 +386,8 @@ pylons_enumeration = {6, 5, 4, 8, 7, 3, 2, 1},
 				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd11}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 145 rocket * 2
 				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd12}", arg_value = 1, arg_increment = 0.1, attach_point_position = {0, 0, 0}}, -- 145 rocket * 1
 				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd13}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 135 rocket * 1
+				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd60}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 60mm OeRAK m/70 practice rocket (special pylon arg 999)
+				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd63}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 63mm SOeRAK m/70 smoke rocket (special pylon arg 999)
 			}
 		),
 
@@ -400,6 +425,8 @@ pylons_enumeration = {6, 5, 4, 8, 7, 3, 2, 1},
 				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd11}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 145 rocket * 2
 				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd12}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 145 rocket * 1
 				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd13}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 135 rocket * 1
+				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd60}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 60mm OeRAK m/70 practice rocket (special pylon arg 998)
+				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd63}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 63mm SOeRAK m/70 smoke rocket (special pylon arg 998)
 			}
         ),
 
@@ -413,6 +440,8 @@ pylons_enumeration = {6, 5, 4, 8, 7, 3, 2, 1},
 				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd11}", arg_value = 1, arg_increment = 0.1}, -- 145 rocket * 2
 				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd12}", arg_value = 1, arg_increment = 0.1}, -- 145 rocket * 1
 				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd13}", arg_value = 1, arg_increment = 0.1}, -- 135 rocket * 1
+				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd60}", arg_value = 1, arg_increment = 0.1}, -- 60mm OeRAK m/70 practice rocket (special pylon arg 997)
+				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd63}", arg_value = 1, arg_increment = 0.1}, -- 63mm SOeRAK m/70 smoke rocket (special pylon arg 997)
 			}
 		),
 
@@ -604,6 +633,12 @@ pylons_enumeration = {6, 5, 4, 8, 7, 3, 2, 1},
 		418, -- Left Low Fuel Pump Switch
 		420, -- Right Low Fuel Pump Switch
 		521,
+		950, -- FR33 100 MHz dial
+		951, -- FR33 10 MHz dial
+		952, -- FR33 1 MHz dial
+		953, -- FR33 100 kHz dial
+		954, -- FR33 10 kHz dial
+		955, -- FR33 1 kHz dial
 		-- special
 		999,
 	},

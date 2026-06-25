@@ -457,6 +457,11 @@ multi_tumb_click_list = {
     {"PTN_550", "FR31 Key 9", devices.FR31_RADIO, 550, nil, Keys.FR31_Key_9},
     {"PTN_552", "FR31 Key 0", devices.FR31_RADIO, 552, nil, Keys.FR31_Key_0},
 
+    -- FR33 secondary VHF radio
+    {"PTN_720", "FR33 MHz Tuning Knob", devices.FR33_RADIO, 720, nil, Keys.FR33_MHz},
+    {"PTN_723", "FR33 100 kHz Tuning Knob", devices.FR33_RADIO, 723, nil, Keys.FR33_100kHz},
+    {"PTN_724", "FR33 25 kHz Tuning Knob", devices.FR33_RADIO, 724, nil, Keys.FR33_25kHz},
+
     {"PTN_601", "Canopy Handle", devices.CANOPY, 601, nil, 71}, -- iCommandPlaneCanopy
 
     -- warning system
@@ -495,6 +500,12 @@ local fr31_keypad_buttons = {
 for _,button in ipairs(fr31_keypad_buttons) do
     elements[button[1]] = default_button(button[2], devices.FR31_RADIO, button[3], nil, button[4], SOUND_DEFAULT_2_WAY_SWITCH)
 end
+
+-- FR33 tuning knobs are relative rotary controls. Each detent is converted to
+-- one tuning step by the FR33 radio device.
+elements["PTN_720"] = default_axis("FR33 MHz Tuning Knob", devices.FR33_RADIO, Keys.FR33_MHz, 720, 0, 0.1, true, true)
+elements["PTN_723"] = default_axis("FR33 100 kHz Tuning Knob", devices.FR33_RADIO, Keys.FR33_100kHz, 723, 0, 0.1, true, true)
+elements["PTN_724"] = default_axis("FR33 25 kHz Tuning Knob", devices.FR33_RADIO, Keys.FR33_25kHz, 724, 0, 0.1, true, true)
 
 elements["PTN_132"] = default_axis("Instrument Light", devices.LIGHT_SYSTEM, Keys.LightInstruBRT, 1132, 0, 0.1)
 elements["PTN_131"] = default_axis("Console Light", devices.LIGHT_SYSTEM, Keys.LightConsoleBRT, 1133, 0, 0.1)

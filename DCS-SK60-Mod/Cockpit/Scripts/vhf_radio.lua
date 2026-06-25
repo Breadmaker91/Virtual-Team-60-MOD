@@ -9,19 +9,12 @@ local gettext = require("i_18n")
 _ = gettext.translate
 
 local dev = GetSelf()
-local iCommandPlaneIntercomVHFPress = 1172
-local radio_power = get_param_handle("RADIO_POWER")
-local function update_radio_power()
-    -- Keep the native radio available to DCS/SRS like the old SK60 did.
-    -- The FR31 display can still follow aircraft electrical power, but dropping
-    -- RADIO_POWER when PTN_401 is off makes SRS lose the aircraft shortly after
-    -- spawn.
-    radio_power:set(1.0)
-end
-
--- SRS compatibility
+-- SRS/native radio compatibility
 function dev:is_on()
-    return radio_power:get() > 0.5
+    -- Match the FR31/UHF backing radio behavior: keep the native radio visible to
+    -- SRS regardless of cockpit display/electrical state. The FR33 control head
+    -- still publishes FR33_POWERED for cockpit/export state.
+    return true
 end
 
 local update_time_step = 0.05 --update will be called once per second
@@ -44,7 +37,7 @@ agr = {
 }
 
 GUI = {
-	range = {min = 118E6, max = 151.975E6, step = 25E3}, --Hz
+	range = {min = 118E6, max = 135.975E6, step = 25E3}, --Hz
 	displayName = _('FR33 Radio'),
 	AM = true,
 	FM = false,
@@ -54,65 +47,41 @@ GUI = {
 local current_freq = 124.8E6
 
 dev:listen_command(Keys.RadioUpdate)
-dev:listen_command(iCommandPlaneIntercomVHFPress)
 
 function check_frequency_change()
-	-- check if override by efm radio system
-	local freq_efm_signal = get_param_handle("RADIO_EFM_CHANGED")
-	local freq_uplink_signal = get_param_handle("RADIO_2EFM_CHANGED")
-	local freqency_EFM_exchange = get_param_handle("RADIO_VHF_FREQ_EXC")
-	-- dprintf(sprintf("current Freq: %d", dev:get_frequency()))
-	-- check if override by simple radio system
-	if (dev:get_frequency() ~= current_freq) then
-		-- send to efm, change display
-		dprintf("lua radio freq changed")
-		current_freq = dev:get_frequency()
-		-- this direction has higher prioity
-		freq_efm_signal:set(0)
-		freqency_EFM_exchange:set(current_freq/1e3)
-		freq_uplink_signal:set(1)
-	elseif freq_efm_signal:get() > 0 then
-		dprintf("EFM freq changed")
-		current_freq = freqency_EFM_exchange:get() * 1e3
-		dev:set_frequency(current_freq)
-		freq_uplink_signal:set(0)
-		freq_efm_signal:set(0)
+	-- Keep this native backing radio local to FR33. The FR33 Lua control head is
+	-- authoritative for dial animation and SRS/export params; avoid the shared
+	-- RADIO_* exchange signals used by FR31.
+	local radio_freq = dev:get_frequency()
+	if radio_freq ~= current_freq then
+		current_freq = radio_freq
+		get_param_handle("FR33_FREQ_HZ"):set(current_freq)
+		get_param_handle("FR33_ACTIVE_FREQ"):set(current_freq / 1e6)
 	end
 end
-
 function post_initialize()
 	-- initialize the radio system
 	local wake_radio = get_param_handle("RADIO_SYSTEM_AVAIL")
 	wake_radio:set(0.0)
 	dev:set_frequency(current_freq)
   	dev:set_modulation(MODULATION_AM)
-  	local intercom = GetDevice(devices.INTERCOM)
-  	intercom:set_communicator(devices.VHF_RADIO)
-	intercom:make_setup_for_communicator()
-
 	--set up the pointer for the radio system
   	str_ptr = string.sub(tostring(dev.link),10)
-  	local set_radio_pointer = get_param_handle("RADIO_POINTER")
+	local set_radio_pointer = get_param_handle("VHF_RADIO_POINTER")
 	set_radio_pointer:set(str_ptr)
 	wake_radio:set(1.0)
-	update_radio_power()
 
-	local freq_efm_signal = get_param_handle("RADIO_EFM_CHANGED")
-	local freq_uplink_signal = get_param_handle("RADIO_2EFM_CHANGED")
-	freq_efm_signal:set(0)
-	freq_uplink_signal:set(0)
+
 end
 
 
 function SetCommand(command,value)
-	-- avVHF_ARC_164 handles iCommandPlaneIntercomVHFPress internally once this
-	-- Lua side listens to it. Keep SetCommand lightweight so the native radio
-	-- command can open the airborne communications menu.
+	-- FR33 is SRS-only for now. Do not claim the DCS intercom/PTT command here;
+	-- FR31/UHF remains the in-game ATC radio.
 	check_frequency_change()
 end
 
 function update()
-	update_radio_power()
 	check_frequency_change()
 end
 

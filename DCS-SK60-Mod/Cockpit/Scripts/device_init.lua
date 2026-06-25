@@ -20,9 +20,11 @@ creators[devices.BREAK_SYSTEM]    ={"avLuaDevice"           ,LockOn_Options.scri
 -- weapon module
 creators[devices.WEAPON_SYSTEM]	  ={"avSimpleWeaponSystem"  ,LockOn_Options.script_path.."Systems/weapon_system.lua"}
 -- These two are for calling ground staff
-creators[devices.INTERCOM]        ={"avIntercom"            ,LockOn_Options.script_path.."Intercom.lua", {devices.UHF_RADIO} }
+creators[devices.INTERCOM]        ={"avIntercom"            ,LockOn_Options.script_path.."Intercom.lua", {devices.UHF_RADIO, devices.VHF_RADIO} }
 creators[devices.UHF_RADIO]       ={"avUHF_ARC_164"         ,LockOn_Options.script_path.."uhf_radio.lua", {devices.INTERCOM, devices.ELECTRIC_SYSTEM} }
 creators[devices.FR31_RADIO]      ={"avLuaDevice"           ,LockOn_Options.script_path.."Systems/fr31_radio.lua"}
+creators[devices.VHF_RADIO]       ={"avVHF_ARC_186"         ,LockOn_Options.script_path.."vhf_radio.lua", {devices.INTERCOM, devices.ELECTRIC_SYSTEM} }
+creators[devices.FR33_RADIO]      ={"avLuaDevice"           ,LockOn_Options.script_path.."Systems/fr33_radio.lua"}
 -- radar module
 creators[devices.RADAR_RAW]		  ={"avSimpleRadar"			,LockOn_Options.script_path.."avRadar/Device/Radar_init.lua"}
 -- hud Display processor

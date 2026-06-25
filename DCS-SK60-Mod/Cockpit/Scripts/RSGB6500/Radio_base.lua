@@ -1,6 +1,6 @@
 dofile(LockOn_Options.script_path.."RSGB6500/Radio_def.lua")
 
-SHOW_MASKS = true -- enable debug
+SHOW_MASKS = false
 
 -- This operation can align the newly created cropping block to the three connectors
 -- Must use FOV mode

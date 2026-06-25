@@ -17,6 +17,7 @@ local gunsightEnable = get_param_handle("gunsightEnable")
 local gunsightBrightness = get_param_handle("gunsightBrightness")
 local gunsightX = get_param_handle("gunsightX")
 local gunsightY = get_param_handle("gunsightY")
+local mainPower = get_param_handle("PTN_401")
 
 
 
@@ -36,12 +37,15 @@ function post_initialize()
 end
 
 function update()
+	local isPowered = mainPower:get() > 0.5
+	local targetEnabled = isPowered and gunsightEnable:get() == 1
+
 	gunsightY:set(sensorData.getVerticalAcceleration() - 1)
 	gunsightX:set(-sensorData.getLateralAcceleration() * 10)
 
 
 
-	if gunsightEnable:get() == 1 and prevStatus == 0 then
+	if targetEnabled and prevStatus == 0 then
 		fadeOut = 0
 		fadeIn = fadeIn + updateTimeStep
 
@@ -52,7 +56,7 @@ function update()
 		else
 			gunsightBrightness:set(gunsightBrightness:get() + fadeIn)
 		end
-	elseif gunsightEnable:get() == 0 and prevStatus == 1 then
+	elseif not targetEnabled and prevStatus == 1 then
 		fadeIn = 0
 		fadeOut = fadeOut + updateTimeStep
 
@@ -63,6 +67,11 @@ function update()
 		else
 			gunsightBrightness:set(gunsightBrightness:get() - fadeOut)
 		end
+	elseif not targetEnabled and gunsightBrightness:get() > 0 then
+		gunsightBrightness:set(0)
+		fadeIn = 0
+		fadeOut = 0
+		prevStatus = 0
 	end
 end
 

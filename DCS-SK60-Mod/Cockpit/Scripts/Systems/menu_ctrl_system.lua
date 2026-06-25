@@ -3,6 +3,8 @@ dofile(LockOn_Options.script_path.."Systems/electric_system_api.lua")
 dofile(LockOn_Options.script_path.."debug_util.lua")
 dofile(LockOn_Options.script_path.."CustomMenu/menu_config.lua")
 
+local condensation_model = dofile(LockOn_Options.script_path.."Systems/condensation_model.lua")
+
 local dev 	    = GetSelf()
 
 local update_time_step = 0.02
@@ -21,8 +23,6 @@ local menu_disp_enable = get_param_handle("MENU_DISP_ENABLE")
 local current_menu_hint = get_param_handle("MENU_CENTER_STR")
 local general_menu_hint = get_param_handle("MENU_STR_TRI")
 
-local debug_line1 = get_param_handle("DEBUG_LINE1")
-local debug_line2 = get_param_handle("DEBUG_LINE2")
 
 local cursor_disp = get_param_handle("MENU_CURSOR")
 local cursor_disp_x = get_param_handle("MENU_CURSOR_X")
@@ -56,6 +56,7 @@ disp_table = {0, 1, 7, 2, 6, 3, 5}
 disp_reverse = {1, 2, 4, 6, 8, 7, 5, 3}
 disp_reverse_available = {0, 0, 0, 0, 0, 0, 0, 0}
 parent_menu_id = {}
+
 
 dev:listen_command(2142)-- iServiceInformAboutUserHAngle
 dev:listen_command(2143)-- iServiceInformAboutUserVAngle
@@ -296,10 +297,8 @@ function activate_selection()
 end
 
 function update()
-    -- debug_line1:set("HORI HEAD: " ..string.format("%.2f", viewang_h).. "; VERT HEAD: "..string.format("%.2f", viewang_v))
-    debug_line1:set("")
-    -- debug_line2:set("HORI HEAD: " ..string.format("%.2f", user_view_h_efm:get()).. "; VERT HEAD: "..string.format("%.2f", user_view_v_efm:get()))
-    debug_line2:set("")
+    condensation_model.update(sensor_data, update_time_step)
+
     menu_disp_ctrl()
     check_input_target()
 end
