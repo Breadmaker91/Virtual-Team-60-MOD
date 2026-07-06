@@ -356,8 +356,6 @@ pylons_enumeration = {6, 5, 4, 8, 7, 3, 2, 1},
 				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd11}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 145 rocket * 2
 				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd12}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 145 rocket * 1
 				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd13}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 135 rocket * 1
-				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd60}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 60mm OeRAK m/70 practice rocket (special pylon arg 1001)
-				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd63}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 63mm SOeRAK m/70 smoke rocket (special pylon arg 1001)
 			}
         ),
 
@@ -425,8 +423,6 @@ pylons_enumeration = {6, 5, 4, 8, 7, 3, 2, 1},
 				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd11}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 145 rocket * 2
 				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd12}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 145 rocket * 1
 				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd13}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 135 rocket * 1
-				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd60}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 60mm OeRAK m/70 practice rocket (special pylon arg 998)
-				{CLSID = "{d694b359-e7a8-4909-88d4-7100b77afd63}", arg_value = 1, arg_increment = 0.1, attach_point_position = { 0, 0, 0}}, -- 63mm SOeRAK m/70 smoke rocket (special pylon arg 998)
 			}
         ),
 

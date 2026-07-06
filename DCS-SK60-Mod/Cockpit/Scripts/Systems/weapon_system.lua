@@ -124,7 +124,7 @@ function check_load_status()
             -- nozzle smoke
             loading_list[i] = 2
             has_nozzle_smoke = 1
-        elseif (string.sub(station.CLSID,1,36) == "{d694b359-e7a8-4909-88d4-7100b77afd1") then
+        elseif (string.sub(station.CLSID,1,35) == "{d694b359-e7a8-4909-88d4-7100b77afd") then
             -- this is a rocket, check the number of it
             loading_list[i] = 3 + station.count
             weapon_system_mode = 2

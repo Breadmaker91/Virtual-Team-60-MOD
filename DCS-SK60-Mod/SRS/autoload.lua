@@ -20,7 +20,7 @@ function exportRadioSK60(_data, SR)
 
     -- COMM2 / FR33. Native VHF radio device ID is fixed at 24.
     _data.radios[3].name = "FR33"
-    _data.radios[3].freq = 121.5 * 1000000
+    _data.radios[3].freq = get_param_handle("FR33_FREQ_HZ"):get()
     _data.radios[3].modulation = 0
     _data.radios[3].secFreq = 121.5 * 1000000
     _data.radios[3].volume = 1.0

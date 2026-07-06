@@ -227,7 +227,7 @@ ORAK60M70.fm.mass = 6.6
 ORAK60M70.fm.caliber = 0.060
 ORAK60M70.fm.L = 0.912
 ORAK60M70.engine.fuel_mass = math.min(ORAK60M70.engine.fuel_mass, 2.0)
-ORAK60M70.engine.nozzle_position = {{-0.456, 0, 0}}
+ORAK60M70.engine.nozzle_position = {{-0.451, 0, 0}}
 ORAK60M70.engine.tail_width = 0.060
 
 declare_weapon(ORAK60M70)
@@ -317,13 +317,14 @@ local SORAK63M70 = {
 	name				= "SORAK63M70",
 	user_name			= _("63mm SÖRAK m/70 Smoke Practice Rocket"),
 	wsTypeOfWeapon		= {wsType_Weapon,wsType_NURS,wsType_Rocket, 6370},
-	scheme 				= "nurs-standard",
+	scheme 				= "nurs-marker",
 	model 				= "SK60_63sorak",
 	fm = copyTable(M49_PSRAK145HEAT.fm),
 	engine = copyTable(M49_PSRAK145HEAT.engine),
 	warhead	=
 	{
 		mass				= 7.0,
+		-- SÖRAK is a white smoke marker rocket, not an explosive round.
 		expl_mass 			= 0.0,
 		other_factors 		= { 0.0, 0.0, 0.0},
 		concrete_factors 	= { 0.0, 0.0, 0.0},
@@ -332,6 +333,11 @@ local SORAK63M70 = {
 		cumulative_factor	= 0.0,
 		cumulative_thickness = 0.0,
 		piercing_mass		= 7.0,
+		-- Keep the impact marker visible for about five minutes.
+		transparency		= 0.85,
+		color				= {1.0, 1.0, 1.0},
+		intensity			= 6.0,
+		duration			= 300.0,
 	},
 	shape_table_data =
 	{
@@ -352,14 +358,12 @@ SORAK63M70.fm.L = 0.983
 SORAK63M70.engine.fuel_mass = math.min(SORAK63M70.engine.fuel_mass, 2.0)
 SORAK63M70.engine.nozzle_position = {{-0.492, 0, 0}}
 SORAK63M70.engine.tail_width = 0.063
-SORAK63M70.engine.smoke_color = {0.9, 0.9, 0.9}
-SORAK63M70.engine.smoke_transparency = 0.35
 
 declare_weapon(SORAK63M70)
 
 
 --loadout declear function
-function declear_rocket_pods(_uuid, _display_name, _display_icon, _rocket_num, _rocket_id, _rocket_shape, _distance, _diameter, _forwarding, _rocket_weight)
+function declear_rocket_pods(_uuid, _display_name, _display_icon, _rocket_num, _rocket_id, _rocket_shape, _distance, _diameter, _forwarding, _rocket_weight, _payload_clsid, _adapter_shape, _adapter_forward_offset)
 	local data = {
 		category 		= CAT_ROCKETS,
 		CLSID 			= _uuid,
@@ -375,16 +379,19 @@ function declear_rocket_pods(_uuid, _display_name, _display_icon, _rocket_num, _
 
 		Elements = {},
 	}
+	local rocket_vertical_offset = _adapter_shape and -0.133 or 0
+	local rocket_forward_offset = _adapter_forward_offset or 0
 
 	if _rocket_num < 1 then
 		data.Elements = {
 			{
-				ShapeName = "", -- pod name
+				ShapeName = _adapter_shape or "", -- adapter/pod name
 				IsAdapter = true,
 			},
 		
 			{
-				Position	= {0,0,0},--{_forwarding + 0.01, - 0.065 - _diameter/2 * 3 - _distance, 0}, --2 0.25
+				Position	= {rocket_forward_offset, rocket_vertical_offset, 0},--{_forwarding + 0.01, - 0.065 - _diameter/2 * 3 - _distance, 0}, --2 0.25
+				payload_CLSID = _payload_clsid,
 				ShapeName	= _rocket_shape,
 				Rotation 	= {0,0,-1.5},
 			},
@@ -392,13 +399,14 @@ function declear_rocket_pods(_uuid, _display_name, _display_icon, _rocket_num, _
 	else
 		data.Elements = {
 			{
-				ShapeName = "placeholder", -- pod name
+				ShapeName = _adapter_shape or "placeholder", -- adapter/pod name
 				position = {0, 0, 0},
 				IsAdapter = true,
 			},
 
 			{
-				Position	= {0,0,0},--{_forwarding, - 0.065 - _diameter/2, 0}, --1 
+				Position	= {rocket_forward_offset, rocket_vertical_offset, 0},--{_forwarding, - 0.065 - _diameter/2, 0}, --1
+				payload_CLSID = _payload_clsid,
 				ShapeName	= _rocket_shape,
 				Rotation 	= {0,0,0},
 			},
@@ -406,7 +414,8 @@ function declear_rocket_pods(_uuid, _display_name, _display_icon, _rocket_num, _
 
 		if _rocket_num > 1 then
 			table.insert(data.Elements, {
-				Position	= {0, -(_diameter + _distance), 0},--{_forwarding + 0.01, - 0.065 - _diameter/2 * 3 - _distance, 0}, --2 0.25
+				Position	= {rocket_forward_offset, rocket_vertical_offset - (_diameter + _distance), 0},--{_forwarding + 0.01, - 0.065 - _diameter/2 * 3 - _distance, 0}, --2 0.25
+				payload_CLSID = _payload_clsid,
 				ShapeName	= _rocket_shape,
 				Rotation 	= {0,0,0},
 			})
@@ -420,8 +429,9 @@ declare_loadout(declear_rocket_pods("{d694b359-e7a8-4909-88d4-7100b77afd13}", "1
 declare_loadout(declear_rocket_pods("{d694b359-e7a8-4909-88d4-7100b77afd12}", "1x 14,5cm HEAT rocket", "M49_Rocket_145_HEAT.png", 1, 1450, "SK60_145_psrak", 0.025, 0.145, 0.43))
 declare_loadout(declear_rocket_pods("{d694b359-e7a8-4909-88d4-7100b77afd10}", "2x 14,5cm HEAT rocket", "M49_Rocket_145_HEAT.png", 2, 1450, "SK60_145_psrak", 0.025, 0.145, 0.43))
 
-declare_loadout(declear_rocket_pods("{d694b359-e7a8-4909-88d4-7100b77afd60}", "1x 60mm ÖRAK m/70 practice rocket", "M56_Rocket_135_HE.png", 1, 6070, "SK60_60_orak", 0.025, 0.150, 0.38, 6.6))
-declare_loadout(declear_rocket_pods("{d694b359-e7a8-4909-88d4-7100b77afd63}", "1x 63mm SÖRAK m/70 smoke rocket", "M56_Rocket_135_HE.png", 1, 6370, "SK60_63sorak", 0.025, 0.145, 0.38, 7.0))
+declare_loadout(declear_rocket_pods("{d694b359-e7a8-4909-88d4-7100b77afd60}", "1x 60mm ÖRAK m/70 practice rocket", "ORAK_Rocket_.png", 1, 6070, "SK60_60_orak", 0.025, 0.150, 0.38, 6.6, nil, "SK60_ORAK_Pylon", 0.447))
+-- Reference aircraft use DCS native smoke-marker rocket payload CLSIDs for marker effects.
+declare_loadout(declear_rocket_pods("{d694b359-e7a8-4909-88d4-7100b77afd63}", "1x 63mm SÖRAK m/70 smoke rocket", "SORAK_Rocket.png", 1, 151, "SK60_63sorak", 0.025, 0.145, 0.38, 7.0, "{M259_HYDRA}", "SK60_ORAK_Pylon"))
 
 -- here is the new gun pods
 -- 30 mm akan m/55
