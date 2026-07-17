@@ -4,8 +4,8 @@ dofile(LockOn_Options.script_path.."devices.lua")
 local gettext = require("i_18n")
 _ = gettext.translate
 
-cursor_mode = 
-{ 
+cursor_mode =
+{
     CUMODE_CLICKABLE = 0,
     CUMODE_CLICKABLE_AND_CAMERA  = 1,
     CUMODE_CAMERA = 2,
@@ -14,7 +14,7 @@ cursor_mode =
 clickable_mode_initial_status  = cursor_mode.CUMODE_CLICKABLE
 use_pointer_name			   = true
 
-cursor_mode = 
+cursor_mode =
 {
     CUMODE_CLICKABLE = 0,
     CUMODE_CLICKABLE_AND_CAMERA = 1,
@@ -387,7 +387,7 @@ elements["PTN_116"] = default_2_position_tumb("AirCondition Switch", devices.ENG
 --elements["PTN_LTHRO"] = default_2_position_tumb("Left ENGINE IDLE",  devices.ENGINE, Keys.LeftEngineIDLEPOS, 41)
 --elements["PTN_RTHRO"] = default_2_position_tumb("Right Engine IDLE",  devices.ENGINE, Keys.RightEngineIDLEPOS, 42)
 
--- 
+--
 elements["FLAP_LEVEL"] = default_multi_position_tumb("Flap handle", devices.BREAK_SYSTEM, Keys.FlapUp, Keys.FlapDown, 43, 5.0)
 
 elements["PARKING_BREAK"] = default_2_position_tumb("Parking Break", devices.BREAK_SYSTEM, Keys.ParkingBrakes, 432)
@@ -402,7 +402,7 @@ elements["PTN_51"] = default_multi_position_tumb(_("Ejection Seat Safety Handle"
 elements["PTN_557"] = default_button("UHF Radio TAKE Press", devices.UHF_RADIO, Keys.UHF_TAKE_Button_Press, Keys.UHF_TAKE_Button_Release, 557)
 
 multi_tumb_click_list = {
-    -- Engine Control
+   -- Engine Control
     {"PTN_405", "Left Engine Motor Starter", devices.HUD_DCMS, 405, SOUND_DEFAULT_2_WAY_SWITCH, Keys.L_STARTER_PRESS, Keys.L_STARTER_RELEASE},
     {"PTN_407", "Right Engine Motor Starter", devices.HUD_DCMS, 407, SOUND_DEFAULT_2_WAY_SWITCH, Keys.R_STARTER_PRESS, Keys.R_STARTER_RELEASE},
     {"PTN_418", "Left Low Pressure Fuel Pump", devices.HUD_DCMS, 418, SOUND_DEFAULT_2_WAY_SWITCH, Keys.L_LP_PUMP},
@@ -415,13 +415,13 @@ multi_tumb_click_list = {
     {"PTN_436", "Taxi/Landing Light", devices.LIGHT_SYSTEM, 436, SOUND_DEFAULT_2_WAY_SWITCH , Keys.LightTaxiUP, Keys.LightTaxiDOWN},
     {"PTN_429", "Anti-Collision Light", devices.LIGHT_SYSTEM, 429, SOUND_DEFAULT_2_WAY_SWITCH , Keys.LightStrobeUP, Keys.LightStrobeDOWN},
     {"PTN_424", "Navigation Light", devices.LIGHT_SYSTEM, 424, SOUND_DEFAULT_2_WAY_SWITCH , Keys.LightNaviWingUP,Keys.LightNaviWingDOWN},
-    
-   -- {"PTN_125", "Taxi/Probe Light", devices.LIGHT_SYSTEM, 125, nil, Keys.LightTaxi},
-  --  {"PTN_128", "Tail Navigation Light", devices.LIGHT_SYSTEM, 128, nil, Keys.LightNaviTailUP, Keys.LightNaviTailDOWN},
-    --{"PTN_130", "Formation Light", devices.LIGHT_SYSTEM, 130, nil, Keys.LightFormationUP, Keys.LightFormationDOWN},
+
+  -- {"PTN_125", "Taxi/Probe Light", devices.LIGHT_SYSTEM, 125, nil, Keys.LightTaxi},
+ --  {"PTN_128", "Tail Navigation Light", devices.LIGHT_SYSTEM, 128, nil, Keys.LightNaviTailUP, Keys.LightNaviTailDOWN},
+   --{"PTN_130", "Formation Light", devices.LIGHT_SYSTEM, 130, nil, Keys.LightFormationUP, Keys.LightFormationDOWN},
     {"PTN_133", "Flood Light", devices.LIGHT_SYSTEM, 133, nil, Keys.LightFloodUP, Keys.LightFloodDOWN},
 
-    -- Electric Power Switches
+   -- Electric Power Switches
     {"PTN_401", "Main Battery Switch", devices.ELECTRIC_SYSTEM, 401, SOUND_DEFAULT_2_WAY_SWITCH , Keys.BatteryPower},
     {"PTN_402", "Inverter 1 Switch", devices.ELECTRIC_SYSTEM, 402, SOUND_DEFAULT_2_WAY_SWITCH , Keys.PowerGeneratorLeft},
     {"PTN_404", "Inverter 2 Switch", devices.ELECTRIC_SYSTEM, 404, SOUND_DEFAULT_2_WAY_SWITCH , Keys.PowerGeneratorRight},
@@ -430,22 +430,22 @@ multi_tumb_click_list = {
     {"PTN_413", "Master Arm", devices.WEAPON_SYSTEM, 413, SOUND_DEFAULT_2_WAY_SWITCH , Keys.WeaponMasterSwitch},
     {"PTN_414", "A/G mode", devices.WEAPON_SYSTEM, 414, SOUND_DEFAULT_2_WAY_SWITCH , Keys.WeaponAirGroundChange},
 
-    -- ElecPowerDCGen = __custom_counter(),
+   -- ElecPowerDCGen = __custom_counter(),
     {"PTN_415", "Left Generator Switch", devices.ELECTRIC_SYSTEM, 415, SOUND_DEFAULT_2_WAY_SWITCH , Keys.ElecPowerDCGenL},
     {"PTN_422", "Right Generator Switch", devices.ELECTRIC_SYSTEM, 422, SOUND_DEFAULT_2_WAY_SWITCH , Keys.ElecPowerDCGenR},
 
-    -- EADI
+   -- EADI
     {"PTN_501", "Screen Display Dim-", devices.HUD_DCMS, 501, nil, Keys.Display_Darker},
     {"PTN_502", "Screen Display Dim+", devices.HUD_DCMS, 502, nil, Keys.Display_Brighter},
 
-    -- FR31 radio
+   -- FR31 radio
     {"PTN_555", "FR31 Volume", devices.UHF_RADIO, 555, SOUND_DEFAULT_2_WAY_SWITCH , Keys.UHF_Vol_Up, Keys.UHF_Vol_Down},
     {"PTN_556", "FR31 UHF Radio Mode Selection", devices.UHF_RADIO, 556, nil, Keys.UHF_Mode_Left, Keys.UHF_Mode_Right},
     {"PTN_717", "FR31 AM/FM Mode", devices.FR31_RADIO, 717, SOUND_DEFAULT_2_WAY_SWITCH, Keys.FR31_Mode},
     {"PTN_551", "FR31 MHz Manual Mode", devices.FR31_RADIO, 551, nil, Keys.FR31_Manual_Mode},
     {"PTN_712", "FR31 NR Mode", devices.FR31_RADIO, 712, nil, Keys.FR31_NR_Mode},
     {"PTN_715", "FR31 Clear", devices.FR31_RADIO, 715, nil, Keys.FR31_Clear},
-    -- FR31 numeric frequency keypad
+   -- FR31 numeric frequency keypad
     {"PTN_542", "FR31 Key 1", devices.FR31_RADIO, 542, nil, Keys.FR31_Key_1},
     {"PTN_543", "FR31 Key 2", devices.FR31_RADIO, 543, nil, Keys.FR31_Key_2},
     {"PTN_544", "FR31 Key 3", devices.FR31_RADIO, 544, nil, Keys.FR31_Key_3},
@@ -457,14 +457,14 @@ multi_tumb_click_list = {
     {"PTN_550", "FR31 Key 9", devices.FR31_RADIO, 550, nil, Keys.FR31_Key_9},
     {"PTN_552", "FR31 Key 0", devices.FR31_RADIO, 552, nil, Keys.FR31_Key_0},
 
-    -- FR33 secondary VHF radio
+   -- FR33 secondary VHF radio
     {"PTN_720", "FR33 MHz Tuning Knob", devices.FR33_RADIO, 720, nil, Keys.FR33_MHz},
     {"PTN_723", "FR33 100 kHz Tuning Knob", devices.FR33_RADIO, 723, nil, Keys.FR33_100kHz},
     {"PTN_724", "FR33 25 kHz Tuning Knob", devices.FR33_RADIO, 724, nil, Keys.FR33_25kHz},
 
     {"PTN_601", "Canopy Handle", devices.CANOPY, 601, nil, 71}, -- iCommandPlaneCanopy
 
-    -- warning system
+   -- warning system
     {"PTN_135", "Master Caution Acknowledge", devices.WARNING_SYSTEM, 135, nil, Keys.WARN_MASTER_CANCEL},
 }
 
@@ -561,7 +561,7 @@ elements["PTN_558"] = default_axis("Baro Setting", devices.HUD_DCMS, Keys.EALT_B
 --elements["PTN_180"] = springloaded_3_pos_tumb("UHF Mega hertz", devices.RADIO_SYSTEM, Keys.UHFFreqBUP, Keys.UHFFreqBSTOP, Keys.UHFFreqBDOWN, Keys.UHFFreqBSTOP, 1134)
 --elements["PTN_181"] = springloaded_3_pos_tumb("UHF hundreds and tens of Kilo hertz", devices.RADIO_SYSTEM, Keys.UHFFreqCUP, Keys.UHFFreqCSTOP, Keys.UHFFreqCDOWN, Keys.UHFFreqCSTOP, 1134)
 --for i,o in pairs(elements) do
---	if  o.class[1] == class_type.TUMB or 
+--	if  o.class[1] == class_type.TUMB or
 --	   (o.class[2]  and o.class[2] == class_type.TUMB) or
 --	   (o.class[3]  and o.class[3] == class_type.TUMB)  then
 --	   o.updatable = true

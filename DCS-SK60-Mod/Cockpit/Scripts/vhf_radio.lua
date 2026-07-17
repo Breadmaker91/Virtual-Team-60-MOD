@@ -11,9 +11,9 @@ _ = gettext.translate
 local dev = GetSelf()
 -- SRS/native radio compatibility
 function dev:is_on()
-    -- Match the FR31/UHF backing radio behavior: keep the native radio visible to
-    -- SRS regardless of cockpit display/electrical state. The FR33 control head
-    -- still publishes FR33_POWERED for cockpit/export state.
+   -- Match the FR31/UHF backing radio behavior: keep the native radio visible to
+   -- SRS regardless of cockpit display/electrical state. The FR33 control head
+   -- still publishes FR33_POWERED for cockpit/export state.
     return true
 end
 
@@ -22,7 +22,7 @@ device_timer_dt = update_time_step
 -- make_default_activity(update_time_step)
 
 -- the following are some functions for the radio to work
--- this part currently use parameters from A4E-C
+-- radio parameter setup
 innerNoise 			= getInnerNoise(2.5E-6, 10.0)--V/m (dB S+N/N)
 frequency_accuracy 	= 500.0				--Hz
 band_width			= 12E3				--Hz (6 dB selectivity)

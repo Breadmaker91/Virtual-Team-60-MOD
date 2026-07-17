@@ -22,24 +22,24 @@ ctrl = {
 
 
 hcr = {
-	cmp   = h_clip_relations.COMPARE, 
-	dec   = h_clip_relations.DECREASE_LEVEL, 
-	decIf = h_clip_relations.DECREASE_IF_LEVEL, 
-	inc   = h_clip_relations.INCREASE_LEVEL, 
-	incIf = h_clip_relations.INCREASE_IF_LEVEL, 
+	cmp   = h_clip_relations.COMPARE,
+	dec   = h_clip_relations.DECREASE_LEVEL,
+	decIf = h_clip_relations.DECREASE_IF_LEVEL,
+	inc   = h_clip_relations.INCREASE_LEVEL,
+	incIf = h_clip_relations.INCREASE_IF_LEVEL,
 	rw    = h_clip_relations.REWRITE_LEVEL
 }
 
 
 lvl = {
-	def    = 8, 
-	mask   = 5, 
-	noclip = 7, 
+	def    = 8,
+	mask   = 5,
+	noclip = 7,
 }
 
 
 matl = {
-	mY   = MakeMaterial(nil, {233, 139, 42, 255}), 
+	mY   = MakeMaterial(nil, {233, 139, 42, 255}),
 	mask = MakeMaterial(nil, {255, 0, 255, 255/2})
 }
 

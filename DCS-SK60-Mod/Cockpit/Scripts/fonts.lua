@@ -64,7 +64,7 @@ CP1251_toUTF8 =
 	[189]=	1029,
 	[190]=	1109,
 	[191]=	1111,
-	-- ugly hack  
+	-- ugly hack
 	[219]=	1102,
 	[241]=	1103
 }
@@ -78,7 +78,7 @@ CMS_ysize = 65
 fontdescription["font_CMS"] = {
 	texture    = IndicationTexturesPath.."font_CMS.tga",
 	size      = {8, 8},
-	resolution = {512, 512},	
+	resolution = {512, 512},
 	default    = {CMS_xsize, CMS_ysize}	,
 	chars	   = {
 		 [1]   = {4,  CMS_xsize, CMS_ysize}, -- ¦ == \4
@@ -132,7 +132,7 @@ fontdescription["font_CMS"] = {
 		 [49]  = {109,CMS_xsize, CMS_ysize}, -- m
 		 [50]  = {115,CMS_xsize, CMS_ysize}, -- s
 		 [51]  = {120,CMS_xsize, CMS_ysize}, -- x
-		 [52]  = { 46,CMS_xsize, CMS_ysize}} -- .		 
+		 [52]  = { 46,CMS_xsize, CMS_ysize}} -- .
 }
 
 MFCD_size_mult = 2
@@ -202,9 +202,9 @@ fontdescription["font_MFCD"] = {
 			  [56]  = {90, MFCD_xsize, MFCD_ysize}, -- Z
 			  [57]  = {91, MFCD_xsize, MFCD_ysize}, -- [
 			  [58]  = {93, MFCD_xsize, MFCD_ysize}, -- ]
-			  [59]  = {CP1251_toUTF8[219],30 * MFCD_size_mult, MFCD_ysize}, -- - 
-			  [60]  = {CP1251_toUTF8[241],MFCD_xsize, MFCD_ysize}, -- +- 
-			  [61]  = {CP1251_toUTF8[176],MFCD_xsize, MFCD_ysize}, -- ° 
+			  [59]  = {CP1251_toUTF8[219],30 * MFCD_size_mult, MFCD_ysize}, -- -
+			  [60]  = {CP1251_toUTF8[241],MFCD_xsize, MFCD_ysize}, -- +-
+			  [61]  = {CP1251_toUTF8[176],MFCD_xsize, MFCD_ysize}, -- °
 			  [62]  = {95, MFCD_xsize, MFCD_ysize}, -- _
 			  [63]  = {37, MFCD_xsize, MFCD_ysize}}-- %
 }
@@ -351,8 +351,8 @@ fontdescription["font_CDU"] = {
 		 [55]  = {91, CDU_xsize, CDU_ysize}, -- [
 		 [56]  = {93, CDU_xsize, CDU_ysize}, -- ]
 		 [57]  = {CP1251_toUTF8[219],CDU_xsize, CDU_ysize}, -- -
-		 [58]  = {CP1251_toUTF8[241],CDU_xsize, CDU_ysize}, -- +- 
-		 [59]  = {CP1251_toUTF8[176],CDU_xsize, CDU_xsize}} -- ° 
+		 [58]  = {CP1251_toUTF8[241],CDU_xsize, CDU_ysize}, -- +-
+		 [59]  = {CP1251_toUTF8[176],CDU_xsize, CDU_xsize}} -- °
 }
 
 HUD_xsize = 44 * 2
@@ -515,13 +515,13 @@ fontdescription["font_RWR"] = {
 		 [38]  = {88, RWR_xsize, RWR_ysize}, -- X
 		 [39]  = {89, RWR_xsize, RWR_ysize}, -- Y
 		 [40]  = {90, RWR_xsize, RWR_ysize}, -- Z
-		} 
+		}
 }
 
 
 agm_65e_x = 30
 agm_65e_y = 50
-fontdescription["font_AGM_65E"] = 
+fontdescription["font_AGM_65E"] =
 {
 	texture    = IndicationTexturesPath.."font_AGM_65E.tga",
 	size      = {5, 5},
@@ -536,7 +536,7 @@ fontdescription["font_AGM_65E"] =
 				  {54, agm_65e_x, agm_65e_y}, -- 6
 				  {55, agm_65e_x, agm_65e_y}, -- 7
 				  {56, agm_65e_x, agm_65e_y}, -- 8
-                  {67, agm_65e_x, agm_65e_y}, -- C 
+                  {67, agm_65e_x, agm_65e_y}, -- C
                   {83, agm_65e_x, agm_65e_y}} -- S
 }
 

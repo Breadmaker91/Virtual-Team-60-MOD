@@ -16,15 +16,15 @@ local function addMusic(path,name,artist,length,img,img_w,img_h)
 		path=path,
 		name=name,
 		artist=artist,
-		length=length,--歌曲长度
+		length=length,
 		img=img,
 		img_w=img_w,
 		img_h=img_h
 	}
-	
+
 end
 local ImgBasePath = LockOn_Options.script_path.."../Textures/Mp3Img/"
--- this config include a table named 
+-- this config include a table named
 dofile(LockOn_Options.script_path.."../Config/MusicPlayerConfig.lua")
 for index, value in ipairs(MusicPlayerList) do
 	if value[4] == nil then

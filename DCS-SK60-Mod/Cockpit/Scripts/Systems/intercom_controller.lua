@@ -1,16 +1,16 @@
---初始化加载要用lua文件
+--lua
 dofile(LockOn_Options.common_script_path.."devices_defs.lua")
 dofile(LockOn_Options.script_path.."Systems/electric_system_api.lua")
 dofile(LockOn_Options.script_path.."utils.lua")
 dofile(LockOn_Options.script_path.."command_defs.lua")
 
---设置循环次数
-local update_rate = 0.05 -- 20次每秒
+
+local update_rate = 0.05 -- 20
 make_default_activity(update_rate)
 
 local ic_ctrl = GetSelf()
 
---初始化DCS读取API
+--DCSAPI
 local sensor_data = get_base_data()
 
 ------Here Strat the general Switch Control
@@ -42,7 +42,7 @@ function post_initialize()
     elseif birth == "GROUND_COLD" then
 
     elseif birth == "AIR_HOT" then
-        
+
     end
 end
 
@@ -65,12 +65,12 @@ function update_switch_status()
         target_status[k][3]:set(current_status[k][2])
         local temp_switch_ref = get_clickable_element_reference(target_status[k][4])
         temp_switch_ref:update()
-        -- print_message_to_user(k)
+       -- print_message_to_user(k)
     end
 end
 
 function update()
-    
+
 end
 
 need_to_be_closed = false

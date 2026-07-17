@@ -13,7 +13,7 @@ local aspect       = GetAspect()
 local eadi_base_clip 			 	= CreateElement "ceMeshPoly" --This is the clipping layer
 eadi_base_clip.name 			    = "eadi_base_clip"
 eadi_base_clip.primitivetype   	    = "triangles"
-eadi_base_clip.vertices 		    = { {1, aspect}, { 1,-aspect}, { -1,-aspect}, {-1,aspect},} --四个边角
+eadi_base_clip.vertices 		    = { {1, aspect}, { 1,-aspect}, { -1,-aspect}, {-1,aspect},} --four corners
 eadi_base_clip.indices 		        = {0,1,2,0,2,3}
 eadi_base_clip.init_pos		        = {0, 0, 0}
 eadi_base_clip.init_rot		        = {0, 0, 0}
@@ -49,7 +49,7 @@ Add(adi_surround_tex)
 local RBOT_text_box             = CreateElement "ceStringPoly" --Create a character output element "ceTexPoly" means to create a texture model
 RBOT_text_box.material          = "EADI_font"    --FONT_             --Material type (note the font material created above)
 RBOT_text_box.init_pos          = {-1950/2000, 2050/2000}         -- This is the coordinates of the alignment point [this is the maximum limit of the current model (do not exceed when aligning the corners)]
-RBOT_text_box.alignment         = "LeftTop"       --Alignment settings：Left/Right/Center; Top/Down/Center
+RBOT_text_box.alignment         = "LeftTop" --Alignment settings:Left/Right/Center; Top/Down/Center
 RBOT_text_box.stringdefs        = {0.8*0.004,0.8 * 0.004, 0, 0}    --{ecrase vertical si inf a 0.01,ecrase lateral * streccth, 0, 0} The first value controls the width, the second value controls the height
 RBOT_text_box.formats           = {"%s","%s"} -- The output is set here, similar to the printf model of C.% is the output type at the beginning, and the following %s is the input type
 RBOT_text_box.element_params    = {"L_EADI_DISPLAY_TL1","LEADI_DIS_ENABLE"} -- top left first line display
@@ -66,7 +66,7 @@ Add(RBOT_text_box)
 local RTOP_text_box             = CreateElement "ceStringPoly" --Create a character output element "ceTexPoly" means to create a texture model
 RTOP_text_box.material          = "EADI_font"    --FONT_             --Material type (note the font material created above)
 RTOP_text_box.init_pos          = {1950/2000, 2050/2000}         -- This is the coordinates of the alignment point [this is the maximum limit of the current model (do not exceed when aligning the corners)]
-RTOP_text_box.alignment         = "RightTop"       --Alignment settings：Left/Right/Center; Top/Down/Center
+RTOP_text_box.alignment         = "RightTop" --Alignment settings:Left/Right/Center; Top/Down/Center
 RTOP_text_box.stringdefs        = {0.8*0.006,0.8 * 0.006, 0, 0}    --{ecrase vertical si inf a 0.01,ecrase lateral * streccth, 0, 0} The first value controls the width, the second value controls the height
 RTOP_text_box.formats           = {"%.1f","%s"} -- The output is set here, similar to the printf model of C.% is the output type at the beginning, and the following %s is the input type
 RTOP_text_box.element_params    = {"ELEV_TRIM_DIGTAL","LEADI_DIS_ENABLE"}--{"L_EADI_DISPLAY_TR1"} -- top left first line display
@@ -83,7 +83,7 @@ Add(RTOP_text_box)
 local RBOT_text_box             = CreateElement "ceStringPoly" --Create a character output element "ceTexPoly" means to create a texture model
 RBOT_text_box.material          = "EADI_font"    --FONT_             --Material type (note the font material created above)
 RBOT_text_box.init_pos          = {1950/2000, -1850/2000}         -- This is the coordinates of the alignment point [this is the maximum limit of the current model (do not exceed when aligning the corners)]
-RBOT_text_box.alignment         = "RightTop"       --Alignment settings：Left/Right/Center; Top/Down/Center
+RBOT_text_box.alignment         = "RightTop" --Alignment settings:Left/Right/Center; Top/Down/Center
 RBOT_text_box.stringdefs        = {0.8*0.004,0.8 * 0.004, 0, 0}    --{ecrase vertical si inf a 0.01,ecrase lateral * streccth, 0, 0} The first value controls the width, the second value controls the height
 RBOT_text_box.formats           = {"%s","%s"} -- The output is set here, similar to the printf model of C.% is the output type at the beginning, and the following %s is the input type
 RBOT_text_box.element_params    = {"L_EADI_DISPLAY_BR1","LEADI_DIS_ENABLE"} -- top left first line display
@@ -98,10 +98,10 @@ RBOT_text_box.parent_element    = "eadi_base_clip"  --Parent node name - can bin
 Add(RBOT_text_box)
 
 local RBOT_text_box             = CreateElement "ceStringPoly"
-RBOT_text_box.material          = "EADI_font"    
-RBOT_text_box.init_pos          = {-1950/2000, 1850/2000}         
+RBOT_text_box.material          = "EADI_font"
+RBOT_text_box.init_pos          = {-1950/2000, 1850/2000}
 RBOT_text_box.alignment         = "LeftTop"
-RBOT_text_box.stringdefs        = {0.8*0.004,0.8 * 0.004, 0, 0} 
+RBOT_text_box.stringdefs        = {0.8*0.004,0.8 * 0.004, 0, 0}
 RBOT_text_box.formats           = {"%s","%s"}
 RBOT_text_box.element_params    = {"L_EADI_DISPLAY_TL2","LEADI_DIS_ENABLE"}
 RBOT_text_box.controllers       = {{"text_using_parameter",0},{"opacity_using_parameter",1}}
@@ -163,7 +163,7 @@ eadi_adi_rotate.parent_element	        = "eadi_adi_clip"
 eadi_adi_rotate.isvisible               = false
 Add(eadi_adi_rotate)
 
--- 310 * 310 in display -> equal to 1900 * 1900  360 * 1024 
+-- 310 * 310 in display -> equal to 1900 * 1900  360 * 1024
 local gyro_tex 				      = CreateElement "ceTexPoly"
 gyro_tex.vertices                 = EADI_vert_gen(2206*2,6276*2)
 gyro_tex.indices                  = {0,1,2,2,3,0}

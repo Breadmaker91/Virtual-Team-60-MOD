@@ -13,6 +13,8 @@ livery = {
 	{"SK60_PilotFlightSuit",	SPECULAR			,	"../T60 #125/SK60_PilotFlightSuit_Roughmet", 	false};
 	{"SK60_PilotDetails",		DIFFUSE				,	"../T60 #125/SK60_PilotDetails", 				false};
 	{"SK60_PilotDetails",		SPECULAR			,	"../T60 #125/SK60_PilotDetails_Roughmet", 		false};
+	{"SK60_PilotBody1",			SPECULAR			,	"../T60 #125/SK60_PilotBody_roughmet", 			false};
+	{"SK60_PilotBody1",			NORMAL_MAP			,	"../T60 #125/SK60_PilotBody_normal", 			false};
 	
 	
 		--BORT NUMBERS---------------------------------------------------------------	

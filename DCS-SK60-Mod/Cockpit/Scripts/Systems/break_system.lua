@@ -2,9 +2,9 @@ local Breaks = GetSelf()
 dofile(LockOn_Options.script_path.."command_defs.lua")
 dofile(LockOn_Options.script_path.."Systems/electric_system_api.lua")
 
--- ATTENTION: 空气刹车暂时不工作
+-- ATTENTION: air brake is currently not working
 
-local update_time_step = 0.02  --每秒50次刷新
+local update_time_step = 0.02 --refreshes 50 times per second
 make_default_activity(update_time_step)
 
 local sensor_data = get_base_data()
@@ -19,15 +19,15 @@ local air_brake_pos_ind = get_param_handle("AIRBRAKE_IND")
 local parking_brake_handle = get_param_handle("PARKINGBREAK_HANDLE")
 local parking_brake_status = get_param_handle("PARK_BRAKE")
 
--- 减速伞工作情况
-local drag_chute_target_state = 0 -- 0为关闭，1为打开，2为抛离
+-- drag chute state
+local drag_chute_target_state = 0 -- 0 closed, 1 deployed, 2 jettisoned
 local drag_chute_pos
 
-local Airbrake  = 73 -- 默认空气刹车的按键输入
+local Airbrake  = 73 -- default air-brake key input
 local AirbrakeOn = 147
 local AirbrakeOff = 148
 
-local iCommandPlaneWheelBrakeOn = 74 --原装的机轮刹车
+local iCommandPlaneWheelBrakeOn = 74 --default wheel brake
 local iCommandPlaneWheelBrakeOff = 75
 
 local gear_state_share = get_param_handle("GEAR_SHARE")
@@ -50,14 +50,14 @@ function post_initialize()
     parking_brake_handle:set(parking_brake_target)
 end
 
--- 监听轮子刹车
+-- listen for wheel-brake commands
 Breaks:listen_command(Keys.BrakesOn)
 Breaks:listen_command(Keys.BrakesOff)
--- 监听空气刹车
+-- listen for air-brake commands
 Breaks:listen_command(Airbrake)
 Breaks:listen_command(AirbrakeOn)
 Breaks:listen_command(AirbrakeOff)
--- 监听停机刹车
+-- listen for parking-brake commands
 Breaks:listen_command(Keys.ParkingBrakesOn)
 Breaks:listen_command(Keys.ParkingBrakesOff)
 Breaks:listen_command(Keys.ParkingBrakes)
@@ -104,16 +104,16 @@ function SetCommand(command,value)
         dispatch_action(nil,iCommandPlaneWheelBrakeOn)
     elseif (command == Keys.BrakesOff) and (parking_brake_target == 0) then
         dispatch_action(nil,iCommandPlaneWheelBrakeOff)
-    --elseif (command == Airbrake) then
-    --    if (air_brake_state == 0) then
-    --        air_brake_state =0 
-    --    elseif (air_brake_state == 1) then
-    --        air_brake_state = 0
-    --    end
-    --elseif (command == AirbrakeOn) then
-    --    air_brake_state = 1
-    --elseif (command == AirbrakeOff) then
-    --    air_brake_state = 0
+   --elseif (command == Airbrake) then
+   --    if (air_brake_state == 0) then
+   --        air_brake_state =0
+   --    elseif (air_brake_state == 1) then
+   --        air_brake_state = 0
+   --    end
+   --elseif (command == AirbrakeOn) then
+   --    air_brake_state = 1
+   --elseif (command == AirbrakeOff) then
+   --    air_brake_state = 0
     elseif (command == Keys.ParkingBrakesOn) then
         print_message_to_user("pb on")
         dispatch_action(nil,iCommandPlaneWheelBrakeOn)
@@ -130,7 +130,7 @@ function SetCommand(command,value)
         end
     elseif (command == 146) then
         dispatch_action(nil,Keys.FlapUp)
-        --[[
+       --[[
         if (Flap_Target > 0.1 and Flap_Target <= 0.7) then
             Flap_Target = 0
         elseif Flap_Target >= 0.8 then
@@ -139,7 +139,7 @@ function SetCommand(command,value)
         ]]--
     elseif (command == 145) then
         dispatch_action(nil,Keys.FlapDown)
-        --[[
+       --[[
         if (Flap_Target < 0.8 and Flap_Target > 0.3) then
             Flap_Target = 1
         elseif Flap_Target < 0.3 then
@@ -147,7 +147,7 @@ function SetCommand(command,value)
         end
         ]]--
     elseif (command == 72) then
-        -- this is warthunder like now
+       -- this is warthunder like now
         if get_aircraft_draw_argument_value(0) > 0.5 then
             if Flap_Target > 0.3 then
                 Flap_Target = 0
@@ -214,14 +214,14 @@ function update_switch_status()
             current_status[k][2] = current_status[k][2] - switch_moving_step
         end
         target_status[k][3]:set(current_status[k][2])
-        -- local temp_switch_ref = get_clickable_element_reference(target_status[k][4])
-        -- temp_switch_ref:update()
-        -- print_message_to_user(k)
+       -- local temp_switch_ref = get_clickable_element_reference(target_status[k][4])
+       -- temp_switch_ref:update()
+       -- print_message_to_user(k)
     end
 end
 
 function update()
-    --[[
+   --[[
         air_brake_pos = tonumber(string.format(fmt, air_brake_pos))
         if (air_brake_pos < air_brake_state) then
             air_brake_pos = air_brake_pos + 0.02
@@ -236,7 +236,7 @@ function update()
 	--print_message_to_user("BREAKPOS")
 	--print_message_to_user(air_brake_pos)
 	--print_message_to_user("BREAKTAR")
-    --print_message_to_user(air_brake_state)
+   --print_message_to_user(air_brake_state)
     if (parking_brake_state < parking_brake_target) and (parking_brake_target == 1) then
         parking_brake_state = parking_brake_state + 0.1
     elseif (parking_brake_state > parking_brake_target) and (parking_brake_target == 0) then
@@ -244,9 +244,9 @@ function update()
     end
 
     parking_brake_handle:set(parking_brake_state)
-    --print_message_to_user(parking_brake_state)
+   --print_message_to_user(parking_brake_state)
     local flap_moving_step = 0.02 / 10
-    -- update flap status
+   -- update flap status
     if get_hydro_system_status() == true then
         if math.abs(Flap_Target - Flap_Current) < flap_moving_step then
             Flap_Current = Flap_Target
@@ -267,5 +267,5 @@ function update()
     update_switch_status()
 end
 
---不关闭该lua
+--do not close this Lua device
 need_to_be_closed = false

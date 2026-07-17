@@ -23,7 +23,7 @@ creators[devices.WEAPON_SYSTEM]	  ={"avSimpleWeaponSystem"  ,LockOn_Options.scri
 creators[devices.INTERCOM]        ={"avIntercom"            ,LockOn_Options.script_path.."Intercom.lua", {devices.UHF_RADIO, devices.VHF_RADIO} }
 creators[devices.UHF_RADIO]       ={"avUHF_ARC_164"         ,LockOn_Options.script_path.."uhf_radio.lua", {devices.INTERCOM, devices.ELECTRIC_SYSTEM} }
 creators[devices.FR31_RADIO]      ={"avLuaDevice"           ,LockOn_Options.script_path.."Systems/fr31_radio.lua"}
-creators[devices.VHF_RADIO]       ={"avVHF_ARC_186"         ,LockOn_Options.script_path.."vhf_radio.lua", {devices.INTERCOM, devices.ELECTRIC_SYSTEM} }
+creators[devices.VHF_RADIO]       ={"avUHF_ARC_164"         ,LockOn_Options.script_path.."vhf_radio.lua", {devices.INTERCOM, devices.ELECTRIC_SYSTEM} }
 creators[devices.FR33_RADIO]      ={"avLuaDevice"           ,LockOn_Options.script_path.."Systems/fr33_radio.lua"}
 -- radar module
 creators[devices.RADAR_RAW]		  ={"avSimpleRadar"			,LockOn_Options.script_path.."avRadar/Device/Radar_init.lua"}
@@ -37,12 +37,12 @@ creators[devices.CLOCK]           ={"avLuaDevice"           ,LockOn_Options.scri
 creators[devices.GEAR_SYSTEM]     ={"avLuaDevice"           ,LockOn_Options.script_path.."Systems/gear_system.lua"}
 
 creators[devices.LIGHT_SYSTEM]    ={"avLuaDevice"           ,LockOn_Options.script_path.."Systems/light_system.lua"}
--- this is 14, dont move this position for now XD, the command from EFM is constant send to lua device 14 
-creators[devices.SOUND_SYSTEM]    ={"avLuaDevice"           ,LockOn_Options.script_path.."Systems/sound_system.lua"} 
--- warning panel controller 
-creators[devices.WARNING_SYSTEM]  ={"avLuaDevice"           ,LockOn_Options.script_path.."Systems/warning_system.lua"} 
+-- this is 14, dont move this position for now XD, the command from EFM is constant send to lua device 14
+creators[devices.SOUND_SYSTEM]    ={"avLuaDevice"           ,LockOn_Options.script_path.."Systems/sound_system.lua"}
+-- warning panel controller
+creators[devices.WARNING_SYSTEM]  ={"avLuaDevice"           ,LockOn_Options.script_path.."Systems/warning_system.lua"}
 -- ipad controller
---creators[devices.IPAD_SYSTEM]     ={"avLuaDevice"           ,LockOn_Options.script_path.."Systems/ipad_ctrl.lua"} 
+--creators[devices.IPAD_SYSTEM]     ={"avLuaDevice"           ,LockOn_Options.script_path.."Systems/ipad_ctrl.lua"}
 -- menu controller
 creators[devices.MENU_SYSTEM]     ={"avLuaDevice"           ,LockOn_Options.script_path.."Systems/menu_ctrl_system.lua"}
 -- gps_receiver & the uplink databus to EFM

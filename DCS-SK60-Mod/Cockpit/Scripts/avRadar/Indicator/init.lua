@@ -12,7 +12,7 @@ page_subsets  = {
 [BASE]    		= LockOn_Options.script_path.."avRadar/Indicator/base_page.lua",
 [INDICATION]    = LockOn_Options.script_path.."avRadar/Indicator/indication_page.lua",
 }
-pages = 
+pages =
 {
 	{
 	 BASE,

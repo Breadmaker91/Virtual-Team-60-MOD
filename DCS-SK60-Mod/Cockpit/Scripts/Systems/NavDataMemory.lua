@@ -2,31 +2,31 @@
 -- This file stores RNAV/NAV programming between DCS sessions.
 return {
     ["state"] = {
-        ["active_rnav_edit_segment"] = 3,
+        ["active_rnav_edit_segment"] = 1,
         ["active_waypoint"] = {
             ["index"] = 1,
-            ["offset_distance_nm"] = 42.300000000000004,
-            ["offset_radial_deg"] = 114,
-            ["vor_frequency_mhz"] = 115.80000000000001,
+            ["offset_distance_nm"] = 60.400000000000006,
+            ["offset_radial_deg"] = 187,
+            ["vor_frequency_mhz"] = 113,
         },
         ["current_waypoint_index"] = 1,
-        ["selected_heading_bug_deg"] = 2,
-        ["selected_offset_distance_nm"] = 42.70000000000001,
-        ["selected_offset_radial_deg"] = 114,
-        ["selected_vor_course_deg"] = 136,
+        ["selected_heading_bug_deg"] = 17,
+        ["selected_offset_distance_nm"] = 60.400000000000006,
+        ["selected_offset_radial_deg"] = 187,
+        ["selected_vor_course_deg"] = 152,
         ["tuned_ndb_frequency_khz"] = 353,
-        ["tuned_vor_frequency_mhz"] = 115.80000000000001,
+        ["tuned_vor_frequency_mhz"] = 113,
         ["version"] = 1,
         ["waypoint_slots"] = {
             [1] = {
-                ["offset_distance_nm"] = 42.70000000000001,
-                ["offset_radial_deg"] = 114,
-                ["vor_frequency_mhz"] = 115.80000000000001,
+                ["offset_distance_nm"] = 60.400000000000006,
+                ["offset_radial_deg"] = 187,
+                ["vor_frequency_mhz"] = 113,
             },
             [2] = {
                 ["offset_distance_nm"] = 13.4,
                 ["offset_radial_deg"] = 156,
-                ["vor_frequency_mhz"] = 113.60000000000001,
+                ["vor_frequency_mhz"] = 113,
             },
             [3] = {
                 ["offset_distance_nm"] = 10.999999999999996,

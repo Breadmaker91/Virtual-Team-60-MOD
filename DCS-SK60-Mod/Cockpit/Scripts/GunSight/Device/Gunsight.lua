@@ -33,7 +33,7 @@ local prevStatus = 0
 
 
 function post_initialize()
-	
+
 end
 
 function update()

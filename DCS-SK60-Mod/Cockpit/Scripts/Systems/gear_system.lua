@@ -65,7 +65,7 @@ function post_initialize()
     r_gear_status = r_main_gear_status
 
     if (gear_level_init == 0) then
-        --gear_system:performClickableAction(click_cmd.GearLevel, 1, false)
+       --gear_system:performClickableAction(click_cmd.GearLevel, 1, false)
     end
 
     set_aircraft_draw_argument_value(0, nose_gear_status)
@@ -96,7 +96,7 @@ function SetCommand(command,value)
     elseif (command == gear_up) then
         nose_gear_status = 0
         l_main_gear_status = 0
-        r_main_gear_status = 0       
+        r_main_gear_status = 0
     elseif (command == 120) then
         dispatch_action(nil, THROTTLEAXIS, -1)
 	end
@@ -107,17 +107,17 @@ local moving_starts = 0
 function update()
     local gear_handle_click_ref = get_clickable_element_reference("PNT_083")
 
-        --takes 7 seconds to full extended
-        -- set globle time count
+       --takes 7 seconds to full extended
+       -- set globle time count
         local time_increse_step = 0.02 / 7
         if (sensor_data.getWOW_LeftMainLandingGear() > 0.001 or sensor_data.getWOW_NoseLandingGear() > 0.001 or sensor_data.getWOW_RightMainLandingGear() > 0.001) then
             move_ability = 0
-            --dprintf("L:"..sensor_data.getWOW_LeftMainLandingGear());
-            --dprintf("R:"..sensor_data.getWOW_RightMainLandingGear());
+           --dprintf("L:"..sensor_data.getWOW_LeftMainLandingGear());
+           --dprintf("R:"..sensor_data.getWOW_RightMainLandingGear());
         else
             move_ability = 1
         end
-        --dprintf("N:"..sensor_data.getWOW_NoseLandingGear());
+       --dprintf("N:"..sensor_data.getWOW_NoseLandingGear());
 
         if math.abs(nose_gear_status - n_gear_status) < time_increse_step then
             if move_ability > 0.5 then
@@ -132,7 +132,7 @@ function update()
                     moving_starts = 1
                 end
             else
-                -- in increments of time_increse_step (50x per second)
+               -- in increments of time_increse_step (50x per second)
                 n_gear_status = n_gear_status + time_increse_step
                 set_aircraft_draw_argument_value(0, n_gear_status)
                 if moving_starts == 0 and move_ability == 1 then
@@ -169,8 +169,8 @@ function update()
         end
         set_aircraft_draw_argument_value(3, r_gear_status)
 
-        -- Move cockpit landing-gear lever toward the commanded position.
-        -- Lever uses opposite sense to gear state: gear down = 0, gear up = 1.
+       -- Move cockpit landing-gear lever toward the commanded position.
+       -- Lever uses opposite sense to gear state: gear down = 0, gear up = 1.
         local gear_level_target = 1 - nose_gear_status
         if math.abs(gear_level_target - gear_level_pos) < 0.1 then
             gear_level_pos = gear_level_target
@@ -183,7 +183,7 @@ function update()
         gear_level:set(gear_level_pos)
         gear_handle_click_ref:update()
 
-        -- the gear indication system  wont work without the dc power
+       -- the gear indication system  wont work without the dc power
         if get_elec_dc_status() then
             ngear_pos_ind:set(n_gear_status)
             mlgear_pos_ind:set(l_gear_status)

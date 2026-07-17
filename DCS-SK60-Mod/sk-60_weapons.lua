@@ -227,7 +227,7 @@ ORAK60M70.fm.mass = 6.6
 ORAK60M70.fm.caliber = 0.060
 ORAK60M70.fm.L = 0.912
 ORAK60M70.engine.fuel_mass = math.min(ORAK60M70.engine.fuel_mass, 2.0)
-ORAK60M70.engine.nozzle_position = {{-0.451, 0, 0}}
+ORAK60M70.engine.nozzle_position = {{-0.456, 0, 0}}
 ORAK60M70.engine.tail_width = 0.060
 
 declare_weapon(ORAK60M70)
@@ -381,6 +381,7 @@ function declear_rocket_pods(_uuid, _display_name, _display_icon, _rocket_num, _
 	}
 	local rocket_vertical_offset = _adapter_shape and -0.133 or 0
 	local rocket_forward_offset = _adapter_forward_offset or 0
+	local rocket_connector_name = _adapter_shape and "Point" or nil
 
 	if _rocket_num < 1 then
 		data.Elements = {
@@ -392,6 +393,7 @@ function declear_rocket_pods(_uuid, _display_name, _display_icon, _rocket_num, _
 			{
 				Position	= {rocket_forward_offset, rocket_vertical_offset, 0},--{_forwarding + 0.01, - 0.065 - _diameter/2 * 3 - _distance, 0}, --2 0.25
 				payload_CLSID = _payload_clsid,
+				connector_name = rocket_connector_name,
 				ShapeName	= _rocket_shape,
 				Rotation 	= {0,0,-1.5},
 			},
@@ -407,6 +409,7 @@ function declear_rocket_pods(_uuid, _display_name, _display_icon, _rocket_num, _
 			{
 				Position	= {rocket_forward_offset, rocket_vertical_offset, 0},--{_forwarding, - 0.065 - _diameter/2, 0}, --1
 				payload_CLSID = _payload_clsid,
+				connector_name = rocket_connector_name,
 				ShapeName	= _rocket_shape,
 				Rotation 	= {0,0,0},
 			},
@@ -416,6 +419,7 @@ function declear_rocket_pods(_uuid, _display_name, _display_icon, _rocket_num, _
 			table.insert(data.Elements, {
 				Position	= {rocket_forward_offset, rocket_vertical_offset - (_diameter + _distance), 0},--{_forwarding + 0.01, - 0.065 - _diameter/2 * 3 - _distance, 0}, --2 0.25
 				payload_CLSID = _payload_clsid,
+				connector_name = rocket_connector_name,
 				ShapeName	= _rocket_shape,
 				Rotation 	= {0,0,0},
 			})
@@ -429,6 +433,7 @@ declare_loadout(declear_rocket_pods("{d694b359-e7a8-4909-88d4-7100b77afd13}", "1
 declare_loadout(declear_rocket_pods("{d694b359-e7a8-4909-88d4-7100b77afd12}", "1x 14,5cm HEAT rocket", "M49_Rocket_145_HEAT.png", 1, 1450, "SK60_145_psrak", 0.025, 0.145, 0.43))
 declare_loadout(declear_rocket_pods("{d694b359-e7a8-4909-88d4-7100b77afd10}", "2x 14,5cm HEAT rocket", "M49_Rocket_145_HEAT.png", 2, 1450, "SK60_145_psrak", 0.025, 0.145, 0.43))
 
+-- Keep ÖRAK as a visual loadout element; using the declared rocket CLSID as a nested payload makes it disappear on the adapter.
 declare_loadout(declear_rocket_pods("{d694b359-e7a8-4909-88d4-7100b77afd60}", "1x 60mm ÖRAK m/70 practice rocket", "ORAK_Rocket_.png", 1, 6070, "SK60_60_orak", 0.025, 0.150, 0.38, 6.6, nil, "SK60_ORAK_Pylon", 0.447))
 -- Reference aircraft use DCS native smoke-marker rocket payload CLSIDs for marker effects.
 declare_loadout(declear_rocket_pods("{d694b359-e7a8-4909-88d4-7100b77afd63}", "1x 63mm SÖRAK m/70 smoke rocket", "SORAK_Rocket.png", 1, 151, "SK60_63sorak", 0.025, 0.145, 0.38, 7.0, "{M259_HYDRA}", "SK60_ORAK_Pylon"))

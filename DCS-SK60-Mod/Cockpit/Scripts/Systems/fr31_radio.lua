@@ -94,9 +94,9 @@ local function set_display_text(text)
 end
 
 local function format_frequency_text(freq_hz)
-    -- The real FR31 shows five digits without a decimal. The sixth kHz digit is
-    -- always entered as an implicit trailing zero, so 243.150 MHz displays as
-    -- 24315.
+   -- The real FR31 shows five digits without a decimal. The sixth kHz digit is
+   -- always entered as an implicit trailing zero, so 243.150 MHz displays as
+   -- 24315.
     local frequency_khz_text = string.format("%06d", math.floor((freq_hz / 1E3) + 0.5))
     return string.sub(frequency_khz_text, 1, 5)
 end
@@ -194,10 +194,10 @@ local function set_radio_frequency(freq_hz)
 end
 
 local function sync_from_backing_radio()
-    -- Keep the FR31 control head authoritative while the pilot is entering
-    -- digits. The backing DCS radio can still update FR31 when an external
-    -- radio-menu action changes the communicator frequency, but it must not
-    -- erase an in-progress keypad entry.
+   -- Keep the FR31 control head authoritative while the pilot is entering
+   -- digits. The backing DCS radio can still update FR31 when an external
+   -- radio-menu action changes the communicator frequency, but it must not
+   -- erase an in-progress keypad entry.
     if entry_active then
         return
     end
@@ -214,9 +214,9 @@ local function set_radio_modulation(modulation)
     current_modulation = modulation
     fr31_mode:set(modulation)
 
-    -- Keep the backing ARC-164 in AM. SRS reads the FR31 AM/FM switch from
-    -- the exporter, and forcing FM into this native UHF device can destabilize
-    -- DCS builds that only implement AM for avUHF_ARC_164.
+   -- Keep the backing ARC-164 in AM. SRS reads the FR31 AM/FM switch from
+   -- the exporter, and forcing FM into this native UHF device can destabilize
+   -- DCS builds that only implement AM for avUHF_ARC_164.
     local uhf_radio = get_backing_radio()
     if uhf_radio ~= nil then
         local ok = pcall(function()
@@ -246,9 +246,9 @@ local function normalise_mission_frequency(freq)
         return nil
     end
 
-    -- DCS mission radio channel data is normally stored in MHz, while the
-    -- FR31 preset table uses Hz. Accept Hz as well so hand-built mission data
-    -- or future DCS changes do not require another conversion path.
+   -- DCS mission radio channel data is normally stored in MHz, while the
+   -- FR31 preset table uses Hz. Accept Hz as well so hand-built mission data
+   -- or future DCS changes do not require another conversion path.
     if numeric_freq < 1E6 then
         return numeric_freq * 1E6
     end
@@ -332,10 +332,10 @@ local function update_display()
     local powered = is_powered()
     fr31_display_enable:set(bool_to_number(powered))
 
-    -- Do not gate the DCS/SRS radio availability on the FR31 display power.
-    -- The old SK60 kept RADIO_POWER on after initialization; tying this shared
-    -- parameter to PTN_401 causes SRS to connect briefly, then drop the aircraft
-    -- once the cold-start electrical state settles.
+   -- Do not gate the DCS/SRS radio availability on the FR31 display power.
+   -- The old SK60 kept RADIO_POWER on after initialization; tying this shared
+   -- parameter to PTN_401 causes SRS to connect briefly, then drop the aircraft
+   -- once the cold-start electrical state settles.
     radio_power:set(1.0)
     fr31_active_freq:set(current_freq_hz / 1E6)
 

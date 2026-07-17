@@ -13,7 +13,7 @@ JOYSTICK =
 
 Keys =
 {
-	pilotToggle = __custom_counter(), 
+	pilotToggle = __custom_counter(),
 
 	PlanePickleOn	= 350,
 	PlanePickleOff	= 351,
@@ -26,28 +26,28 @@ Keys =
     PlaneModeGround = 111,
 
 	Canopy = 71,
-	
-	PlaneAirBrake = 73,		
+
+	PlaneAirBrake = 73,
 	PlaneAirBrakeOn = 147,
-	PlaneAirBrakeOff = 148,	
-	
+	PlaneAirBrakeOff = 148,
+
 	PlaneFlaps = 72,
 	PlaneFlapsOn = 145, -- Fully down
 	PlaneFlapsOff = 146, -- Fully up
-    	
+
 	PlaneGear = 68,						-- Шасси
 	PlaneGearUp	= 430,
 	PlaneGearDown = 431,
-    
-	--LeftEngineStart = 311,			
-	--RightEngineStart = 312,			
-	--LeftEngineStop = 313,			
-	--RightEngineStop = 314,			
+
+	--LeftEngineStart = 311,
+	--RightEngineStart = 312,
+	--LeftEngineStop = 313,
+	--RightEngineStop = 314,
 
 	PowerOnOff = 315,
 
-    --[[   -- Do not use the built-in altimeter adjustments, they have internal SSM affects on the altimeter that we cannot limit
-    AltimeterPressureIncrease = 316,  
+   --[[   -- Do not use the built-in altimeter adjustments, they have internal SSM affects on the altimeter that we cannot limit
+    AltimeterPressureIncrease = 316,
     AltimeterPressureDecrease = 317,
     AltimeterPressureStop = 318,        ]]--
 
@@ -61,7 +61,7 @@ Keys =
 
     PlaneChgTargetPrev = 1315,   -- iCommandPlaneUFC_STEER_DOWN
 
-    -- Customized buttons start here and can be automatically added from 10,000 to avoid conflicts. --
+   -- Customized buttons start here and can be automatically added from 10,000 to avoid conflicts. --
     ThrottleAxisTest = __custom_counter(),  --Throttle position
     EnginesStart = __custom_counter(), --Custom engine start input
     EnginesStop = __custom_counter(), --Custom engine shutdown input
@@ -73,10 +73,10 @@ Keys =
 
     DragParachute = __custom_counter(), --Customized parachute release
 
-    --PlaneFlapsStop = __custom_counter(),      --Manual slats currently blocked
-    --PlaneFlapsUpHotas = __custom_counter(),   --
-    --PlaneFlapsDownHotas = __custom_counter(), --
-    
+   --PlaneFlapsStop = __custom_counter(),      --Manual slats currently blocked
+   --PlaneFlapsUpHotas = __custom_counter(),   --
+   --PlaneFlapsDownHotas = __custom_counter(), --
+
     SpoilersArmToggle = __custom_counter(),
     SpoilersArmOn = __custom_counter(),
     SpoilersArmOff = __custom_counter(),
@@ -85,11 +85,11 @@ Keys =
     PickleOn = __custom_counter(),  -- replaces iCommandPlanePickleOn
     PickleOff = __custom_counter(), -- replaces iCommandPlanePickleOff
 
-    -- Weapon testing button
+   -- Weapon testing button
     WeaponSelectNext = __custom_counter(),
     WeaponLaunch = __custom_counter(),
 
-    -- flap action
+   -- flap action
     FlapUp = __custom_counter(),
     FlapDown = __custom_counter(),
 
@@ -119,12 +119,12 @@ Keys =
     FuelMasterLeft = __custom_counter(),
     FuelMasterRight = __custom_counter(),
 
-    --PowerGeneratorLeft = __custom_counter(),
-    --PowerGeneratorRight = __custom_counter(),
+   --PowerGeneratorLeft = __custom_counter(),
+   --PowerGeneratorRight = __custom_counter(),
 
     LeftEngineIDLE = __custom_counter(),
     RightEngineIDLE = __custom_counter(),
-    
+
     FuelDisMain = __custom_counter(),
     FuelDisWing = __custom_counter(),
     FuelDisCtr = __custom_counter(),
@@ -167,7 +167,7 @@ Keys =
     AutoPilotAltHoldSwitch = __custom_counter(),
     AutoPilotMachHoldSwitch = __custom_counter(),
 
-    -- ECS aircondition
+   -- ECS aircondition
     AircondMasterSwitch = __custom_counter(),
     AircondAutoManSwitch = __custom_counter(),
     AircondCockpitSwitchUP = __custom_counter(),
@@ -181,7 +181,7 @@ Keys =
     AircondTemp = __custom_counter(),
     AircondDefog = __custom_counter(),
 
-    -- UHF radio
+   -- UHF radio
     UHFMode = __custom_counter(),
     UHFFreqAUP = __custom_counter(),
     UHFFreqADOWN = __custom_counter(),
@@ -195,18 +195,18 @@ Keys =
     UHFGuard = __custom_counter(),
     UHFVolume = __custom_counter(),
 
-    -- TACAN
+   -- TACAN
     TACANMode = __custom_counter(),
     TACANChanA = __custom_counter(),
     TACANChanB = __custom_counter(),
 
-    -- Radio System Antanna
+   -- Radio System Antanna
     TACANAntUP = __custom_counter(),
     TACANAntDOWN = __custom_counter(),
     UHFAntUP = __custom_counter(),
     UHFAntDOWN = __custom_counter(),
 
-    -- VDI System
+   -- VDI System
     VDIControlOff = __custom_counter(),
     VDIControlTC = __custom_counter(),
     VDIControlTest = __custom_counter(),
@@ -214,12 +214,12 @@ Keys =
     VDIControlAnalog = __custom_counter(),
     VDIControlSTBY = __custom_counter(),
 
-    -- Gear System add-ons
+   -- Gear System add-ons
 
     HookHandle = __custom_counter(),
     LaunchBarHandle = __custom_counter(),
 
-    -- Weapon System
+   -- Weapon System
     MasterArmamentUP = __custom_counter(),
     MasterArmamentDOWN = __custom_counter(),
 
@@ -273,11 +273,11 @@ Keys =
     MissileCoolingUP = __custom_counter(),
     MissileCoolingDOWN = __custom_counter(),
 
-    -- power system
+   -- power system
     ElecPowerDCGenL = __custom_counter(),
     ElecPowerDCGenR = __custom_counter(),
 
-    -- this part is fpr music player
+   -- this part is fpr music player
     MusicPauseOrPlay = __custom_counter(),
     MusicNext = __custom_counter(),
     MusicLast = __custom_counter(),
@@ -288,14 +288,14 @@ Keys =
     MusicVolDown = __custom_counter(),
     MusicScreenHide = __custom_counter(),
 
-    --起落架手柄 5001// 5050 EFM - 6000 for EFM
+--landing gear handle 5001// 5050 EFM - 6000 for EFM
     NoseWheelSteeringOn = 5050,
     NoseWheelSteeringOff = 5051,
-    -- LeftEngineOFF = __custom_counter(),
-    -- RightEngineOFF = __custom_counter(),
+   -- LeftEngineOFF = __custom_counter(),
+   -- RightEngineOFF = __custom_counter(),
     YawDamperSwitch = 5052,
 
-    -- Weapon Part till 5070
+   -- Weapon Part till 5070
     WingPylonSmokeOn = 5053,
     NozzleSmokeOn = 5054,
     WeaponFireOn = 5055,
@@ -308,27 +308,27 @@ Keys =
     GunSightInstall = 5062,
     GunSightUninstall = 5063,
 
-    -- special functions
+   -- special functions
     SpecialSence = 5070,
 
-    -- Flight Control Key start from 5071 - 5100
+   -- Flight Control Key start from 5071 - 5100
     AirbrakePauseMove = 5071,
     Flap_Pos_Up = 5072,
     Flap_Pos_Half = 5073,
     Flap_Pos_Down = 5074,
 
-    -- Ejection seat safety lever and gated ejection
+   -- Ejection seat safety lever and gated ejection
     EjectionSeatSafetyLever = 5075,
     EjectionSeatSafetyLeverOn = 5076,
     EjectionSeatSafetyLeverOff = 5077,
     EjectionSeatEject = 5078,
 
-    -- CustomMenu Trigger
+   -- CustomMenu Trigger
     Custom_Menu = 5090,
     Custom_Menu_Enter = 5091,
 
-    -- 5100-5500 Navigation input
-    -- GNS 430
+   -- 5100-5500 Navigation input
+   -- GNS 430
     COM_Freq_Swap = 5100,
     VLOC_Freq_Swap = 5101,
     Freq_Degi = 5102,
@@ -366,17 +366,17 @@ Keys =
         Nav_RNAV_CHK_PRESS = 5132,
         Nav_RNAV_CHK_RELEASE = 5133,
         Nav_RNAV_RTN = 5134,
-	    -- Course/heading selectors
+	   -- Course/heading selectors
     Nav_Course_Sel = 5150,
     Nav_Heading_Sel = 5151,
-    -- Display controls
+   -- Display controls
     Display_Brighter = 5200,
     Display_Darker = 5201,
     EALT_BARO = 5202,
-    -- Main Nav Power Bus
+   -- Main Nav Power Bus
     Nav_Main_Power = 5500,
 
-    -- 5500 - 5550 Engine Conrol
+   -- 5500 - 5550 Engine Conrol
     L_LP_PUMP = 5501,
     R_LP_PUMP = 5502,
     L_HP_PUMP = 5503,
@@ -392,7 +392,7 @@ Keys =
     R_THROTTLE_SETIDLE = 5513,
     R_THROTTLE_SETOFF = 5514,
 
-    -- 5601 - 5700 for UHF radio
+   -- 5601 - 5700 for UHF radio
     UHF_Vol_Up = 5601,
     UHF_Vol_Down = 5602,
     UHF_SQLACK_Up = 5603,
@@ -416,7 +416,7 @@ Keys =
     UHF_Key_ENT = 5621,
     RadioUpdate = 5622,
 
-    -- 5701 - 5750 for FR31 radio
+   -- 5701 - 5750 for FR31 radio
     FR31_Key_0 = 5701,
     FR31_Key_1 = 5702,
     FR31_Key_2 = 5703,
@@ -432,12 +432,12 @@ Keys =
     FR31_Manual_Mode = 5713,
     FR31_NR_Mode = 5714,
 
-    -- 5751 - 5760 for FR33 radio
+   -- 5751 - 5760 for FR33 radio
     FR33_MHz = 5751,
     FR33_100kHz = 5752,
     FR33_25kHz = 5753,
 
-    -- 6000 - 6100 for sound trigger
+   -- 6000 - 6100 for sound trigger
     SND_LEFT_PANEL = 6001,
     SND_CENTER_PANEL = 6002,
     SND_RIGHT_PANEL = 6003,
@@ -445,12 +445,12 @@ Keys =
     SND_GEAR   = 6005,
     SND_BEACON_ROT = 6006,
 
-    -- 6100 - 6200 for further warning system
+   -- 6100 - 6200 for further warning system
     WARN_MASTER_CANCEL = 6100,
-	
+
 	--6500 - 6900 Breadmakers special additions
 	PilotBody = 6500,
-	
+
 }
 
 --Increment click instructions starting from 5000

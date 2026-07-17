@@ -9,6 +9,7 @@ local STANDARD_PRESSURE_HPA = 1013.25
 local KELVIN_TO_CELSIUS = -273.15
 local SMOKE_ANIMATION_ARG = 5000
 local SMOKE_LOOP_ANIMATION_ARG = 5001
+local GLASS_FOG_ANIMATION_ARG = 5002
 local SMOKE_LOOP_PERIOD_SECONDS = 2.0
 local SMOKE_LOOP_FRAME_COUNT = 60
 local SMOKE_LOOP_FRAME_DURATION_SECONDS = SMOKE_LOOP_PERIOD_SECONDS / SMOKE_LOOP_FRAME_COUNT
@@ -17,12 +18,16 @@ local SMOKE_LOOP_FRAME_VALUE_STEP = SMOKE_LOOP_MAX_VALUE / SMOKE_LOOP_FRAME_COUN
 local HUMIDITY_SMOKE_THRESHOLD = 50
 local HUMIDITY_FULL_EFFECT_PERCENT = 80
 local AMBIENT_MOISTURE_FLOOR_SCALE = 0.12
+local SMOKE_MOISTURE_CLEAR_THRESHOLD = 0.035
+local SMOKE_MOISTURE_FULL_EFFECT = 0.16
 local AIRFLOW_SMOKE_VISIBILITY_BOOST = 17.0
 local AIRFLOW_SMOKE_PUSH_GAIN = 0.70
-local AIRFLOW_SMOKE_PUSH_DECAY_RATE = 0.70
-local AIRFLOW_EQUALIZATION_DECAY_RATE = 1.20
-local AIRFLOW_COCKPIT_DRYING_RATE = 0.095
-local AIRFLOW_WET_AIRCRAFT_DRYING_RATE = 0.075
+local AIRFLOW_SMOKE_PUSH_DECAY_RATE = 1.20
+local AIRFLOW_EQUALIZATION_DECAY_RATE = 2.40
+local AIRFLOW_COCKPIT_DRYING_RATE = 0.120
+local AIRFLOW_WET_AIRCRAFT_DRYING_RATE = 0.100
+local GLASS_FOG_BUILD_RESPONSE_RATE = 0.45
+local GLASS_FOG_CLEAR_RESPONSE_RATE = 0.65
 local DEW_POINT_FULL_EFFECT_SPREAD_C = 2
 local DEW_POINT_NO_EFFECT_SPREAD_C = 12
 local PRESSURE_TRANSIENT_THRESHOLD_PA_PER_SEC = 450
@@ -32,6 +37,7 @@ local humidity_param = get_param_handle("CURRENT_HUMIDITY")
 local smoke_param = get_param_handle("CONDENSATION_SMOKE_PERCENT")
 local smoke_animation_param = get_param_handle("CONDENSATION_SMOKE")
 local smoke_loop_animation_param = get_param_handle("CONDENSATION_SMOKE_LOOP")
+local glass_fog_animation_param = get_param_handle("CONDENSATION_GLASS_FOG")
 local dew_point_param = get_param_handle("CONDENSATION_DEW_POINT_C")
 local cockpit_moisture_param = get_param_handle("CONDENSATION_COCKPIT_MOISTURE")
 local temperature_param = get_param_handle("ATMOSPHERE_TEMPERATURE_K")
@@ -49,6 +55,7 @@ local cockpit_moisture = 0
 local wet_aircraft_factor = 0
 local airflow_smoke_push = 0
 local previous_airflow_factor = 0
+local glass_fog_level = 0
 local previous_pressure_pa = nil
 local previous_temperature_c = nil
 
@@ -234,13 +241,19 @@ local function update_cockpit_moisture(delta_time, humidity_factor, rain_factor,
         0,
         1
     )
-    local ambient_moisture_floor = humidity_factor * AMBIENT_MOISTURE_FLOOR_SCALE * active_wetness_floor
+    local airflow_floor_reduction = 1 - (airflow_factor * 0.85)
+    local ambient_moisture_floor = humidity_factor * AMBIENT_MOISTURE_FLOOR_SCALE * active_wetness_floor * airflow_floor_reduction
 
     cockpit_moisture = cockpit_moisture + (moisture_in - moisture_out) * delta_time
     cockpit_moisture = math.max(cockpit_moisture, ambient_moisture_floor)
     cockpit_moisture = clamp(cockpit_moisture, 0, 1)
 
     return cockpit_moisture, wet_factor
+end
+
+local function calculate_visible_moisture_factor(moisture_factor, airflow_push_factor)
+    local raw_visible_moisture = clamp(moisture_factor + airflow_push_factor, 0, 1)
+    return clamp((raw_visible_moisture - SMOKE_MOISTURE_CLEAR_THRESHOLD) / (SMOKE_MOISTURE_FULL_EFFECT - SMOKE_MOISTURE_CLEAR_THRESHOLD), 0, 1)
 end
 
 local function update_airflow_smoke_push(delta_time, airflow_factor, moisture_factor)
@@ -252,6 +265,22 @@ local function update_airflow_smoke_push(delta_time, airflow_factor, moisture_fa
     previous_airflow_factor = airflow_factor
 
     return airflow_smoke_push
+end
+
+local function update_glass_fog(delta_time, moisture_factor, canopy_open_factor)
+    local canopy_closed_factor = 1 - canopy_open_factor
+    local target_fog_level = moisture_factor * canopy_closed_factor
+    local response_rate = GLASS_FOG_CLEAR_RESPONSE_RATE
+    if target_fog_level > glass_fog_level then
+        response_rate = GLASS_FOG_BUILD_RESPONSE_RATE
+    end
+
+    local response = clamp(response_rate * delta_time, 0, 1)
+    glass_fog_level = clamp(glass_fog_level + ((target_fog_level - glass_fog_level) * response), 0, 1)
+    glass_fog_animation_param:set(glass_fog_level)
+    set_aircraft_draw_argument_value(GLASS_FOG_ANIMATION_ARG, glass_fog_level)
+
+    return glass_fog_level
 end
 
 local function calculate_humidity_factor(humidity)
@@ -422,7 +451,8 @@ function CondensationModel.update(sensor_data, delta_time)
         transient_factor
     )
     local airflow_push_factor = update_airflow_smoke_push(dt, airflow_factor, moisture_factor)
-    local visible_moisture_factor = clamp(moisture_factor + airflow_push_factor, 0, 1)
+    local visible_moisture_factor = calculate_visible_moisture_factor(moisture_factor, airflow_push_factor)
+    local glass_fog = update_glass_fog(dt, moisture_factor, canopy_open_factor)
     local vapor_pulse = 0.75 + 0.15 * math.sin(smoke_loop_time * 1.7) + 0.10 * math.sin(smoke_loop_time * 4.3)
     local smoke_animation_value = clamp(humidity_factor * airflow_factor * AIRFLOW_SMOKE_VISIBILITY_BOOST * visible_moisture_factor * dewpoint_factor * vapor_pulse, 0, 1)
     local smoke_percent = smoke_animation_value * 100
@@ -442,6 +472,11 @@ function CondensationModel.update(sensor_data, delta_time)
         cockpit_moisture = moisture_factor,
         airflow_factor = airflow_factor,
         airflow_push_factor = airflow_push_factor,
+        glass_fog = glass_fog,
+        rain_factor = rain_factor,
+        fog_factor = fog_factor,
+        cloud_factor = cloud_factor,
+        canopy_open_factor = canopy_open_factor,
         dew_point_c = dew_point_c,
         temperature_c = temperature_c,
         pressure_pa = pressure_pa,

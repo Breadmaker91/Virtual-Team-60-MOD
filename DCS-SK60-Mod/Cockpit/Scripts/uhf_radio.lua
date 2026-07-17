@@ -12,10 +12,10 @@ local dev = GetSelf()
 local iCommandPlaneIntercomUHFPress = 1172
 local radio_power = get_param_handle("RADIO_POWER")
 local function update_radio_power()
-    -- Keep the native radio available to DCS/SRS like the old SK60 did.
-    -- The FR31 display can still follow aircraft electrical power, but dropping
-    -- RADIO_POWER when PTN_401 is off makes SRS lose the aircraft shortly after
-    -- spawn.
+   -- Keep the native radio available to DCS/SRS like the old SK60 did.
+   -- The FR31 display can still follow aircraft electrical power, but dropping
+   -- RADIO_POWER when PTN_401 is off makes SRS lose the aircraft shortly after
+   -- spawn.
     radio_power:set(1.0)
 end
 
@@ -29,7 +29,7 @@ device_timer_dt = update_time_step
 -- make_default_activity(update_time_step)
 
 -- the following are some functions for the radio to work
--- this part currently use parameters from A4E-C
+-- radio parameter setup
 innerNoise 			= getInnerNoise(2.5E-6, 10.0)--V/m (dB S+N/N)
 frequency_accuracy 	= 500.0				--Hz
 band_width			= 12E3				--Hz (6 dB selectivity)

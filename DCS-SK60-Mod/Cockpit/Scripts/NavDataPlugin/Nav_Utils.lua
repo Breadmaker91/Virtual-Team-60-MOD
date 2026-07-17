@@ -5,7 +5,7 @@
 -- =====================================================================================
 
 -- DCS Lua doesnt seem to like the new functions... I think its pre 5.3?
----@diagnostic disable: deprecated 
+---@diagnostic disable: deprecated
 
 -- Beacon constants, from Beacons.lua
 BEACON_TYPE_NULL = 0
@@ -51,43 +51,43 @@ function haversine(lat1, lon1, lat2, lon2)
 end
 
 function calculateRunwayLength(edge1x, edge1y, edge2x, edge2y)
-    -- calculate length of runway in feet from start to finish coords from roadnet
+   -- calculate length of runway in feet from start to finish coords from roadnet
     local edge1xy = lo_to_geo_coords(edge1x, edge1y)
     local edge2xy = lo_to_geo_coords(edge2x, edge2y)
-    
+
     local distanceInNM = haversine(edge1xy.lat, edge1xy.lon, edge2xy.lat, edge2xy.lon)
-    
-    return distanceInNM * 6076.12 -- Convert nautical miles to feet   
+
+    return distanceInNM * 6076.12 -- Convert nautical miles to feet
 end
 
 
 -- Function to calculate the bearing from the player to an airport (or any point)
 function getBearing(lat1, lon1, lat2, lon2)
-    -- Convert degrees to radians
+   -- Convert degrees to radians
     local function degToRad(deg)
         return deg * math.pi / 180
     end
 
-    -- Convert radians to degrees
+   -- Convert radians to degrees
     local function radToDeg(rad)
         return rad * 180 / math.pi
     end
 
-    -- Convert latitudes and longitudes to radians
+   -- Convert latitudes and longitudes to radians
     local lat1_rad = degToRad(lat1)
     local lon1_rad = degToRad(lon1)
     local lat2_rad = degToRad(lat2)
     local lon2_rad = degToRad(lon2)
 
-    -- Calculate the differences between the two points
+   -- Calculate the differences between the two points
     local dLon = lon2_rad - lon1_rad
 
-    -- Calculate the bearing
+   -- Calculate the bearing
     local y = math.sin(dLon) * math.cos(lat2_rad)
     local x = math.cos(lat1_rad) * math.sin(lat2_rad) - math.sin(lat1_rad) * math.cos(lat2_rad) * math.cos(dLon)
     local bearing_rad = math.atan2(y, x)
 
-    -- Convert bearing from radians to degrees
+   -- Convert bearing from radians to degrees
     local bearing_deg = (radToDeg(bearing_rad) + 360) % 360  -- Normalize to 0-360 degrees
 
     return bearing_deg
@@ -95,7 +95,7 @@ end
 
 
 function getCivilianStatus(civilian)
-    -- this function is largely only relevant to the T-38C
+   -- this function is largely only relevant to the T-38C
     if civilian then
         return "CIV"
     else
@@ -105,7 +105,7 @@ end
 
 
 function getAirportLocation(reference_point)
-    -- convert metric coords to something useful (DMM i think)
+   -- convert metric coords to something useful (DMM i think)
     local location = lo_to_geo_coords(reference_point.x, reference_point.y)
     location.x = reference_point.x
     location.y = reference_point.y

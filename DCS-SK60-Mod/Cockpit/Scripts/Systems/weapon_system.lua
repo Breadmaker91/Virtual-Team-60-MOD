@@ -9,7 +9,7 @@ dofile(LockOn_Options.common_script_path.."../../../Database/wsTypes.lua")
 dofile(LockOn_Options.script_path.."sounds_def.lua")
 -- snd_device:performClickableAction(Keys.SND_CENTER_PANEL, cockpit_sound.basic_switch, false)
 
-local update_time_step = 0.02  --每秒50次刷新
+local update_time_step = 0.02 --refreshes 50 times per second
 make_default_activity(update_time_step)
 
 local sensor_data = get_base_data()
@@ -28,17 +28,17 @@ local iCommandPlanePickleOff = 351
 
 local gun_sight_animation = get_param_handle("GUN_SIGHT")
 
--- 获取锁定状态
--- 是否锁定
+
+
 local ir_missile_lock_param = get_param_handle("WS_IR_MISSILE_LOCK")
--- 锁定的目标的高程和方向
+
 local ir_missile_az_param = get_param_handle("WS_IR_MISSILE_TARGET_AZIMUTH")
 local ir_missile_el_param = get_param_handle("WS_IR_MISSILE_TARGET_ELEVATION")
 
--- 似乎是设置预设锁定方向？
--- 方位角
+-- ?
+
 local ir_missile_des_az_param = get_param_handle("WS_IR_MISSILE_SEEKER_DESIRED_AZIMUTH")
--- 高程
+
 local ir_missile_des_el_param = get_param_handle("WS_IR_MISSILE_SEEKER_DESIRED_ELEVATION")
 
 WeaponSystem:listen_command(Keys.WingPylonSmokeOn)
@@ -63,7 +63,7 @@ end
 local smokepodstatus = 0
 local nozzlesmokestatus = 0
 
--- fireing mode, 1 is single, 2 is in pairs, 
+-- fireing mode, 1 is single, 2 is in pairs,
 local rockets_fire_mode = 1
 -- ripple mode enable
 local rocket_ripple_enable = 0
@@ -105,7 +105,7 @@ current_status = {
 -- 1,2,3,4,5,6,7,8 position
 -- 2, 4, 5, 7 can be loaded with smoke system, gun pod, and rockets
 -- 1, 3, 6, 8 can only be loaded with rockets
--- 0 is nothing mounted, 1 is smoke pod, 2 is nozzle smoke, 3 is gunpod, 
+-- 0 is nothing mounted, 1 is smoke pod, 2 is nozzle smoke, 3 is gunpod,
 -- 4 is rockets * 1, 5 is rockets * 2,
 --#region             1,2,3,4,5,6,7,8
 local loading_list = {0,0,0,0,0,0,0,0}
@@ -117,24 +117,24 @@ function check_load_status()
     for i = 1,8,1 do
         local station = WeaponSystem:get_station_info(i-1)
         if (string.sub(station.CLSID,1,36) == "{3d7bfa20-fefe-4642-ba1f-380d5ae4f9c") then
-            -- smokepod
+           -- smokepod
             loading_list[i] = 1
             has_smoke_pod = 1
         elseif (string.sub(station.CLSID,1,36) == "{3d7bfa20-fefe-4642-ba1f-380d5ae4f9d") then
-            -- nozzle smoke
+           -- nozzle smoke
             loading_list[i] = 2
             has_nozzle_smoke = 1
         elseif (string.sub(station.CLSID,1,35) == "{d694b359-e7a8-4909-88d4-7100b77afd") then
-            -- this is a rocket, check the number of it
+           -- this is a rocket, check the number of it
             loading_list[i] = 3 + station.count
             weapon_system_mode = 2
 			get_param_handle("armamentType"):set(2)
         elseif (string.sub(station.CLSID,1,36) == "{5d5aa063-a002-4de8-8a89-6eda1e80ee7") then
-            -- gunpod
+           -- gunpod
             loading_list[i] = 3
             weapon_system_mode = 1
 			get_param_handle("armamentType"):set(1)
-            -- print_message_to_user("gunpod on station "..i)
+           -- print_message_to_user("gunpod on station "..i)
         else
             loading_list[i] = 0
         end
@@ -148,17 +148,17 @@ local rocket_interval = 0
 function check_frequency_change()
     local dev=GetDevice(devices.UHF_RADIO)
     if dev then
-        -- check if override by efm radio system
+       -- check if override by efm radio system
         local freq_efm_signal = get_param_handle("RADIO_EFM_CHANGED")
         local freq_uplink_signal = get_param_handle("RADIO_2EFM_CHANGED")
         local freqency_EFM_exchange = get_param_handle("RADIO_UHF_FREQ_EXC")
-        -- dprintf(sprintf("current Freq: %d", dev:get_frequency()))
-        -- check if override by simple radio system
+       -- dprintf(sprintf("current Freq: %d", dev:get_frequency()))
+       -- check if override by simple radio system
         if (dev:get_frequency() ~= current_freq) then
-            -- send to efm, change display
+           -- send to efm, change display
             dprintf("lua radio freq changed")
             current_freq = dev:get_frequency()
-            -- this direction has higher prioity
+           -- this direction has higher prioity
             freq_efm_signal:set(0)
             freqency_EFM_exchange:set(current_freq/1e3)
             freq_uplink_signal:set(1)
@@ -176,13 +176,13 @@ end
 function launch_rockets(launch_mode)
     local launch_signal = 0
     if launch_mode < 2 then
-        -- serial mode, normal sequence
-        -- start from lower
+       -- serial mode, normal sequence
+       -- start from lower
         for i = 3, 1, -1 do
-            -- check left side first
-            -- following sequence inner -> outer
+           -- check left side first
+           -- following sequence inner -> outer
             if loading_list[i] == 5 then
-                -- launch lower part first
+               -- launch lower part first
                 if launch_mode == 0 then
                     WeaponSystem:launch_station(i-1)
                 else
@@ -192,27 +192,27 @@ function launch_rockets(launch_mode)
                 launch_signal = 1
                 break
             elseif loading_list[7-i] == 5 then
-                -- check the opposite side
+               -- check the opposite side
                 WeaponSystem:launch_station(6-i)
                 launch_signal = 1
                 break
             end
         end
         if launch_signal == 0 then
-            -- check upper layer
+           -- check upper layer
             normal_serial = {3, 2, 1}
             spec_serial = {2, 1, 3}
             for j = 1, 3, 1 do
-                -- check if have 2-1-1 serial
+               -- check if have 2-1-1 serial
                 if WeaponSystem:get_station_info(1).CLSID == WeaponSystem:get_station_info(3).CLSID then
                     i = normal_serial[j]
                 else
                     i = spec_serial[j]
                 end
-                -- check left side first
-                -- following sequence inner -> outer
+               -- check left side first
+               -- following sequence inner -> outer
                 if loading_list[i] == 4 then
-                    -- launch lower part first
+                   -- launch lower part first
                     if launch_mode == 0 then
                         WeaponSystem:launch_station(i-1)
                     else
@@ -222,7 +222,7 @@ function launch_rockets(launch_mode)
                     launch_signal = 1
                     break
                 elseif loading_list[7-i] == 4 then
-                    -- check the opposite side
+                   -- check the opposite side
                     WeaponSystem:launch_station(6-i)
                     launch_signal = 1
                     break
@@ -242,7 +242,7 @@ function SetCommand(command,value)
         check_load_status()
         if (command == Keys.WeaponFireOn) then
             if (weapon_system_mode == 2 and rocket_ripple_enable == 0) then
-                -- rocket
+               -- rocket
                 launch_rockets(rockets_fire_mode-1)
                 fire_trigger_status = 0
             else
@@ -321,12 +321,12 @@ function update_switch_status()
         target_status[k][3]:set(current_status[k][2])
         local temp_switch_ref = get_clickable_element_reference(target_status[k][4])
         temp_switch_ref:update()
-        -- print_message_to_user(k)
+       -- print_message_to_user(k)
     end
 end
 
 function update()
-    -- check_load_status()
+   -- check_load_status()
     pod_smoke_light:set(smokepodstatus)
     nozzle_smoke_light:set(nozzlesmokestatus)
     update_switch_status()
@@ -346,7 +346,7 @@ function update()
             end
         else
             for i = 1, 3, 1 do
-                -- WeaponSystem:launch_station(i-1)
+               -- WeaponSystem:launch_station(i-1)
                 if loading_list[i] == 3 then
                     WeaponSystem:launch_station(i-1)
                     WeaponSystem:launch_station(6-i)

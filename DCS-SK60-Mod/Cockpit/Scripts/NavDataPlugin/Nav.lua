@@ -38,7 +38,7 @@ local Radios                = {}
 
 
 local function GetRunwayData(airport)
-    -- unlike radios, this loads only the runway data for the specific roadnet
+   -- unlike radios, this loads only the runway data for the specific roadnet
     local runwayList = Terrain.getRunwayList(airport)
     local runways = {}
 
@@ -51,7 +51,7 @@ local function GetRunwayData(airport)
         }
     end
 
-    -- Sort runways by length, largest first
+   -- Sort runways by length, largest first
     table.sort(runways, function(a, b)
         return a.runwayLength > b.runwayLength
     end)
@@ -60,7 +60,7 @@ local function GetRunwayData(airport)
 end
 
 local function getAirportRadios(radio)
-    -- set the specific radio frequencies for the airport
+   -- set the specific radio frequencies for the airport
     if not radio or not radio[1] then return nil end
     if Radios[radio[1]] then return Radios[radio[1]]
     else return nil end
@@ -76,18 +76,18 @@ local function loadAirports()
             position = getAirportLocation(v.reference_point),
             radioid = v.radio,
             radios = getAirportRadios(v.radio),
-            isCivilian = v.civilian, 
+            isCivilian = v.civilian,
             beacons = v.beacons,
         }
         if aircraftType == "T-38C" then
-            -- this is boolean, however for my use I am converting to "CIV" or "MIL" or "BOTH"
+           -- this is boolean, however for my use I am converting to "CIV" or "MIL" or "BOTH"
             FilteredAirportData[v.display_name].isCivilian = getCivilianStatus(v.civilian)
         end
     end
 end
 
-local function deepMerge(target, source) 
-    -- this is a recursive function to merge tables only for values that are updated
+local function deepMerge(target, source)
+   -- this is a recursive function to merge tables only for values that are updated
     for key, value in pairs(source) do
         if type(value) == "table" and type(target[key]) == "table" then
             deepMerge(target[key], value)
@@ -99,7 +99,7 @@ end
 
 local function loadICAOData()
     local ICAODataPath = LockOn_Options.script_path .. "Systems/NavDataPluginExtra/"..theatre.."/"..theatre.."_ICAO.lua"
-    
+
     local f = loadfile(ICAODataPath)
     if f then
         local dataModule = f()
@@ -136,26 +136,26 @@ end
 
 
 local function loadRadios()
-    -- this loads every radio frequency for every airport even for a specific roadnet
+   -- this loads every radio frequency for every airport even for a specific roadnet
     local _, firstAirport = next(rawAirportData)
     local radioList = Terrain.getRadio(firstAirport.roadnet )
     for i, v in pairs(radioList) do
-        -- Initialize the radio entry in the Radios table
+       -- Initialize the radio entry in the Radios table
         Radios[v.radioId] = {
             radioId = v.radioId,
             uniform = nil,
             victor = nil,
         }
 
-        -- Check if the frequency data exists
+       -- Check if the frequency data exists
         if v.frequency then
-            
+
             for _, freqTable in pairs(v.frequency) do
-                -- Convert the frequency to the desired format
+               -- Convert the frequency to the desired format
                 if freqTable[2] then
-                    
+
                     local freq = freqTable[2] / 1000000
-                    -- Assign to the correct category based on the frequency value
+                   -- Assign to the correct category based on the frequency value
                     if freq >= 225.0 then
                         Radios[v.radioId].uniform = freq
                     elseif freq >= 118.0 and freq < 225.0 then
@@ -235,8 +235,8 @@ local function addILSBeacon(beaconData)
         return
     end
 
-    -- Keep all colliding entries for a frequency. Selection (localizer preference + nearest)
-    -- is performed at use-site so maps with reused ILS frequencies still resolve correctly.
+   -- Keep all colliding entries for a frequency. Selection (localizer preference + nearest)
+   -- is performed at use-site so maps with reused ILS frequencies still resolve correctly.
     ILS_beacons[frequencyHz] = {
         existing,
         beaconData,
@@ -336,7 +336,7 @@ function sortAirportsByDistance(ownPos)
         local distanceToPlayerNM = haversine(ownPos[1], ownPos[2], v.position.lat, v.position.lon)
         local bearingToPlayer = getBearing(ownPos[1], ownPos[2], v.position.lat, v.position.lon)
 
-        -- v.distanceToPlayerFeet = distanceToPlayerFeet
+       -- v.distanceToPlayerFeet = distanceToPlayerFeet
         v.distanceToPlayerNM = distanceToPlayerNM
         v.bearingToPlayer = bearingToPlayer
 
@@ -354,25 +354,25 @@ function sortAirportsByDistanceMetric(ownPos)
     local sortedAirportList = {}
 
     for i, v in pairs(FilteredAirportData) do
-        -- Calculate the distance using metric coordinates (in meters)
+       -- Calculate the distance using metric coordinates (in meters)
         local deltaX = v.position.x - ownPos[1]
         local deltaY = v.position.y - ownPos[2]
         local distanceToPlayer = math.sqrt(deltaX^2 + deltaY^2) / 1852 -- Convert meters to nautical miles
 
-        -- Calculate the bearing in degrees using atan2
+       -- Calculate the bearing in degrees using atan2
         local bearingToPlayer = math.deg(math.atan2(deltaY, deltaX))
         if bearingToPlayer < 0 then
             bearingToPlayer = bearingToPlayer + 360
         end
 
-        -- Assign calculated values to the airport
+       -- Assign calculated values to the airport
         v.distanceToPlayerNM = distanceToPlayer -- Distance in nautical miles
         v.bearingToPlayer = bearingToPlayer
 
         table.insert(sortedAirportList, v)
     end
 
-    -- Sort the list by distance
+   -- Sort the list by distance
     table.sort(sortedAirportList, function(a, b)
         return a.distanceToPlayerNM < b.distanceToPlayerNM
     end)

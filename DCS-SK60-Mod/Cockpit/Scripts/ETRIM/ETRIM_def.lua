@@ -1,6 +1,6 @@
 dofile(LockOn_Options.common_script_path.."elements_defs.lua")
 
-EADI_IND_TEX_PATH        = LockOn_Options.script_path .. "../Textures/EADI/" 
+EADI_IND_TEX_PATH        = LockOn_Options.script_path .. "../Textures/EADI/"
 
 -- set fov here to make sure always same
 SetScale(FOV)
@@ -10,8 +10,8 @@ DEGREE_TO_RAD  = 0.0174532925199433
 RAD_TO_DEGREE  = 57.29577951308233
 MRAD_TO_DEGREE = 0.05729577951308233
 
-EADI_DEFAULT_LEVEL = 6                            
-EADI_DEFAULT_NOCLIP_LEVEL  = EADI_DEFAULT_LEVEL - 1 
+EADI_DEFAULT_LEVEL = 6
+EADI_DEFAULT_NOCLIP_LEVEL  = EADI_DEFAULT_LEVEL - 1
 
 DEBUG_COLOR                 = {0,255,0,200}
 
@@ -61,7 +61,7 @@ end
 
 function create_EADI_circle_index(total_dots)
     local return_group = {}
-    -- we can calculate for every three
+   -- we can calculate for every three
     for i = 1, (total_dots - 1), 1 do
         return_group[i*3 - 2] = 0;
         return_group[i*3 - 1] = i;

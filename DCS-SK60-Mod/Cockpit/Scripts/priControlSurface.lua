@@ -18,15 +18,15 @@ function update()
     local pitch = sensor_data:getStickPitchPosition() / 100
     local yaw   = sensor_data:getRudderPosition()     / 100
 
-    -- Ailerons
+   -- Ailerons
     set_aircraft_draw_argument_value(11,  roll)
     set_aircraft_draw_argument_value(12, -roll)
 
-    -- Elevator / Canards
+   -- Elevator / Canards
     set_aircraft_draw_argument_value(15, pitch)
     set_aircraft_draw_argument_value(16, pitch)
 
-    -- Rudder
+   -- Rudder
     set_aircraft_draw_argument_value(17, -yaw)
     set_aircraft_draw_argument_value(18, -yaw)
 end
@@ -38,9 +38,9 @@ end
 --	local ROLL_STATE = sensor_data:getStickPitchPosition() / 100
 --	set_aircraft_draw_argument_value(10, ROLL_STATE) -- right aileron
 --    set_aircraft_draw_argument_value(11, -ROLL_STATE) -- left aileron
-    --set_aircraft_draw_argument_value(9, ROLL_STATE) -- right slat
+   --set_aircraft_draw_argument_value(9, ROLL_STATE) -- right slat
 	--set_aircraft_draw_argument_value(10, -ROLL_STATE) -- left slat
-	
+
 
 --	local PITCH_STATE = sensor_data:getStickRollPosition() / 100
 --	set_aircraft_draw_argument_value(15, PITCH_STATE) -- right canard
@@ -49,7 +49,7 @@ end
 --	local RUDDER_STATE = sensor_data:getRudderPosition() / 100
 --    set_aircraft_draw_argument_value(17, -RUDDER_STATE)
 --    set_aircraft_draw_argument_value(18, -RUDDER_STATE)
-	
+
 	-- if (get_aircraft_draw_argument_value(0) > 0.5) then
 	--	set_aircraft_draw_argument_value(2, -RUDDER_STATE*0.666) -- limit visual nosewheel deflection to 30 degrees
 	--else

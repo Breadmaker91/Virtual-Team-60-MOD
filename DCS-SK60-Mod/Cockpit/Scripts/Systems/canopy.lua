@@ -48,10 +48,13 @@ function post_initialize()
         CANOPY_COMMAND = 1
         target_status[canopy_switch][2] = SWITCH_ON
     end
-    sndhost_cockpit         = create_sound_host("COCKPIT_BACK","3D", -1, 0, 0) 
-    snd_canopy_open_sound   = sndhost_cockpit:create_sound("Aircrafts/SK-60/CanopyOpen")
-    -- use same for open and close
-    snd_canopy_close_sound   = sndhost_cockpit:create_sound("Aircrafts/SK-60/CanopyOpen") -- sndhost_cockpit:create_sound("Aircrafts/SK-60/CanopyClose")
+    sndhost_cockpit             = create_sound_host("COCKPIT_BACK", "3D", -1, 0, 0)
+    sndhost_external_canopy     = create_sound_host("EXTERNAL_AIRCRAFT", "3D", 0, 0, 0)
+    snd_canopy_open_sound       = sndhost_cockpit:create_sound("Aircrafts/SK-60/CanopyOpen")
+    snd_canopy_open_sound_ext   = sndhost_external_canopy:create_sound("Aircrafts/SK-60/CanopyOpenExt")
+    -- use same for open and close in cockpit, but use the external close sdef outside
+    snd_canopy_close_sound      = sndhost_cockpit:create_sound("Aircrafts/SK-60/CanopyOpen") -- sndhost_cockpit:create_sound("Aircrafts/SK-60/CanopyClose")
+    snd_canopy_close_sound_ext  = sndhost_external_canopy:create_sound("Aircrafts/SK-60/CanopyCloseExt")
     for k, v in pairs(target_status)do
         current_status[k][2] = target_status[k][2]
         target_status[k][3]:set(current_status[k][2])
@@ -121,7 +124,10 @@ function update()
             LOCK_TIME_COUNT = LOCK_TIME_COUNT + 1
         end
         if not snd_canopy_close_sound:is_playing() then
-            snd_canopy_close_sound:play_continue() 
+            snd_canopy_close_sound:play_continue()
+        end
+        if not snd_canopy_close_sound_ext:is_playing() then
+            snd_canopy_close_sound_ext:play_continue()
         end
 	elseif (CANOPY_COMMAND == 1 and CanoStatus < 0.95) then
         -- raise canopy in increment of 0.01 (50x per second)
@@ -134,15 +140,26 @@ function update()
             LOCK_TIME_COUNT = LOCK_TIME_COUNT + 1
         end
         if not snd_canopy_open_sound:is_playing() then
-            snd_canopy_open_sound:play_continue() 
+            snd_canopy_open_sound:play_continue()
+        end
+        if not snd_canopy_open_sound_ext:is_playing() then
+            snd_canopy_open_sound_ext:play_continue()
         end
     else
         if snd_canopy_open_sound:is_playing() then
             snd_canopy_open_sound:stop()
             LOCK_TIME_COUNT = 0
         end
+        if snd_canopy_open_sound_ext:is_playing() then
+            snd_canopy_open_sound_ext:stop()
+            LOCK_TIME_COUNT = 0
+        end
         if snd_canopy_close_sound:is_playing() then
             snd_canopy_close_sound:stop()
+            LOCK_TIME_COUNT = 0
+        end
+        if snd_canopy_close_sound_ext:is_playing() then
+            snd_canopy_close_sound_ext:stop()
             LOCK_TIME_COUNT = 0
         end
     end

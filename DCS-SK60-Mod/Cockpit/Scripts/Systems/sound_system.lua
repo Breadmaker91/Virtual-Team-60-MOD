@@ -7,7 +7,7 @@ dofile(LockOn_Options.script_path.."sounds_def.lua")
 
 local SoundSystem = GetSelf()
 --Set the number of cycles
-local update_rate = 0.05 -- 20次每秒
+local update_rate = 0.05 -- 20
 -- make_default_activity(update_rate)
 
 --Initialize DCS read API
@@ -21,20 +21,20 @@ function post_initialize()
     elseif birth == "GROUND_COLD" then
 
     elseif birth == "AIR_HOT" then
-        
+
     end
 
-    -- initial the sound
-    -- center panel
-    sndhost_cockpit_left            = create_sound_host("COCKPIT_LDP","3D",0.3,-0.3,-0.3) 
+   -- initial the sound
+   -- center panel
+    sndhost_cockpit_left            = create_sound_host("COCKPIT_LDP","3D",0.3,-0.3,-0.3)
     snd_left_panel_switch           = sndhost_cockpit_left:create_sound("Aircrafts/SK-60/SK60_Switch")
-    -- center panel
-    sndhost_cockpit_center          = create_sound_host("COCKPIT_CDP","3D",0.3,-0.3,0.3) 
+   -- center panel
+    sndhost_cockpit_center          = create_sound_host("COCKPIT_CDP","3D",0.3,-0.3,0.3)
     snd_center_panel_switch         = sndhost_cockpit_center:create_sound("Aircrafts/SK-60/SK60_Switch")
-    -- center panel
-    sndhost_cockpit_right           = create_sound_host("COCKPIT_RDP","3D",0.3,-0.3,0.9) 
+   -- center panel
+    sndhost_cockpit_right           = create_sound_host("COCKPIT_RDP","3D",0.3,-0.3,0.9)
     snd_right_panel_switch          = sndhost_cockpit_right:create_sound("Aircrafts/SK-60/SK60_Switch")
-    -- electrical power
+   -- electrical power
     sndhost_electrical              = create_sound_host("ELECTRIC_UNIT", "3D", -0.5, 0, 0)
     snd_main_electric_invert        = sndhost_electrical:create_sound("Aircrafts/SK-60/SK60_Main_Elec")
     snd_gear_action                 = sndhost_electrical:create_sound("Aircrafts/SK-60/SK60_Gear_Down")

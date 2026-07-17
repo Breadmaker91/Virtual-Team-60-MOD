@@ -13,7 +13,7 @@ local aspect       = GetAspect()
 local base_clip 			 	= CreateElement "ceMeshPoly" --This is the clipping layer
 base_clip.name 			        = "warn_base_clip"
 base_clip.primitivetype   	    = "triangles"
-base_clip.vertices 		        = { {1, aspect}, { 1,-aspect}, { -1,-aspect}, {-1,aspect},} --四个边角
+base_clip.vertices 		        = { {1, aspect}, { 1,-aspect}, { -1,-aspect}, {-1,aspect},} --four corners
 base_clip.indices 		        = {0,1,2,0,2,3}
 base_clip.init_pos		        = {0, 0, 0}
 base_clip.init_rot		        = {0, 0, 0}
@@ -34,18 +34,18 @@ local elem_size_y = 80
 local element_name = {"FIRE_L_ENG", "CANOPY", "FIRE_R_ENG", "FUEL_L_ENG", "THRUST_REV", "FUEL_R_ENG", "OIL_L_ENG", "BRAKE", "OIL_R_ENG", "HYDRO_L", "CONVERT_A", "HYDRO_R", "GEN_L", "CONVERT_B", "GEN_R"}
 local warn_elements 				    = CreateElement "ceTexPoly"
 for i = 1, elem_num_total, 1 do
-    -- calculate the init position
+   -- calculate the init position
     local init_pos_x = -1 + elem_size_x / 2 / default_size_x +  (math.fmod((i-1), elem_num_row)) * ((default_size_x * 2 - 3 * elem_size_x) / (elem_num_row - 1) + elem_size_x) / (default_size_x)
     local init_pos_y = 1 * aspect - (math.modf((i-1)/elem_num_row) + 0.5) * (default_size_x * aspect / (elem_num_total/elem_num_row)) / default_size_x * 2
-    --  generate the cover for warning signs
+   --  generate the cover for warning signs
     warn_elements 				            = CreateElement "ceTexPoly"
     warn_elements.vertices                  =  mesh_vert_gen(elem_size_x, elem_size_y) --GPS_vert_gen(2*80*temp_map_size*math.cos(math.rad(44)),80*temp_map_size)
     warn_elements.indices                   = {0,1,2,2,3,0}
-    --warn_elements.state_tex_coords          = state_map_scale_coord_gen()
+   --warn_elements.state_tex_coords          = state_map_scale_coord_gen()
     if (math.fmod(i, 2) == 1) then
         warn_elements.material                  = "TEST_RED"
     else
-        warn_elements.material                  = "TEST_GREEN"--blue_ns430_material 
+        warn_elements.material                  = "TEST_GREEN"--blue_ns430_material
     end
     warn_elements.name 			            = create_guid_string()
     warn_elements.init_pos                  = {init_pos_x, init_pos_y, 0}

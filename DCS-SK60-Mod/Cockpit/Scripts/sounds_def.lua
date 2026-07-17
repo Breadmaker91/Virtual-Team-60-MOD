@@ -1,6 +1,6 @@
 dofile(LockOn_Options.script_path.."devices.lua")
 
-cockpit_sound = 
+cockpit_sound =
 {
     basic_switch = 1,
 }

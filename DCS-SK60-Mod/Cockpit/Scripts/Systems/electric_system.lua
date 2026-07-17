@@ -2,12 +2,12 @@ dofile(LockOn_Options.script_path.."command_defs.lua")
 dofile(LockOn_Options.script_path.."Systems/electric_system_api.lua")
 dofile(LockOn_Options.script_path.."sounds_def.lua")
 -- snd_device:performClickableAction(command,value,false)
- 
+
 
 local electric_system = GetSelf()
 local dev = electric_system
 
-local update_time_step = 0.02 --每秒50次调用update()函数
+local update_time_step = 0.02 --50update()
 make_default_activity(update_time_step)
 
 local sensor_data = get_base_data()
@@ -71,17 +71,17 @@ function update_switch_status()
             current_status[k][2] = current_status[k][2] - switch_moving_step
         end
         target_status[k][3]:set(current_status[k][2])
-        -- local temp_switch_ref = get_clickable_element_reference(target_status[k][4])
-        -- temp_switch_ref:update()
-        -- print_message_to_user(k)
+       -- local temp_switch_ref = get_clickable_element_reference(target_status[k][4])
+       -- temp_switch_ref:update()
+       -- print_message_to_user(k)
     end
 end
 
 local inverter_statue = -1
 
-function update_elec_state() --更新电力总线状态
+function update_elec_state()
     if (electric_system:get_AC_Bus_1_voltage() > 0 or electric_system:get_AC_Bus_2_voltage() > 0) then
-        -- 主发电机状态正常（双备份）
+-- ()
         elec_charging_status:set(1)
     else
         elec_charging_status:set(0)
@@ -89,8 +89,8 @@ function update_elec_state() --更新电力总线状态
 
     if electric_system:get_DC_Bus_1_voltage() > 0 or electric_system:get_DC_Bus_2_voltage() > 0 then
         if elec_battery_status:get() == 0 then
-            -- elec_dc_status:set(0)
-            -- problem here, when bus has power, dc electric should be on
+           -- elec_dc_status:set(0)
+           -- problem here, when bus has power, dc electric should be on
             elec_dc_status:set(1)
         else
             elec_dc_status:set(1)
@@ -105,7 +105,7 @@ function update_elec_state() --更新电力总线状态
         elec_ac_status:set(0)
     end
 
-    if (elec_dc_status:get() == 1 and elec_charging_status:get() == 0) then    
+    if (elec_dc_status:get() == 1 and elec_charging_status:get() == 0) then
         if (elec_ac_status:get() == 1) then
             elec_battery_status:set(elec_battery_status:get()-2)
         else
@@ -127,13 +127,13 @@ function update_elec_state() --更新电力总线状态
     end
 end
 
-function post_initialize() --默认初始化函数
-    --local dev = GetSelf()
-    -- initial the elec system pointer for the radio
+function post_initialize()
+   --local dev = GetSelf()
+   -- initial the elec system pointer for the radio
     str_ptr = string.sub(tostring(electric_system.link),10)
     local set_elec_pointer = get_param_handle("ELEC_POINTER")
     set_elec_pointer:set(str_ptr)
-    -- end of block
+   -- end of block
     elec_battery_status:set(3000000)
     local birth = LockOn_Options.init_conditions.birth_place
     if birth=="GROUND_HOT" or birth=="AIR_HOT" then --"GROUND_COLD","GROUND_HOT","AIR_HOT"
@@ -149,7 +149,7 @@ function post_initialize() --默认初始化函数
         target_status[main_nav_switch][2] = SWITCH_ON
         current_status[main_nav_switch][2] = SWITCH_ON
     elseif birth=="GROUND_COLD" then
-        electric_system:AC_Generator_1_on(true) 
+        electric_system:AC_Generator_1_on(true)
         electric_system:AC_Generator_2_on(true)
         electric_system:DC_Battery_on(false)
         target_status[main_power_switch][2] = SWITCH_OFF
@@ -172,7 +172,7 @@ end
 local nav_switch_transfer = get_param_handle("ELEC_NAV_BUS")
 
 function SetCommand(command,value)
-    -- 最基础的航电功能监听
+
     local status = 0
     if command == Keys.PowerGeneratorLeft then
         target_status[left_gen_switch][2] = 1 - target_status[left_gen_switch][2]
@@ -216,24 +216,24 @@ function SetCommand(command,value)
             dispatch_action(devices.SOUND_SYSTEM, Keys.SND_LEFT_PANEL, cockpit_sound.basic_switch)
         end
     end
-    --[[
+   --[[
     if target_status[left_gen_switch][2] < 0.5 then
-        -- electric_system:AC_Generator_1_on(false)
-        -- electric_system:AC_Generator_2_on(false)
+       -- electric_system:AC_Generator_1_on(false)
+       -- electric_system:AC_Generator_2_on(false)
         status = status + 1
     else
         electric_system:AC_Generator_1_on(true)
         electric_system:AC_Generator_2_on(true)
     end
     if target_status[right_gen_switch][2] < 0.5 then
-        -- electric_system:AC_Generator_2_on(false)
-        -- electric_system:AC_Generator_1_on(false)
+       -- electric_system:AC_Generator_2_on(false)
+       -- electric_system:AC_Generator_1_on(false)
         status = status + 1
     else
         electric_system:AC_Generator_2_on(true)
         electric_system:AC_Generator_1_on(true)
     end
-    
+
     if status == 2 then
         electric_system:AC_Generator_2_on(false)
         electric_system:AC_Generator_1_on(false)
@@ -241,7 +241,7 @@ function SetCommand(command,value)
     ]]--
 end
 
-function update() --刷新状态
+function update()
     update_switch_status()
     update_elec_state()
     nav_switch_transfer:set(target_status[main_nav_switch][2])
@@ -278,4 +278,4 @@ iCommandElectricalPowerInverterSTBY	1074
 iCommandElectricalPowerInverterOFF	1075
 iCommandElectricalPowerInverterTEST	1076
 --]]
-need_to_be_closed = false 
+need_to_be_closed = false

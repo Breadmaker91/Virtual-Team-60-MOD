@@ -61,7 +61,7 @@ local temp_dbg = get_param_handle("DBG_OUT_TMP")
 
 local sensor_data = get_base_data()
 local ias_conversion_to_knots = 1.9504132
-local ias_conversion_to_kmh =  1.9504132 -- easily convert to knots -- 3.6 
+local ias_conversion_to_kmh =  1.9504132 -- easily convert to knots -- 3.6
 local DEGREE_TO_RAD  = 0.0174532925199433
 local RAD_TO_DEGREE  = 57.29577951308233
 local METER_TO_INCH = 3.2808
@@ -159,7 +159,7 @@ function post_initialize()
     hud_FD_x:set(0)
     hud_FD_y:set(0)
     hud_adi_level_enable:set(1)
-    --hud_enable:set(1)
+   --hud_enable:set(1)
     hud_maxg_dis:set(1)
     erpm_power:set(0)
     n1rpm_power:set(0)
@@ -177,12 +177,12 @@ local cursor_mode = get_param_handle("DEBUG_LINE3")
 function SetCommand(command,value)
     if (command == 2142) then
         viewang_h = value
-        -- print_message_to_user("headx:"..value)
+       -- print_message_to_user("headx:"..value)
     elseif (command == 2143) then
-        -- print_message_to_user("heady:"..value)
+       -- print_message_to_user("heady:"..value)
     end
-    -- print_message_to_user(command)
-    --[[
+   -- print_message_to_user(command)
+   --[[
     if (command == 9100) then
         cursor_h = value
         print_message_to_user("9100")
@@ -195,18 +195,18 @@ function SetCommand(command,value)
         viewang_v = value
     end
     elseif (command == Keys.Custom_Menu) then
-        -- ask the click mode to off
+       -- ask the click mode to off
         print_message_to_user("menu triggered")
         if (debug_line3:get() < 1) then
-            -- cursor mode is clickable
+           -- cursor mode is clickable
             dispatch_action(nil, 363)
         end
-        -- close click mode [should be in transpose mode now]
-        -- force close transpose mode
+       -- close click mode [should be in transpose mode now]
+       -- force close transpose mode
         dispatch_action(nil, 1594)
-        -- dispatch_action(nil, iCommandMouseViewOn, 1)
+       -- dispatch_action(nil, iCommandMouseViewOn, 1)
     end
-    -- 
+   --
     ]]--
 end
 
@@ -234,12 +234,12 @@ function update()
     hud_hdg_dis:set(sensor_data.getMagneticHeading() * RAD_TO_DEGREE)
     hud_ln2_dis:set(sensor_data.getEngineLeftRPM() / 1.2)
     hud_rn2_dis:set(sensor_data.getEngineRightRPM() / 1.2)
-    -- getMagneticHeading
+   -- getMagneticHeading
 
     hud_nav_data_1:set("NAV UNSET")
     hud_nav_data_2:set("ETE: 00:00")
     hud_nav_data_3:set("MODE: TEST")
-    
+
     local temp_hdg = sensor_data.getMagneticHeading() * RAD_TO_DEGREE / 10
     if temp_hdg > 18 then
         temp_hdg = 36 - temp_hdg
@@ -248,19 +248,19 @@ function update()
         hud_hdg_mov:set(-temp_hdg)
     end
 
-    -- Set the flight path vector cursor
+   -- Set the flight path vector cursor
     local current_aoa = sensor_data.getAngleOfAttack()
     local current_aos = sensor_data.getAngleOfSlide()
     hud_adi_movx:set(current_aos)
     hud_FD_y:set(current_aoa)
-    --eadi_lf1_display:set("VERSION 2")
-    --eadi_lf2_display:set("EADI OK")
-    --eadi_rf1_display:set(sensor_data.getMachNumber())
-    --eadi_rb1_display:set("ERECT")
+   --eadi_lf1_display:set("VERSION 2")
+   --eadi_lf2_display:set("EADI OK")
+   --eadi_rf1_display:set(sensor_data.getMachNumber())
+   --eadi_rb1_display:set("ERECT")
 
-    -- debug
+   -- debug
     local roll_rate = sensor_data.getRateOfRoll()
-    --temp_dbg:set(roll_rate * RAD_TO_DEGREE)
+   --temp_dbg:set(roll_rate * RAD_TO_DEGREE)
 
     if get_elec_dc_status() then
         local speed_kmh = sensor_data.getIndicatedAirSpeed()*ias_conversion_to_kmh
@@ -320,12 +320,12 @@ function update()
 
     local temp_dbg1 = get_param_handle("DBG_OUTPUT")
     local temp_dbg2 = get_param_handle("MAP_CENTER_Y")
-    --print_message_to_user("maxI:"..temp_dbg1:get())
-    --print_message_to_user("minI:"..temp_dbg2:get())
-    --left_n1:set(sensor_data.getEngineLeftRPM())
-    --print_message_to_user(left_n1:get())
-    -- print_message_to_user(line1_lat:get())
-    -- print_message_to_user(line1_lon:get())
+   --print_message_to_user("maxI:"..temp_dbg1:get())
+   --print_message_to_user("minI:"..temp_dbg2:get())
+   --left_n1:set(sensor_data.getEngineLeftRPM())
+   --print_message_to_user(left_n1:get())
+   -- print_message_to_user(line1_lat:get())
+   -- print_message_to_user(line1_lon:get())
 end
 
 need_to_be_closed = false

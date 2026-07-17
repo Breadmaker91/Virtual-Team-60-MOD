@@ -4,12 +4,12 @@ dofile(LockOn_Options.script_path.."debug_util.lua")
 
 local dev = GetSelf()
 
-local update_time_step = 0.02  --每秒50次刷新
+local update_time_step = 0.02 --refreshes 50 times per second
 make_default_activity(update_time_step)
 
 sensor_data = get_base_data()
 local ias_conversion_to_knots = 1  --1.9504132
-local ias_conversion_to_kmh = 3.6 
+local ias_conversion_to_kmh = 3.6
 local DEGREE_TO_RAD  = 0.0174532925199433
 local RAD_TO_DEGREE  = 57.29577951308233
 local MAX_TURN_RATE_DEG_PER_SEC = 6
@@ -92,7 +92,7 @@ function Airspeed_Gauge_AOA_G_Cal()
         vertical_acc = sensor_data.getVerticalAcceleration()
     end
     Gauge_display_state[airspeed_ind][2] = get_airspeed_needle_arg(current_speed)
-    --[[
+   --[[
     if vertical_acc > 0 then
         Gauge_display_state[current_g_ind][2] = vertical_acc/8*0.889
     else
@@ -134,7 +134,7 @@ end
     attgyro_stby_off:set(standby_off_target)
     attgyro_stby_horiz:set(standby_adi_horizon)
 
-    -- Freeze the backup ADI when AC power is unavailable.
+   -- Freeze the backup ADI when AC power is unavailable.
     if standby_off_target == 1 then
         return
     end
@@ -164,7 +164,7 @@ function calculate_Climb_Slide()
         local climb_rate = sensor_data.getVerticalVelocity() / 40
         local yaw_rate_degrees = sensor_data.getRateOfYaw() * RAD_TO_DEGREE
         local slide_rate = yaw_rate_degrees / 90
-        -- DCS yaw rate is positive opposite the cockpit turn-rate needle convention.
+       -- DCS yaw rate is positive opposite the cockpit turn-rate needle convention.
         local turn_rate = -yaw_rate_degrees / MAX_TURN_RATE_DEG_PER_SEC
         if turn_rate > 1 then
             turn_rate = 1
@@ -198,8 +198,8 @@ function update_Fuel_Gauges()
     local total_fuel_kg = sensor_data.getTotalFuelWeight()
     local total_fuel_capacity_kg = 1640
 
-    -- Temporary split rule:
-    -- distribute total fuel equally to left and right needles.
+   -- Temporary split rule:
+   -- distribute total fuel equally to left and right needles.
     local side_fuel_percent = 0
     if total_fuel_capacity_kg > 0 then
         side_fuel_percent = total_fuel_kg / total_fuel_capacity_kg
@@ -304,7 +304,7 @@ function update()
 	update_Backup_ADI()
 	update_Fuel_Gauges()
     update_Gauge_Display()
-    --print_message_to_user(baro_altitude_efm)
+   --print_message_to_user(baro_altitude_efm)
 end
 
 need_to_be_closed = false

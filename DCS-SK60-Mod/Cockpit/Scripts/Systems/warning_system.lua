@@ -1,16 +1,16 @@
---初始化加载要用lua文件
+--lua
 dofile(LockOn_Options.common_script_path.."devices_defs.lua")
 dofile(LockOn_Options.script_path.."Systems/electric_system_api.lua")
 dofile(LockOn_Options.script_path.."debug_util.lua")
 dofile(LockOn_Options.script_path.."command_defs.lua")
 
---设置循环次数
-local update_rate = 0.1 -- 20次每秒
+
+local update_rate = 0.1 -- 20
 make_default_activity(update_rate)
 
 local ic_ctrl = GetSelf()
 
---初始化DCS读取API
+--DCSAPI
 local sensor_data = get_base_data()
 
 ------Here Strat the general Switch Control
@@ -107,8 +107,8 @@ function post_initialize()
         current_status[k][2] = target_status[k][2]
         target_status[k][3]:set(current_status[k][2])
     end
-    -- center panel
-    sndhost_cockpit_warning          = create_sound_host("COCKPIT_WARN","3D",0.3,-0.3,0.3) 
+   -- center panel
+    sndhost_cockpit_warning          = create_sound_host("COCKPIT_WARN","3D",0.3,-0.3,0.3)
     snd_stall_warning                = sndhost_cockpit_warning:create_sound("Aircrafts/SK-60/SK60_Warn_Stall")
 end
 
@@ -133,9 +133,9 @@ function update_switch_status()
             current_status[k][2] = current_status[k][2] - switch_moving_step
         end
         target_status[k][3]:set(current_status[k][2])
-        -- local temp_switch_ref = get_clickable_element_reference(target_status[k][4])
-        -- temp_switch_ref:update()
-        -- print_message_to_user(k)
+       -- local temp_switch_ref = get_clickable_element_reference(target_status[k][4])
+       -- temp_switch_ref:update()
+       -- print_message_to_user(k)
     end
 end
 
@@ -145,7 +145,7 @@ warn_tick = 0
 
 -- set warning panel to off
 function setWarnSystemPowerOff()
-    -- set whole system to power off
+   -- set whole system to power off
     for k,v in pairs(target_status) do
         target_status[k][2] = 0
     end
@@ -183,7 +183,7 @@ end
 function switchTargetStatus(uid, target)
     current_status[uid][3] = target_status[uid][2]
     target_status[uid][2] = target
-    -- Flap/gear warning is intentionally independent and must not trigger master caution.
+   -- Flap/gear warning is intentionally independent and must not trigger master caution.
     if uid ~= flap_gear_warn and target_status[uid][2] > 0.5 then
         unarmedCounter = unarmedCounter + 1
         if current_status[uid][3] < 0.5 then
@@ -195,13 +195,13 @@ end
 
 function updateWarningSignal()
     unarmedCounter = 0
-    -- canopy
+   -- canopy
     if get_aircraft_draw_argument_value(38) < 0.05 then
         switchTargetStatus(canopy, SWITCH_OFF)
     else
         switchTargetStatus(canopy, SWITCH_ON)
     end
-    -- electric system
+   -- electric system
     if get_elec_inverterA_status() then
         switchTargetStatus(inverterA, SWITCH_OFF)
     else
@@ -212,7 +212,7 @@ function updateWarningSignal()
     else
         switchTargetStatus(inverterB, SWITCH_ON)
     end
-    -- engine part
+   -- engine part
     if sensor_data.getEngineLeftRPM() < 0.5 then
         switchTargetStatus(l_eng_gen, SWITCH_ON)
         switchTargetStatus(l_eng_hyd, SWITCH_ON)
@@ -248,11 +248,11 @@ function updateWarningSignal()
         switchTargetStatus(r_eng_fuel, SWITCH_ON)
     end
 
-    -- Gear/flap warning is active only when flaps are extended and gear is in.
+   -- Gear/flap warning is active only when flaps are extended and gear is in.
     local flap_extended = get_aircraft_draw_argument_value(9) > 0.05
     local gear_is_in = gear_state_share:get() < 0.5
 
-    -- Flap warning blinks only when flaps are out and gear is in.
+   -- Flap warning blinks only when flaps are out and gear is in.
     if flap_extended and gear_is_in then
         flapGearWarnActive = 1
         switchTargetStatus(flap_gear_warn, SWITCH_ON)
@@ -289,7 +289,7 @@ function letTheLightBlink()
         target_status[master_cau][2] = SWITCH_TEST
     end
 
-    -- Flap/gear warning blinks with the same cadence as master caution.
+   -- Flap/gear warning blinks with the same cadence as master caution.
     if flapGearWarnActive == 1 then
         target_status[flap_gear_warn][2] = blink_value
     else
@@ -300,15 +300,15 @@ end
 function update()
     update_switch_status()
     if get_elec_dc_status() then
-        -- here start the warning system
+       -- here start the warning system
         updateWarningSignal()
         letTheLightBlink()
-        -- warning_display:set(1)
+       -- warning_display:set(1)
         local main_gear_weight_on_wheels = sensor_data.getWOW_LeftMainLandingGear() > 0.01 or sensor_data.getWOW_RightMainLandingGear() > 0.01
         local indicated_airspeed_kmh = sensor_data.getIndicatedAirSpeed() * IAS_TO_KMH
         local stall_warning_speed_kmh = getConfiguredStallSpeedKmh() + STALL_WARNING_MARGIN_KMH
         local stall_warning_active = indicated_airspeed_kmh <= stall_warning_speed_kmh
-        -- The flap/gear warning drives only the warning-panel light; keep the stall tone tied to stall speed.
+       -- The flap/gear warning drives only the warning-panel light; keep the stall tone tied to stall speed.
         if (main_gear_weight_on_wheels) then
             snd_stall_warning:stop()
         elseif (stall_warning_active) then

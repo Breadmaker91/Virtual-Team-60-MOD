@@ -90,7 +90,7 @@ local function set_dial_args(freq_hz)
 
     for index,arg in ipairs(DIAL_ARGS) do
         local digit = tonumber(string.sub(text, index, index)) or 0
-        -- The cockpit model uses decimal wheel args; 0.0 = digit 0, 0.9 = digit 9.
+       -- The cockpit model uses decimal wheel args; 0.0 = digit 0, 0.9 = digit 9.
         local arg_value = digit / 10.0
         dial_params[index]:set(arg_value)
         set_aircraft_draw_argument_value(arg, arg_value)

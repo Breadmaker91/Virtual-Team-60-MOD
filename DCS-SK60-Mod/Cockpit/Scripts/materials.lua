@@ -66,7 +66,7 @@ fontdescription["font_MPCD"] = {
 		[3]   = {20,  MPCD_xsize, MPCD_ysize}, -- ¶ == [] == \20
 		[4]   = {26,  MPCD_xsize, MPCD_ysize}, -- > == -> == \26
 		[5]   = {27,  MPCD_xsize, MPCD_ysize}, -- < == <- == \27
-		[6]   = {31,  MPCD_xsize, MPCD_ysize}, -- SPARE 
+		[6]   = {31,  MPCD_xsize, MPCD_ysize}, -- SPARE
 		[7]   = {126, MPCD_xsize, MPCD_ysize}, -- ~
 		[8]   = {32,  MPCD_xsize, MPCD_ysize}, -- [space]
 		[9]   = {33,  MPCD_xsize, MPCD_ysize}, -- !
@@ -118,10 +118,10 @@ fontdescription["font_MPCD"] = {
 		[55]  = {89,  MPCD_xsize, MPCD_ysize}, -- Y
 		[56]  = {90,  MPCD_xsize, MPCD_ysize}, -- Z
 		[57]  = {91,  MPCD_xsize, MPCD_ysize}, -- [
-		[58]  = {93,  MPCD_xsize, MPCD_ysize}, -- ] 
+		[58]  = {93,  MPCD_xsize, MPCD_ysize}, -- ]
 		[59]  = {124, MPCD_xsize, MPCD_ysize}, -- | == ¦
-		[60]  = {38,  MPCD_xsize, MPCD_ysize}, -- & == +- 
-		[61]  = {59,  MPCD_xsize, MPCD_ysize}, -- ; == ° 
+		[60]  = {38,  MPCD_xsize, MPCD_ysize}, -- & == +-
+		[61]  = {59,  MPCD_xsize, MPCD_ysize}, -- ; == °
 		[62]  = {95,  MPCD_xsize, MPCD_ysize}, -- _
 		[63]  = {37,  MPCD_xsize, MPCD_ysize},-- %
 		[64]  = {24,  MPCD_xsize, MPCD_ysize},-- alpha α
@@ -139,7 +139,7 @@ fontdescription["font_EADI"] = {
 		[3]   = {20,  MPCD_xsize, MPCD_ysize}, -- ¶ == [] == \20
 		[4]   = {26,  MPCD_xsize, MPCD_ysize}, -- > == -> == \26
 		[5]   = {27,  MPCD_xsize, MPCD_ysize}, -- < == <- == \27
-		[6]   = {31,  MPCD_xsize, MPCD_ysize}, -- SPARE 
+		[6]   = {31,  MPCD_xsize, MPCD_ysize}, -- SPARE
 		[7]   = {126, MPCD_xsize, MPCD_ysize}, -- ~
 		[8]   = {32,  MPCD_xsize, MPCD_ysize}, -- [space]
 		[9]   = {33,  MPCD_xsize, MPCD_ysize}, -- !
@@ -191,10 +191,10 @@ fontdescription["font_EADI"] = {
 		[55]  = {89,  MPCD_xsize, MPCD_ysize}, -- Y
 		[56]  = {90,  MPCD_xsize, MPCD_ysize}, -- Z
 		[57]  = {91,  MPCD_xsize, MPCD_ysize}, -- [
-		[58]  = {93,  MPCD_xsize, MPCD_ysize}, -- ] 
+		[58]  = {93,  MPCD_xsize, MPCD_ysize}, -- ]
 		[59]  = {124, MPCD_xsize, MPCD_ysize}, -- | == ¦
-		[60]  = {38,  MPCD_xsize, MPCD_ysize}, -- & == +- 
-		[61]  = {59,  MPCD_xsize, MPCD_ysize}, -- ; == ° 
+		[60]  = {38,  MPCD_xsize, MPCD_ysize}, -- & == +-
+		[61]  = {59,  MPCD_xsize, MPCD_ysize}, -- ; == °
 		[62]  = {95,  MPCD_xsize, MPCD_ysize}, -- _
 		[63]  = {37,  MPCD_xsize, MPCD_ysize},-- %
 		[64]  = {24,  MPCD_xsize, MPCD_ysize},-- alpha α
@@ -212,7 +212,7 @@ fontdescription["font_HUD"] = {
 		[3]   = {20,  MPCD_xsize, MPCD_ysize}, -- ¶ == [] == \20
 		[4]   = {26,  MPCD_xsize, MPCD_ysize}, -- > == -> == \26
 		[5]   = {27,  MPCD_xsize, MPCD_ysize}, -- < == <- == \27
-		[6]   = {31,  MPCD_xsize, MPCD_ysize}, -- SPARE 
+		[6]   = {31,  MPCD_xsize, MPCD_ysize}, -- SPARE
 		[7]   = {126, MPCD_xsize, MPCD_ysize}, -- ~
 		[8]   = {32,  MPCD_xsize, MPCD_ysize}, -- [space]
 		[9]   = {33,  MPCD_xsize, MPCD_ysize}, -- !
@@ -264,10 +264,10 @@ fontdescription["font_HUD"] = {
 		[55]  = {89,  MPCD_xsize, MPCD_ysize}, -- Y
 		[56]  = {90,  MPCD_xsize, MPCD_ysize}, -- Z
 		[57]  = {91,  MPCD_xsize, MPCD_ysize}, -- [
-		[58]  = {93,  MPCD_xsize, MPCD_ysize}, -- ] 
+		[58]  = {93,  MPCD_xsize, MPCD_ysize}, -- ]
 		[59]  = {124, MPCD_xsize, MPCD_ysize}, -- | == ¦
-		[60]  = {38,  MPCD_xsize, MPCD_ysize}, -- & == +- 
-		[61]  = {59,  MPCD_xsize, MPCD_ysize}, -- ; == ° 
+		[60]  = {38,  MPCD_xsize, MPCD_ysize}, -- & == +-
+		[61]  = {59,  MPCD_xsize, MPCD_ysize}, -- ; == °
 		[62]  = {95,  MPCD_xsize, MPCD_ysize}, -- _
 		[63]  = {37,  MPCD_xsize, MPCD_ysize},-- %
 		[64]  = {24,  MPCD_xsize, MPCD_ysize},-- alpha α
@@ -285,7 +285,7 @@ fontdescription["font_LCD"] = {
 		[3]   = {20,  MPCD_xsize, MPCD_ysize}, -- ¶ == [] == \20
 		[4]   = {26,  MPCD_xsize, MPCD_ysize}, -- > == -> == \26
 		[5]   = {27,  MPCD_xsize, MPCD_ysize}, -- < == <- == \27
-		[6]   = {31,  MPCD_xsize, MPCD_ysize}, -- SPARE 
+		[6]   = {31,  MPCD_xsize, MPCD_ysize}, -- SPARE
 		[7]   = {126, MPCD_xsize, MPCD_ysize}, -- ~
 		[8]   = {32,  MPCD_xsize, MPCD_ysize}, -- [space]
 		[9]   = {33,  MPCD_xsize, MPCD_ysize}, -- !
@@ -337,10 +337,10 @@ fontdescription["font_LCD"] = {
 		[55]  = {89,  MPCD_xsize, MPCD_ysize}, -- Y
 		[56]  = {90,  MPCD_xsize, MPCD_ysize}, -- Z
 		[57]  = {91,  MPCD_xsize, MPCD_ysize}, -- [
-		[58]  = {93,  MPCD_xsize, MPCD_ysize}, -- ] 
+		[58]  = {93,  MPCD_xsize, MPCD_ysize}, -- ]
 		[59]  = {124, MPCD_xsize, MPCD_ysize}, -- | == ¦
-		[60]  = {38,  MPCD_xsize, MPCD_ysize}, -- & == +- 
-		[61]  = {59,  MPCD_xsize, MPCD_ysize}, -- ; == ° 
+		[60]  = {38,  MPCD_xsize, MPCD_ysize}, -- & == +-
+		[61]  = {59,  MPCD_xsize, MPCD_ysize}, -- ; == °
 		[62]  = {95,  MPCD_xsize, MPCD_ysize}, -- _
 		[63]  = {37,  MPCD_xsize, MPCD_ysize},-- %
 		[64]  = {24,  MPCD_xsize, MPCD_ysize},-- alpha α
@@ -370,7 +370,7 @@ fontdescription["font_Pixel"] = {
 		[3]   = {43,  MPCD_xsize_2k, MPCD_ysize_2k}, -- + {20,  MPCD_xsize_2k, MPCD_ysize_2k}, -- ¶ == [] == \20
 		[4]   = {45,  MPCD_xsize_2k, MPCD_ysize_2k}, -- - {26,  MPCD_xsize_2k, MPCD_ysize_2k}, -- > == -> == \26
 		[5]   = {64,  MPCD_xsize_2k, MPCD_ysize_2k}, -- @ == © -- < == <- == \27
-		[6]   = {35,  MPCD_xsize_2k, MPCD_ysize_2k}, -- # {31,  MPCD_xsize_2k, MPCD_ysize_2k}, -- SPARE 
+		[6]   = {35,  MPCD_xsize_2k, MPCD_ysize_2k}, -- # {31,  MPCD_xsize_2k, MPCD_ysize_2k}, -- SPARE
 		[7]   = {44,  MPCD_xsize_2k, MPCD_ysize_2k}, -- ,
 		[8]   = {63,  MPCD_xsize_2k, MPCD_ysize_2k}, -- ?
 		[9]   = {58,  MPCD_xsize_2k, MPCD_ysize_2k}, -- :
@@ -378,13 +378,13 @@ fontdescription["font_Pixel"] = {
 		[11]  = {32,  MPCD_xsize_2k, MPCD_ysize_2k}, -- [space]
 		[12]  = {125,  MPCD_xsize_2k, MPCD_ysize_2k}, -- }
 		-- line 2
-		[13]  = {128, MPCD_xsize_2k, MPCD_ysize_2k}, -- 
-		[14]  = {129, MPCD_xsize_2k, MPCD_ysize_2k}, -- 
-		[15]  = {130, MPCD_xsize_2k, MPCD_ysize_2k}, -- 
-		[16]  = {131, MPCD_xsize_2k, MPCD_ysize_2k}, -- 
-		[17]  = {132, MPCD_xsize_2k, MPCD_ysize_2k}, -- 
-		[18]  = {133, MPCD_xsize_2k, MPCD_ysize_2k}, -- 
-		[19]  = {134, MPCD_xsize_2k, MPCD_ysize_2k}, -- 
+		[13]  = {128, MPCD_xsize_2k, MPCD_ysize_2k}, --
+		[14]  = {129, MPCD_xsize_2k, MPCD_ysize_2k}, --
+		[15]  = {130, MPCD_xsize_2k, MPCD_ysize_2k}, --
+		[16]  = {131, MPCD_xsize_2k, MPCD_ysize_2k}, --
+		[17]  = {132, MPCD_xsize_2k, MPCD_ysize_2k}, --
+		[18]  = {133, MPCD_xsize_2k, MPCD_ysize_2k}, --
+		[19]  = {134, MPCD_xsize_2k, MPCD_ysize_2k}, --
 		[20]  = {60, MPCD_xsize_2k, MPCD_ysize_2k}, -- <
 		[21]  = {62,  MPCD_xsize_2k, MPCD_ysize_2k}, -- >
 		[22]  = {40,  MPCD_xsize_2k, MPCD_ysize_2k}, -- (
@@ -456,10 +456,10 @@ fontdescription["font_Pixel"] = {
 		[87]  = {121,  MPCD_xsize_2k, MPCD_ysize_2k}, -- y
 		[88]  = {122,  MPCD_xsize_2k, MPCD_ysize_2k}, -- z
 		[89]  = {91,  MPCD_xsize_2k, MPCD_ysize_2k}, -- [
-		[90]  = {93,  MPCD_xsize_2k, MPCD_ysize_2k}, -- ] 
+		[90]  = {93,  MPCD_xsize_2k, MPCD_ysize_2k}, -- ]
 		[91]  = {124, MPCD_xsize_2k, MPCD_ysize_2k}, -- | == ¦
-		[92]  = {38,  MPCD_xsize_2k, MPCD_ysize_2k}, -- & == +- 
-		[93]  = {59,  MPCD_xsize_2k, MPCD_ysize_2k}, -- ; == ° 
+		[92]  = {38,  MPCD_xsize_2k, MPCD_ysize_2k}, -- & == +-
+		[93]  = {59,  MPCD_xsize_2k, MPCD_ysize_2k}, -- ; == °
 		[94]  = {95,  MPCD_xsize_2k, MPCD_ysize_2k}, -- _
 		[95]  = {37,  MPCD_xsize_2k, MPCD_ysize_2k},-- %
 		[96]  = {24,  MPCD_xsize_2k, MPCD_ysize_2k},-- alpha α

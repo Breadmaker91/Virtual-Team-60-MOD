@@ -25,13 +25,13 @@ dev:listen_command(voice_ptt_0_icommand)
 dev:listen_command(voice_ptt_1_icommand)
 
 function SetCommand(command, value)
-    -- Keep the old in-cockpit UHF press behavior mapped to radio 1.
+   -- Keep the old in-cockpit UHF press behavior mapped to radio 1.
     if command == iCommandPlaneIntercomUHFPress then
         avSimplestRadio.PTT(1)
         return
     end
 
-    -- SRS/DCS PTT 1 -> UHF, PTT 2 -> VHF2.
+   -- SRS/DCS PTT 1 -> UHF, PTT 2 -> VHF2.
     if command == voice_ptt_0_icommand then
         if value == 1 then
             avSimplestRadio.PTT(1)

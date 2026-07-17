@@ -1,5 +1,5 @@
---电力状态api,返回全部为布尔型
---初步仅设置两条电力总线:交流115v总线和直流28v总线
+--api,
+--:115v28v
 
 elec_ac_status = get_param_handle("ELEC_AC_BUS") -- 1 or 0
 elec_dc_status = get_param_handle("ELEC_DC_BUS") -- 1 or 0

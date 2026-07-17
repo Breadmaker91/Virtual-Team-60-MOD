@@ -318,8 +318,16 @@ RightPilotBodyDraw = create_parameter_gauge("RIGHT_PILOT_BODY_VISIBLE", 3103, vi
 RightPilotHeadDraw = create_parameter_gauge("RIGHT_PILOT_HEAD_VISIBLE", 3104, visibility_range, visibility_range)
 
 CockpitLeftPilotHeadLR = create_parameter_gauge("COCKPIT_LEFT_PILOT_HEAD_LR", 40, head_motion_range, head_motion_range)
-CockpitLeftPilotHeadUD = create_parameter_gauge("COCKPIT_LEFT_PILOT_HEAD_UD", 100, head_motion_range, head_motion_range)
+CockpitLeftPilotHeadUD = create_parameter_gauge("COCKPIT_LEFT_PILOT_HEAD_UD", 99, head_motion_range, head_motion_range)
 CockpitRightPilotHeadLR = create_parameter_gauge("COCKPIT_RIGHT_PILOT_HEAD_LR", 336, head_motion_range, head_motion_range)
+
+CockpitPilotBodyLeanLR = create_parameter_gauge("COCKPIT_PILOT_BODY_LEAN_LR", 800, head_motion_range, head_motion_range)
+CockpitPilotHeadLeanLR = create_parameter_gauge("COCKPIT_PILOT_HEAD_LEAN_LR", 801, head_motion_range, head_motion_range)
+CockpitPilotEyesLR = create_parameter_gauge("COCKPIT_PILOT_EYES_LR", 802, head_motion_range, head_motion_range)
+CockpitPilotEyesUD = create_parameter_gauge("COCKPIT_PILOT_EYES_UD", 803, head_motion_range, head_motion_range)
+CockpitPilotEyesBlink = create_parameter_gauge("COCKPIT_PILOT_EYES_BLINK", 804, visibility_range, visibility_range)
+CockpitPilotClearVisor = create_parameter_gauge("COCKPIT_PILOT_CLEAR_VISOR", 805, visibility_range, visibility_range)
+CockpitPilotTintedVisor = create_parameter_gauge("COCKPIT_PILOT_TINTED_VISOR", 806, visibility_range, visibility_range)
 
 
 

@@ -57,6 +57,8 @@ disp_reverse = {1, 2, 4, 6, 8, 7, 5, 3}
 disp_reverse_available = {0, 0, 0, 0, 0, 0, 0, 0}
 parent_menu_id = {}
 
+local condensation_debug_print_timer = 0
+local CONDENSATION_DEBUG_PRINT_INTERVAL = 2.0
 
 dev:listen_command(2142)-- iServiceInformAboutUserHAngle
 dev:listen_command(2143)-- iServiceInformAboutUserVAngle
@@ -297,7 +299,24 @@ function activate_selection()
 end
 
 function update()
-    condensation_model.update(sensor_data, update_time_step)
+    local condensation_debug = condensation_model.update(sensor_data, update_time_step)
+
+    condensation_debug_print_timer = condensation_debug_print_timer + update_time_step
+    if condensation_debug_print_timer >= CONDENSATION_DEBUG_PRINT_INTERVAL then
+        condensation_debug_print_timer = 0
+        print_message_to_user(string.format(
+            "Condensation Debug\nHumidity: %.0f%%\nSmoke: %.0f%%\nGlass Fog: %.0f%%\nMoisture: %.0f%%\nRPM Airflow: %.0f%%\nAirflow Push: %.0f%%\nRain: %.0f%%\nCloud: %.0f%%\nCanopy Open: %.0f%%",
+            condensation_debug.humidity,
+            condensation_debug.smoke_percent,
+            (condensation_debug.glass_fog or 0) * 100,
+            (condensation_debug.cockpit_moisture or 0) * 100,
+            (condensation_debug.airflow_factor or 0) * 100,
+            (condensation_debug.airflow_push_factor or 0) * 100,
+            (condensation_debug.rain_factor or 0) * 100,
+            (condensation_debug.cloud_factor or 0) * 100,
+            (condensation_debug.canopy_open_factor or 0) * 100
+        ))
+    end
 
     menu_disp_ctrl()
     check_input_target()

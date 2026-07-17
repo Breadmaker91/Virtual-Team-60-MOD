@@ -215,7 +215,9 @@ function SetCommand(command, value)
     end
 end
 
-NAV_FLASH_COUNT = 0
+local NAV_BLINK_HALF_PERIOD = 0.5
+local nav_blink_elapsed = 0
+local nav_blink_on = true
 STROBE_ROTATION = 0
 
 function update_externel_light_status()
@@ -241,32 +243,30 @@ function update_externel_light_status()
             set_aircraft_draw_argument_value(192, anticolmulti)
         end
 
-        -- Nav light flash mode
+        -- The third navigation-light switch position flashes at full brightness.
+        local nav_light_value
         if target_status[wing_navi_switch][2] > 0.25 and target_status[wing_navi_switch][2] < 0.75 then
-            NAV_FLASH_COUNT = NAV_FLASH_COUNT + 0.02
-            if NAV_FLASH_COUNT > 2 then
-                NAV_FLASH_COUNT = 0
+            nav_blink_elapsed = nav_blink_elapsed + update_rate
+            if nav_blink_elapsed >= NAV_BLINK_HALF_PERIOD then
+                nav_blink_elapsed = nav_blink_elapsed - NAV_BLINK_HALF_PERIOD
+                nav_blink_on = not nav_blink_on
             end
-            if NAV_FLASH_COUNT <= 1 then
-                set_aircraft_draw_argument_value(190, NAV_FLASH_COUNT)
-                set_aircraft_draw_argument_value(191, NAV_FLASH_COUNT)
-            else
-                set_aircraft_draw_argument_value(190, 2 - NAV_FLASH_COUNT)
-                set_aircraft_draw_argument_value(191, 2 - NAV_FLASH_COUNT)
-            end
+            nav_light_value = nav_blink_on and 1 or 0
         elseif target_status[wing_navi_switch][2] < -0.25 then
-            NAV_FLASH_COUNT = 0
-            set_aircraft_draw_argument_value(190, 0)
-            set_aircraft_draw_argument_value(191, 0)
+            nav_blink_elapsed = 0
+            nav_blink_on = true
+            nav_light_value = 0
         elseif target_status[wing_navi_switch][2] > -0.25 and target_status[wing_navi_switch][2] < 0.25 then
-            NAV_FLASH_COUNT = 0
-            set_aircraft_draw_argument_value(190, 0.5)
-            set_aircraft_draw_argument_value(191, 0.5)
+            nav_blink_elapsed = 0
+            nav_blink_on = true
+            nav_light_value = 0.5
         elseif target_status[wing_navi_switch][2] > 0.75 then
-            NAV_FLASH_COUNT = 0
-            set_aircraft_draw_argument_value(190, 1)
-            set_aircraft_draw_argument_value(191, 1)
+            nav_blink_elapsed = 0
+            nav_blink_on = true
+            nav_light_value = 1
         end
+        set_aircraft_draw_argument_value(190, nav_light_value)
+        set_aircraft_draw_argument_value(191, nav_light_value)
 
         -- taxi/landing lights
         if get_aircraft_draw_argument_value(0) > 0.8 then
@@ -283,6 +283,8 @@ function update_externel_light_status()
             set_aircraft_draw_argument_value(194, 0)
         end
     else
+        nav_blink_elapsed = 0
+        nav_blink_on = true
         set_aircraft_draw_argument_value(51, 0) -- taxi light 51
         set_aircraft_draw_argument_value(190, 0)
         set_aircraft_draw_argument_value(191, 0)

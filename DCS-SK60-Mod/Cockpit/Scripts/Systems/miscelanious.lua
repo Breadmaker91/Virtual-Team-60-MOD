@@ -26,7 +26,7 @@ function CockpitEvent(event,val)
     end
 end
 
-function update()		
+function update()
 	if WHEELCHOCKS_STATE == 1 then
 	dispatch_action(nil,"Keys.BrakesOn")
 	elseif WHEELCHOCKS_STATE == 0 then
@@ -35,7 +35,7 @@ function update()
 	end
 
 	set_aircraft_draw_argument_value(WHEELCHOCKS_LADDER_ANIM_ARG, WHEELCHOCKS_STATE)
-	
+
 end
 
 need_to_be_closed = false

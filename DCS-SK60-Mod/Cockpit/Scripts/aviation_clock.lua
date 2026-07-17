@@ -3,7 +3,7 @@ dofile(LockOn_Options.script_path.."Systems/electric_system_api.lua")
 
 local dev = GetSelf()
 
-local update_time_step = 0.02  --每秒50次刷新
+local update_time_step = 0.02 --refreshes 50 times per second
 make_default_activity(update_time_step)
 
 local sensor_data = get_base_data()
@@ -20,7 +20,7 @@ end
 
 
 function update()
-    -- dprintf(get_absolute_model_time())
+   -- dprintf(get_absolute_model_time())
     local current_time_in_second = get_absolute_model_time()
     local current_hour = current_time_in_second / 3600
     local current_minute = math.fmod(current_time_in_second , 3600) / 60

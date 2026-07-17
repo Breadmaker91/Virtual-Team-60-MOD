@@ -11,8 +11,8 @@ DEGREE_TO_RAD  = 0.0174532925199433
 RAD_TO_DEGREE  = 57.29577951308233
 MRAD_TO_DEGREE = 0.05729577951308233
 
-MENU_DEFAULT_LEVEL = 22                             
-MENU_DEFAULT_NOCLIP_LEVEL  = MENU_DEFAULT_LEVEL - 1 
+MENU_DEFAULT_LEVEL = 22
+MENU_DEFAULT_NOCLIP_LEVEL  = MENU_DEFAULT_LEVEL - 1
 
 DEBUG_COLOR                 = {0,255,0,100}
 
@@ -77,7 +77,7 @@ end
 
 function create_circle_index(total_dots)
     local return_group = {}
-    -- we can calculate for every three
+   -- we can calculate for every three
     for i = 1, (total_dots - 1), 1 do
         return_group[i*3 - 2] = 0;
         return_group[i*3 - 1] = i;

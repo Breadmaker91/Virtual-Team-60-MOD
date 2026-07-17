@@ -16,7 +16,7 @@ local mission_route_points_num = get_param_handle("MISSION_WP_NUM")
 
 local sensor_data = get_base_data()
 local ias_conversion_to_knots = 1.9504132
-local ias_conversion_to_kmh =  1.9504132 -- easily convert to knots -- 3.6 
+local ias_conversion_to_kmh =  1.9504132 -- easily convert to knots -- 3.6
 local DEGREE_TO_RAD  = 0.0174532925199433
 local RAD_TO_DEGREE  = 57.29577951308233
 local METER_TO_INCH = 3.2808
@@ -30,16 +30,16 @@ local waypoints = {}
 function updateGPS()
     pos_x_loc, alt, pos_y_loc= sensor_data.getSelfCoordinates()
     coord = lo_to_geo_coords(pos_x_loc, pos_y_loc)
-    -- temp_dbg:set(coord.lat)
+   -- temp_dbg:set(coord.lat)
     gps_receiver_lat:set(coord.lat)
     gps_receiver_lon:set(coord.lon)
     gps_receiver_alt:set(alt)
 end
 
--- 只有上行至EFM链路
+-- EFM
 function uploadRouteToEFM()
     if waypoints ~= nil then
-        -- have way points, upload to efm
+       -- have way points, upload to efm
         mission_route_points_num:set(#waypoints)
         local route_coord
         local uplink_handle
@@ -63,7 +63,7 @@ end
 
 function post_initialize()
     updateGPS()
-    -- collect the waypoint data from mission
+   -- collect the waypoint data from mission
     waypoints = get_mission_route()
 end
 
@@ -79,7 +79,7 @@ function update()
     end
 
     if get_elec_ac_status() then
-        -- update the receiver status from lua
+       -- update the receiver status from lua
         updateGPS()
     end
 
@@ -98,7 +98,7 @@ function debug_display()
     local coord_waypoint
     print_message_to_user("Way point size is "..#waypoints)
     for i,v in pairs(waypoints) do
-        for j,value in pairs(v) do 
+        for j,value in pairs(v) do
             if type(value) ~= "table" then
                 print_message_to_user("Waypoint "..i.." value "..j.." is "..tostring(value))
             end

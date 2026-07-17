@@ -9,7 +9,7 @@ local  screen_width  =          LockOn_Options.screen.width * 0.5
 HUD_base_clip 			 	    = CreateElement "ceMeshPoly" --This is the clipping layer
 HUD_base_clip.name 			    = "menu_base_clip"
 HUD_base_clip.primitivetype   	= "triangles"
-HUD_base_clip.vertices 		    = { {screen_width, screen_height}, { screen_width,-screen_height}, { -screen_width,-screen_height}, {-screen_width,screen_height},} --四个边角 --四个边角
+HUD_base_clip.vertices 		    = { {screen_width, screen_height}, { screen_width,-screen_height}, { -screen_width,-screen_height}, {-screen_width,screen_height},} --four corners --four corners
 HUD_base_clip.indices 		    = {0,1,2,0,2,3} -- Index, each group of three forms a triangle that will be displayed, and the number represents the previous vert coordinate
 HUD_base_clip.init_pos		    = {0, 0, 0}
 HUD_base_clip.init_rot		    = {0, 0, 0}
@@ -23,7 +23,7 @@ HUD_base_clip.change_opacity    = false
 HUD_base_clip.isvisible		    = false
 Add(HUD_base_clip)
 
--- The cursor 
+-- The cursor
 temp_str_2 = "MENU_CURSOR"
 texture_offset_x = math.fmod((8-1), 8)
 texture_offset_y = math.modf((8-1)/ 8)
@@ -69,7 +69,7 @@ Add(current_menu_center)
 local Debug_text_box             = CreateElement "ceStringPoly" --Create a character output element "ceTexPoly" means to create a texture model
 Debug_text_box.material          = "BS430_font_white"    --FONT_             --Material type (note the font material created above)
 Debug_text_box.init_pos          = {0, -0.2}         -- This is the coordinates of the alignment point [this is the maximum limit of the current model (do not exceed when aligning the corners)]
-Debug_text_box.alignment         = "CenterCenter"       --Alignment settings：Left/Right/Center; Top/Down/Center
+Debug_text_box.alignment         = "CenterCenter" --Alignment settings:Left/Right/Center; Top/Down/Center
 Debug_text_box.stringdefs        = {80/1920, 40/1920, 0, 0}    --{ecrase vertical si inf a 0.01,ecrase lateral * streccth, 0, 0} The first value controls the width, the second value controls the height
 Debug_text_box.formats           = {"%s","%s"} -- The output is set here, similar to the printf model of C.% is the output type at the beginning, and the following %s is the input type
 Debug_text_box.element_params    = {"MENU_CENTER_STR","MENU_DISP_ENABLE"} -- top left first line display
@@ -88,7 +88,7 @@ for i, v in pairs(submenu_id) do
     temp_string = "MENU_CENTER_"..tostring(v)
     texture_offset_x = math.fmod(submenu[v][0][2] - 1, 8)
     texture_offset_y = math.modf((submenu[v][0][2] - 1)/8)
-    -- StartUP Logo -- test only
+   -- StartUP Logo -- test only
     local menu_center_icon 				          = CreateElement "ceTexPoly"
     menu_center_icon.vertices                     = mesh_vert_gen(0.8*screen_height, 0.8*screen_height)
     menu_center_icon.indices                      = {0,1,2,2,3,0}
@@ -111,7 +111,7 @@ end
 for i, page_index in pairs(submenu_id) do
     temp_string = "MENU_SUB_"..tostring(page_index)
     for j, subsect_index in pairs(submenu[page_index]) do
-        -- icon 0 is for indicate the center display
+       -- icon 0 is for indicate the center display
         if (j > 0 and j < 8) then
             temp_str_2 = temp_string.."_SEC_"..j
             texture_offset_x = math.fmod((subsect_index[2]-1), 8)
@@ -131,7 +131,7 @@ for i, page_index in pairs(submenu_id) do
             menu_section.isvisible               = false
             Add(menu_section)
 
-            -- StartUP Logo -- test only
+           -- StartUP Logo -- test only
             local menu_center_icon 				          = CreateElement "ceTexPoly"
             menu_center_icon.vertices                     = mesh_vert_gen(0.6*screen_height, 0.6*screen_height)
             menu_center_icon.indices                      = {0,1,2,2,3,0}
@@ -153,7 +153,7 @@ for i, page_index in pairs(submenu_id) do
             local Debug_text_box_1             = CreateElement "ceStringPoly" --Create a character output element "ceTexPoly" means to create a texture model
             Debug_text_box_1.material          = "BS430_font_white"    --FONT_             --Material type (note the font material created above)
             Debug_text_box_1.init_pos          = {0, - 0.2}         -- This is the coordinates of the alignment point [this is the maximum limit of the current model (do not exceed when aligning the corners)]
-            Debug_text_box_1.alignment         = "CenterCenter"       --Alignment settings：Left/Right/Center; Top/Down/Center
+            Debug_text_box_1.alignment         = "CenterCenter" --Alignment settings:Left/Right/Center; Top/Down/Center
             Debug_text_box_1.stringdefs        = {60/1920, 30/1920, 0, 0}    --{ecrase vertical si inf a 0.01,ecrase lateral * streccth, 0, 0} The first value controls the width, the second value controls the height
             Debug_text_box_1.formats           = {subsect_index[1],"%s"} -- The output is set here, similar to the printf model of C.% is the output type at the beginning, and the following %s is the input type
             Debug_text_box_1.element_params    = {"MENU_STR_TRI", temp_str_2} -- top left first line display
@@ -189,7 +189,7 @@ for i = 1,8,1 do
     menu_section.isvisible               = false
     Add(menu_section)
 
-    -- StartUP Logo -- test only
+   -- StartUP Logo -- test only
     local menu_center_icon 				          = CreateElement "ceTexPoly"
     menu_center_icon.vertices                     = mesh_vert_gen(0.3*screen_height, 0.3*screen_height)
     menu_center_icon.indices                      = {0,1,2,2,3,0}
@@ -250,7 +250,7 @@ Add(menu_center_icon)
 local Debug_text_box_1             = CreateElement "ceStringPoly" --Create a character output element "ceTexPoly" means to create a texture model
 Debug_text_box_1.material          = "BS430_font_white"    --FONT_             --Material type (note the font material created above)
 Debug_text_box_1.init_pos          = {0, - 0.2}         -- This is the coordinates of the alignment point [this is the maximum limit of the current model (do not exceed when aligning the corners)]
-Debug_text_box_1.alignment         = "CenterCenter"       --Alignment settings：Left/Right/Center; Top/Down/Center
+Debug_text_box_1.alignment         = "CenterCenter" --Alignment settings:Left/Right/Center; Top/Down/Center
 Debug_text_box_1.stringdefs        = {60/1920, 30/1920, 0, 0}    --{ecrase vertical si inf a 0.01,ecrase lateral * streccth, 0, 0} The first value controls the width, the second value controls the height
 Debug_text_box_1.formats           = {"return","%s"} -- The output is set here, similar to the printf model of C.% is the output type at the beginning, and the following %s is the input type
 Debug_text_box_1.element_params    = {"MENU_STR_TRI", temp_str_2} -- top left first line display
