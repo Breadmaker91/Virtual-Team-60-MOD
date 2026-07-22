@@ -4,7 +4,7 @@
 
 local waypoints = {
     -- WPT   FRQ      RAD    DST
-    [ 1] = { FRQ = 113.60, RAD = 278, DST =   8.5 },
+    [ 1] = { FRQ = 113.60, RAD = 278, DST =  11.5 },
     [ 2] = { FRQ = 113.60, RAD =  46, DST =   9.0 },
     [ 3] = { FRQ = 114.20, RAD = 105, DST =   9.0 },
     [ 4] = { FRQ = 117.35, RAD =  12, DST =  25.7 },
@@ -28,7 +28,7 @@ return {
         },
         ["current_waypoint_index"] = 1,
         ["selected_heading_bug_deg"] = 262,
-        ["selected_offset_distance_nm"] = 8.4999999999999982,
+        ["selected_offset_distance_nm"] = 11.499999999999998,
         ["selected_offset_radial_deg"] = 278,
         ["selected_vor_course_deg"] = 172,
         ["tuned_ndb_frequency_khz"] = 311,

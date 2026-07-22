@@ -10,6 +10,7 @@ local fr33_freq_hz = get_param_handle("FR33_FREQ_HZ")
 local fr33_powered = get_param_handle("FR33_POWERED")
 local fr33_debug_text = get_param_handle("FR33_DEBUG_TEXT")
 local fr33_backing_available = get_param_handle("FR33_BACKING_AVAILABLE")
+local fr33_debug_text_enabled = false
 
 local MIN_FREQ_HZ = 118.000E6
 local MAX_FREQ_HZ = 135.975E6
@@ -110,7 +111,7 @@ local function publish_state(show_message)
     fr33_debug_text:set(debug_text)
     set_dial_args(current_freq_hz)
 
-    if show_message and debug_text ~= last_debug_text and print_message_to_user ~= nil then
+    if fr33_debug_text_enabled and show_message and debug_text ~= last_debug_text and print_message_to_user ~= nil then
         print_message_to_user("FR33 " .. debug_text)
     end
 

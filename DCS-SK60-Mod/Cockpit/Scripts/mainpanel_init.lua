@@ -137,6 +137,10 @@ animation_list = {
     {"FUEL_QUAN_A_x1", 360},
 
     {"Inside_Canopy", 38, {0, 1}, {1, 0}},
+    -- Bind the condensation model parameter to the cockpit EDM. Writing an
+    -- aircraft draw argument only drives the external model; cockpit argument
+    -- 5002 needs a panel gauge to make the canopy-glass fog visible in-cockpit.
+    {"CONDENSATION_GLASS_FOG", 5002, {0, 1}, {0, 1}},
     {"RUDDER_PADDLE", 3, {-1, 1}, {1, -1}},
     {"BRAKE_LEFT", 4},
     {"BRAKE_RIGHT", 5},

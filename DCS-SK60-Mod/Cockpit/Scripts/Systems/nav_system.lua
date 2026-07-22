@@ -104,6 +104,7 @@ local ils_bar_slew_per_second = 0.7
 local VOR_DME_MAX_RANGE_NM = 200
 local ILS_LOCALIZER_MAX_RANGE_NM = 18
 local nav_debug_popup_enabled = false
+local ils_debug_text_enabled = false
 local last_announced_ils_frequency_hz = nil
 local last_magnetic_variation_deg = 0
 
@@ -1794,7 +1795,7 @@ function update()
         end
 
         update_ils_bar_slew()
-        if tuned_ils ~= nil then
+        if ils_debug_text_enabled and tuned_ils ~= nil then
             local tuned_frequency_hz = math.floor((active_waypoint.vor_frequency_mhz * 1000000) + 0.5)
             if last_announced_ils_frequency_hz ~= tuned_frequency_hz then
                 last_announced_ils_frequency_hz = tuned_frequency_hz
@@ -1812,7 +1813,7 @@ function update()
         set_hsi_cdi(hsi_ils_cdi_norm)
 
         local now = get_absolute_model_time()
-        if now - last_ils_message_time >= ils_message_interval_seconds then
+        if ils_debug_text_enabled and now - last_ils_message_time >= ils_message_interval_seconds then
             last_ils_message_time = now
             local inbound_true = loc_inbound_true or 0
             local inbound_mag = true_to_magnetic(inbound_true)

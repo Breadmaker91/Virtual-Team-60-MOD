@@ -59,6 +59,7 @@ parent_menu_id = {}
 
 local condensation_debug_print_timer = 0
 local CONDENSATION_DEBUG_PRINT_INTERVAL = 2.0
+local CONDENSATION_DEBUG_TEXT_ENABLED = false
 
 dev:listen_command(2142)-- iServiceInformAboutUserHAngle
 dev:listen_command(2143)-- iServiceInformAboutUserVAngle
@@ -302,7 +303,7 @@ function update()
     local condensation_debug = condensation_model.update(sensor_data, update_time_step)
 
     condensation_debug_print_timer = condensation_debug_print_timer + update_time_step
-    if condensation_debug_print_timer >= CONDENSATION_DEBUG_PRINT_INTERVAL then
+    if CONDENSATION_DEBUG_TEXT_ENABLED and condensation_debug_print_timer >= CONDENSATION_DEBUG_PRINT_INTERVAL then
         condensation_debug_print_timer = 0
         print_message_to_user(string.format(
             "Condensation Debug\nHumidity: %.0f%%\nSmoke: %.0f%%\nGlass Fog: %.0f%%\nMoisture: %.0f%%\nRPM Airflow: %.0f%%\nAirflow Push: %.0f%%\nRain: %.0f%%\nCloud: %.0f%%\nCanopy Open: %.0f%%",

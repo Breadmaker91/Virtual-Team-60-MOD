@@ -12,6 +12,7 @@ local misc = GetSelf()
 local sensor_data = get_base_data()
 
 misc:listen_command(Keys.pilotToggle)
+misc:listen_command(Keys.PilotTintedVisorToggle)
 misc:listen_command(Keys.EjectionSeatSafetyLever)
 misc:listen_command(Keys.EjectionSeatSafetyLeverOn)
 misc:listen_command(Keys.EjectionSeatSafetyLeverOff)
@@ -107,11 +108,10 @@ local visor_animation_elapsed = 0.0
 local visor_animation_active = false
 local visor_animation_completed = false
 local visor_animation_direction = 0
-local visor_use_tinted = false
+local tinted_visor_selected = false
 local last_canopy_closed = false
 local VISOR_ANIMATION_DURATION = 3.0
-local mission_weather = nil
-local mission_weather_loaded = false
+local TINTED_VISOR_ANIMATION_DURATION = 1.5
 
 
 local function set_draw_argument(arg_number, value)
@@ -218,14 +218,6 @@ local function approach(current, target, rate)
 	return current + (target - current) * alpha
 end
 
-local function get_table_value(source_table, key)
-	if type(source_table) ~= "table" then
-		return nil
-	end
-
-	return source_table[key]
-end
-
 local function read_sensor_number(sensor_function_name, default_value)
 	local sensor_function = sensor_data[sensor_function_name]
 	if type(sensor_function) ~= "function" then
@@ -239,77 +231,6 @@ local function read_sensor_number(sensor_function_name, default_value)
 
 	return value
 end
-local function load_mission_weather()
-	if mission_weather_loaded then
-		return mission_weather
-	end
-
-	mission_weather_loaded = true
-	if do_mission_file ~= nil then
-		do_mission_file("mission")
-		if type(mission) == "table" then
-			mission_weather = mission.weather
-		end
-	end
-
-	return mission_weather
-end
-
-local function get_daylight_factor()
-	local time_seconds = 12.0 * 3600.0
-	if type(get_absolute_model_time) == "function" then
-		time_seconds = get_absolute_model_time()
-	end
-
-	local hour = (time_seconds / 3600.0) % 24.0
-	if hour < 5.0 or hour >= 20.5 then
-		return 0.0
-	elseif hour < 7.0 then
-		return (hour - 5.0) / 2.0
-	elseif hour <= 18.0 then
-		return 1.0
-	elseif hour < 20.5 then
-		return 1.0 - ((hour - 18.0) / 2.5)
-	end
-
-	return 0.0
-end
-
-local function get_weather_light_reduction()
-	local weather = load_mission_weather()
-	local clouds = get_table_value(weather, "clouds") or {}
-	local fog = get_table_value(weather, "fog") or {}
-	local preset = string.lower(tostring(clouds.preset or clouds.name or ""))
-	local density = clamp(tonumber(clouds.density) or 0.0, 0.0, 10.0) / 10.0
-	local precipitation = tonumber(clouds.iprecptns or clouds.precipitation) or 0.0
-
-	local cloud_factor = density
-	if preset ~= "" and not preset:find("clear") then
-		cloud_factor = math.max(cloud_factor, 0.40)
-	end
-	if preset:find("overcast") or preset:find("rain") or preset:find("storm") then
-		cloud_factor = math.max(cloud_factor, 0.75)
-	end
-
-	local fog_factor = 0.0
-	if fog.enable == true or fog.enabled == true or (tonumber(fog.visibility) or 0.0) > 0.0 then
-		fog_factor = 1.0
-	elseif preset:find("fog") or preset:find("mist") then
-		fog_factor = 0.8
-	end
-
-	local rain_factor = precipitation > 0.0 and 1.0 or 0.0
-	if preset:find("rain") or preset:find("shower") or preset:find("storm") or preset:find("thunder") then
-		rain_factor = 1.0
-	end
-
-	return clamp((cloud_factor * 0.45) + (fog_factor * 0.50) + (rain_factor * 0.35), 0.0, 0.90)
-end
-
-local function get_pilot_brightness_factor()
-	return clamp(get_daylight_factor() - get_weather_light_reduction(), 0.0, 1.0)
-end
-
 
 local function start_new_head_turn()
 	head_start = head_position
@@ -433,14 +354,7 @@ local function start_pilot_visor_animation(direction)
 	visor_animation_active = true
 	visor_animation_completed = false
 
-	if direction > 0 then
-		visor_use_tinted = get_pilot_brightness_factor() >= 0.50
-	else
-		visor_use_tinted = visor_use_tinted or tinted_visor_position > 0.01
-	end
-
 	visor_animation_elapsed = clamp(visor_arm_position * VISOR_ANIMATION_DURATION, 0.0, VISOR_ANIMATION_DURATION)
-	tinted_visor_position = visor_use_tinted and tinted_visor_position or 0.0
 end
 
 local function reset_pilot_visor_animation()
@@ -448,7 +362,7 @@ local function reset_pilot_visor_animation()
 	visor_animation_active = false
 	visor_animation_completed = false
 	visor_animation_direction = 0
-	visor_use_tinted = false
+	tinted_visor_selected = false
 	visor_arm_position = 0.0
 	tinted_visor_position = 0.0
 end
@@ -458,6 +372,7 @@ local function update_pilot_visor_selection()
 	if canopy_closed and (not last_canopy_closed or (not visor_animation_active and not visor_animation_completed)) then
 		start_pilot_visor_animation(1)
 	elseif (not canopy_closed) and last_canopy_closed then
+		tinted_visor_selected = false
 		start_pilot_visor_animation(-1)
 	end
 	last_canopy_closed = canopy_closed
@@ -466,17 +381,23 @@ local function update_pilot_visor_selection()
 		visor_animation_elapsed = clamp(visor_animation_elapsed + (updateTimeStep * visor_animation_direction), 0.0, VISOR_ANIMATION_DURATION)
 		local alpha = visor_animation_elapsed / VISOR_ANIMATION_DURATION
 		visor_arm_position = alpha
-		tinted_visor_position = visor_use_tinted and alpha or 0.0
 
 		if visor_animation_elapsed >= VISOR_ANIMATION_DURATION then
 			visor_animation_active = false
 			visor_animation_completed = true
 			visor_animation_direction = 0
 			visor_arm_position = 1.0
-			tinted_visor_position = visor_use_tinted and 1.0 or 0.0
 		elseif visor_animation_elapsed <= 0.0 then
 			reset_pilot_visor_animation()
 		end
+	end
+
+	local tinted_target = canopy_closed and tinted_visor_selected and 1.0 or 0.0
+	local tinted_step = updateTimeStep / TINTED_VISOR_ANIMATION_DURATION
+	if tinted_visor_position < tinted_target then
+		tinted_visor_position = math.min(tinted_visor_position + tinted_step, tinted_target)
+	elseif tinted_visor_position > tinted_target then
+		tinted_visor_position = math.max(tinted_visor_position - tinted_step, tinted_target)
 	end
 end
 
@@ -651,6 +572,10 @@ function SetCommand(command, value)
 			pilotToggle:set(1)
 		end
 		update_pilot_body_visibility()
+	elseif command == Keys.PilotTintedVisorToggle then
+		if is_canopy_closed() then
+			tinted_visor_selected = not tinted_visor_selected
+		end
 	elseif command == Keys.EjectionSeatSafetyLever then
 		if value ~= nil and value < 0 then
 			set_ejection_seat_safety_lever(false)

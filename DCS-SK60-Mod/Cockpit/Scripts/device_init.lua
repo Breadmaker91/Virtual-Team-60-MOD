@@ -91,6 +91,8 @@ indicators[#indicators + 1] = {"ccIndicator", LockOn_Options.script_path.."GunSi
 --indicators[#indicators + 1] = {"ccIndicator", LockOn_Options.script_path.."DBGiPad/ipad_init.lua",nil,{{"IPAD_center","IPAD_down","IPAD_right"},{sx_l =  -0.001,}}}
 -- custom menu indicator
 indicators[#indicators + 1] = {"ccIndicator", LockOn_Options.script_path.."CustomMenu/menu_init.lua",nil,{{}, {sh = 0.5, sw = 0.5}, 4}}
+-- Player-view tinted visor overlay
+indicators[#indicators + 1] = {"ccIndicator", LockOn_Options.script_path.."VisorEffect/visor_init.lua", nil}
 
 
 -- Enable KneeBoard for Test

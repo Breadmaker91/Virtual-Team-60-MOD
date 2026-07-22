@@ -48,6 +48,10 @@ WeaponSystem:listen_command(Keys.WeaponFireOff)
 WeaponSystem:listen_command(Keys.WeaponConfigSingle)
 WeaponSystem:listen_command(Keys.WeaponConfigPairs)
 WeaponSystem:listen_command(Keys.WeaponConfigAll)
+WeaponSystem:listen_command(Keys.WeaponSelectAkan)
+WeaponSystem:listen_command(Keys.WeaponSelectRocket)
+WeaponSystem:listen_command(Keys.WeaponConfigSerie)
+WeaponSystem:listen_command(Keys.WeaponConfigImpuls)
 WeaponSystem:listen_command(Keys.WeaponMasterSwitch)
 WeaponSystem:listen_command(Keys.WeaponAirGroundChange)
 WeaponSystem:listen_command(Keys.GunSightInstall)
@@ -71,6 +75,9 @@ local has_smoke_pod = 0
 local has_nozzle_smoke = 0
 -- 0 is nothing, 1 is gunpod, 2 is rockets
 local weapon_system_mode = 0
+-- Ground crew selection. Zero preserves the original automatic loadout selection
+-- until the player explicitly chooses AKAN or ROCKET.
+local selected_weapon_mode = 0
 local fire_trigger_status = 0
 local gun_sight_is_installed = 0
 
@@ -111,7 +118,7 @@ current_status = {
 local loading_list = {0,0,0,0,0,0,0,0}
 
 function check_load_status()
-    weapon_system_mode = 0
+    local detected_weapon_mode = 0
     has_smoke_pod = 0
     has_nozzle_smoke = 0
     for i = 1,8,1 do
@@ -127,18 +134,22 @@ function check_load_status()
         elseif (string.sub(station.CLSID,1,35) == "{d694b359-e7a8-4909-88d4-7100b77afd") then
            -- this is a rocket, check the number of it
             loading_list[i] = 3 + station.count
-            weapon_system_mode = 2
-			get_param_handle("armamentType"):set(2)
+            detected_weapon_mode = 2
         elseif (string.sub(station.CLSID,1,36) == "{5d5aa063-a002-4de8-8a89-6eda1e80ee7") then
            -- gunpod
             loading_list[i] = 3
-            weapon_system_mode = 1
-			get_param_handle("armamentType"):set(1)
+            detected_weapon_mode = 1
            -- print_message_to_user("gunpod on station "..i)
         else
             loading_list[i] = 0
         end
     end
+    if selected_weapon_mode == 0 then
+        weapon_system_mode = detected_weapon_mode
+    else
+        weapon_system_mode = selected_weapon_mode
+    end
+    get_param_handle("armamentType"):set(weapon_system_mode)
 end
 
 local current_freq = 256E6
@@ -255,6 +266,22 @@ function SetCommand(command,value)
     if (command == Keys.WeaponConfigAll) then
         rocket_ripple_enable = 1 - rocket_ripple_enable
         dprintf("rocket fire Ripple status change")
+    elseif (command == Keys.WeaponSelectAkan) then
+        selected_weapon_mode = 1
+        weapon_system_mode = 1
+        get_param_handle("armamentType"):set(weapon_system_mode)
+        dprintf("weapon selection AKAN")
+    elseif (command == Keys.WeaponSelectRocket) then
+        selected_weapon_mode = 2
+        weapon_system_mode = 2
+        get_param_handle("armamentType"):set(weapon_system_mode)
+        dprintf("weapon selection ROCKET")
+    elseif (command == Keys.WeaponConfigSerie) then
+        rocket_ripple_enable = 1
+        dprintf("rocket firing mode SERIE")
+    elseif (command == Keys.WeaponConfigImpuls) then
+        rocket_ripple_enable = 0
+        dprintf("rocket firing mode IMPULS")
     elseif (command == Keys.WeaponConfigSingle) then
         rockets_fire_mode = 1
         dprintf("rocket fire mode Single")

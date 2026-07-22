@@ -14,6 +14,7 @@ JOYSTICK =
 Keys =
 {
 	pilotToggle = __custom_counter(),
+	PilotTintedVisorToggle = __custom_counter(),
 
 	PlanePickleOn	= 350,
 	PlanePickleOff	= 351,
@@ -307,6 +308,10 @@ Keys =
     WeaponAirGroundChange = 5061,
     GunSightInstall = 5062,
     GunSightUninstall = 5063,
+    WeaponSelectAkan = 5064,
+    WeaponSelectRocket = 5065,
+    WeaponConfigSerie = 5066,
+    WeaponConfigImpuls = 5067,
 
    -- special functions
     SpecialSence = 5070,

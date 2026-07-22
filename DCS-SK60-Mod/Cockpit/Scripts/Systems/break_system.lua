@@ -152,27 +152,27 @@ function SetCommand(command,value)
             if Flap_Target > 0.3 then
                 Flap_Target = 0
                 target_status[flap_switch][2] = SWITCH_ON
-                print_message_to_user("Flap: Retract")
+                -- Flap status debug text disabled.
             else
                 if (sensor_data.getWOW_NoseLandingGear() > 0.0001) then
                     Flap_Target = 0.5
                     target_status[flap_switch][2] = SWITCH_HALF
-                    print_message_to_user("Flap: Takeoff")
+                    -- Flap status debug text disabled.
                 else
                     Flap_Target = 1
                     target_status[flap_switch][2] = SWITCH_OFF
-                    print_message_to_user("Flap: Landing")
+                    -- Flap status debug text disabled.
                 end
             end
         else
             if Flap_Target > 0.3 then
                 Flap_Target = 0
                 target_status[flap_switch][2] = SWITCH_ON
-                print_message_to_user("Flap: Retract")
+                -- Flap status debug text disabled.
             else
                 Flap_Target = 0.5
                 target_status[flap_switch][2] = SWITCH_HALF
-                print_message_to_user("Flap: Combat")
+                -- Flap status debug text disabled.
             end
         end
     elseif (command == Keys.Flap_Pos_Up) then

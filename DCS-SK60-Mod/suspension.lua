@@ -2,7 +2,7 @@
 -- GLOBAL TUNING
 -- =========================
 
-local multiplier_suspen = 108000     -- tuned for ~22–24 kN per main gear
+local multiplier_suspen = 108000     -- progressive support near full main-gear compression
 local multi2 = 1.15                   -- progressive spring exponent
 
 local multi2_damp_f = 42000
@@ -32,12 +32,11 @@ suspension_data =
     amortizer_max_length = 0.15,
     amortizer_basic_length = 0.15,
 
-    -- Slightly softened + corrected scaling
-    amortizer_spring_force_factor = 180000,
+    -- Low static support lets the nose settle; progression resists bottoming
+    amortizer_spring_force_factor = 60000,
     amortizer_spring_force_factor_rate = 1.3,
 
-    -- Increased to realistic share (~10–15% of aircraft weight)
-    amortizer_static_force = 8000,
+    amortizer_static_force = 10000,
 
     amortizer_reduce_length = 0.05,
 
@@ -92,7 +91,8 @@ suspension_data =
     amortizer_spring_force_factor = multiplier_suspen * 1.3,
     amortizer_spring_force_factor_rate = multi2,
 
-    amortizer_static_force = 11500,
+    -- Damping handles the initial impact; low preload allows a deep static sag
+    amortizer_static_force = 500,
     amortizer_reduce_length = 0.148,
 
     amortizer_direct_damper_force_factor = multi2_damp_f,
@@ -154,7 +154,8 @@ suspension_data =
     amortizer_spring_force_factor = multiplier_suspen * 1.3,
     amortizer_spring_force_factor_rate = multi2,
 
-    amortizer_static_force = 11500,
+    -- Damping handles the initial impact; low preload allows a deep static sag
+    amortizer_static_force = 500,
     amortizer_reduce_length = 0.148,
 
     amortizer_direct_damper_force_factor = multi2_damp_f,
