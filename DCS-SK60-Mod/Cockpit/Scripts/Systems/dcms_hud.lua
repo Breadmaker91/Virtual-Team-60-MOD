@@ -143,6 +143,8 @@ dev:listen_command(Keys.Nav_FPL)
 dev:listen_command(Keys.Nav_PROC)
 dev:listen_command(Keys.L_STARTER_RELEASE)
 dev:listen_command(Keys.L_STARTER_PRESS)
+dev:listen_command(Keys.R_STARTER_RELEASE)
+dev:listen_command(Keys.R_STARTER_PRESS)
 dev:listen_command(Keys.Nav_Right_Knob_Push)
 
 -- iCommandPlaneViewVertical 2008
@@ -175,7 +177,11 @@ viewang_h = 0
 local cursor_mode = get_param_handle("DEBUG_LINE3")
 
 function SetCommand(command,value)
-    if (command == 2142) then
+    if command == Keys.L_STARTER_PRESS or command == Keys.R_STARTER_PRESS then
+        -- Forward the physical starter engagement to the cockpit sound device;
+        -- waiting for an RPM rise makes the starter sample audibly late.
+        dispatch_action(devices.SOUND_SYSTEM, command, value)
+    elseif (command == 2142) then
         viewang_h = value
        -- print_message_to_user("headx:"..value)
     elseif (command == 2143) then

@@ -361,6 +361,9 @@ keyCommands = {
     {down = Keys.WingPylonSmokeOn,	name = _('Smoke Pod On/Off'),		category = _('Weapons')},
     {down = Keys.NozzleSmokeOn,	name = _('Nozzle Smoke On/Off'),		category = _('Weapons')},
     {down = Keys.WeaponFireOn, up = Keys.WeaponFireOff,	name = _('Weapon Fire Trigger'),		category = _('Weapons')},
+    {down = Keys.WeaponSafetyTrigger, name = _('Weapon Safety Trigger Toggle'), category = _('Weapons')},
+    {down = Keys.WeaponSafetyTriggerOn, value_down = 1, name = _('Weapon Safety Trigger ON'), category = _('Weapons')},
+    {down = Keys.WeaponSafetyTriggerOn, value_down = 0, name = _('Weapon Safety Trigger OFF'), category = _('Weapons')},
 
     --HOTAS
     {down = Keys.Flap_Pos_Up,	up = Keys.Flap_Pos_Half,			name = _('HOTAS Flap Up Position'),					category = _('HOTAS') },
@@ -371,8 +374,8 @@ keyCommands = {
     {down = Keys.Custom_Menu_Enter,		name = _('Menu Enter'),							category = _('Special Function') },
 
     -- NAV Unit
-    {down = Keys.Nav_Main_Power, value_down = 1, name = _('NAV Main Power ON'), category = _('NAV Unit')},
-    {down = Keys.Nav_Main_Power, value_down = 0, name = _('NAV Main Power OFF'), category = _('NAV Unit')},
+    {down = Keys.Nav_Main_Power_On, name = _('NAV Main Power ON'), category = _('NAV Unit')},
+    {down = Keys.Nav_Main_Power_Off, name = _('NAV Main Power OFF'), category = _('NAV Unit')},
     {down = Keys.Nav_Course_Sel, value_down = 0.05, name = _('VOR Course Increase'), category = _('NAV Unit')},
     {down = Keys.Nav_Course_Sel, value_down = -0.05, name = _('VOR Course Decrease'), category = _('NAV Unit')},
     {down = Keys.Nav_RNAV_PWR, value_down = 0.1, name = _('RNAV Display Power ON'), category = _('NAV Unit')},
@@ -410,8 +413,8 @@ keyCommands = {
 	-- Breadmakers Additions
 	{down = Keys.BatteryPower, value_down= 1, value_up = 0,					name = _('FPL NAT ON'),   category = _('Electrical')},
 	{down = Keys.BatteryPower, value_down= 0, value_up = 0,					name = _('FPL NAT OFF'),  category = _('Electrical')},
-	{down = Keys.Nav_Main_Power, value_down= 1, value_up = 0,					name = _('NAV TILL'), category = _('Electrical')},
-	{down = Keys.Nav_Main_Power, value_down= 0, value_up = 0,					name = _('NAV FRAN'), category = _('Electrical')},	
+	{down = Keys.Nav_Main_Power_On,					name = _('NAV TILL'), category = _('Electrical')},
+	{down = Keys.Nav_Main_Power_Off,					name = _('NAV FRAN'), category = _('Electrical')},
 	{down = Keys.PowerGeneratorLeft, value_down= 1, value_up = 0,			name = _('OMF1 ON'),      category = _('Electrical')},
 	{down = Keys.PowerGeneratorLeft, value_down= 0, value_up = 0,			name = _('OMF1 OFF'),     category = _('Electrical')},
 	{down = Keys.PowerGeneratorRight, value_down= 1, value_up = 0,			name = _('OMF2 ON'),      category = _('Electrical')},

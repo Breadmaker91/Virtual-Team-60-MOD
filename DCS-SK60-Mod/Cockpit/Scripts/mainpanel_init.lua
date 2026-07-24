@@ -136,7 +136,9 @@ animation_list = {
     {"FUEL_QUAN_A_x10", 359},
     {"FUEL_QUAN_A_x1", 360},
 
-    {"Inside_Canopy", 38, {0, 1}, {1, 0}},
+    -- DCS reserves argument value 1.0 for a removed canopy.  The cockpit and
+    -- external EDMs therefore use the same convention: 0.0 closed, 0.9 open.
+    {"Inside_Canopy", 38, {0, 0.9}, {0, 0.9}},
     -- Bind the condensation model parameter to the cockpit EDM. Writing an
     -- aircraft draw argument only drives the external model; cockpit argument
     -- 5002 needs a panel gauge to make the canopy-glass fog visible in-cockpit.
@@ -192,6 +194,8 @@ animation_list = {
 
     -- gun sight
     {"GUN_SIGHT", 915},
+    -- Grip safety trigger (0 = safe, 1 = armed)
+    {"WEAPON_SAFETY_TRIGGER", 916},
 
     {"PTN_424", 424}, -- Nav light
     {"PTN_429", 429}, -- Anti Col light

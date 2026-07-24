@@ -117,7 +117,6 @@ SK_60 =  {
 		length						=	10.8,	--XX
 		height						=	2.7,	--XX
 		crew_size					=	2, 		--XX
-		engine_type					=	1,
 		engines_count				=	2, 		--XX
 		wing_tip_pos 				= 	{ -1 , 0, -4.6},-- wingtip coords for visual effects
 		
@@ -161,8 +160,7 @@ sounderName = "Aircraft/Planes/PlaneSK60",
 				pos = 	{2.6,	0.94,	- 0.4}, -- DCS body-axis ejection station; keep near cockpit to avoid pitch impulse
 				g_suit 			    =  6,
 				can_be_playable   	= true,
-				-- No canopy_arg here: SK60 ejects through closed canopy glass,
-				-- so the normal canopy animation must not gate ejection.
+				canopy_arg          = 38,
 				ejection_through_canopy = true,
 				ejection_order    	= 1,
 				role      			= "pilot",
@@ -176,8 +174,7 @@ sounderName = "Aircraft/Planes/PlaneSK60",
 				pos = 	{2.6,	0.94,	0.4}, -- DCS body-axis ejection station; keep near cockpit to avoid pitch impulse
 				g_suit 			    =  6,
 				can_be_playable   	= true,
-				-- No canopy_arg here: SK60 ejects through closed canopy glass,
-				-- so the normal canopy animation must not gate ejection.
+				canopy_arg          = 38,
 				ejection_through_canopy = true,
 				ejection_order    	= 2,
 				role      			= "instructor",

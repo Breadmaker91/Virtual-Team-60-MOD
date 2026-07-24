@@ -205,7 +205,8 @@ local function get_transient_condensation_factor(temperature_c, pressure_pa, del
 end
 
 local function get_canopy_open_factor()
-    return clamp(canopy_param:get() or 0, 0, 1)
+    -- Canopy argument 38 uses 0.9 for fully open; 1.0 means removed in DCS.
+    return clamp((canopy_param:get() or 0) / 0.9, 0, 1)
 end
 
 local function get_heat_factor(temperature_c)

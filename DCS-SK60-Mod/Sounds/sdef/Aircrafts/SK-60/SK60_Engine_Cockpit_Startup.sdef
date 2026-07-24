@@ -1,7 +1,7 @@
 wave = "Effects/Aircrafts/SK-60/SK60_Engine_Cockpit_Startup"
 
 pitch = 1.0
-gain = 0.9
+gain = 0.6
 attack = 0.0
 release = 0.1
 

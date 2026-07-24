@@ -365,6 +365,9 @@ return {
     {down = Keys.WingPylonSmokeOn,	name = _('Smoke Pod On/Off'),		category = _('Weapons')},
     {down = Keys.NozzleSmokeOn,	name = _('Nozzle Smoke On/Off'),		category = _('Weapons')},
     {down = Keys.WeaponFireOn, up = Keys.WeaponFireOff,	name = _('Weapon Fire Trigger'),		category = _('Weapons')},
+    {down = Keys.WeaponSafetyTrigger, name = _('Weapon Safety Trigger Toggle'), category = _('Weapons')},
+    {down = Keys.WeaponSafetyTriggerOn, value_down = 1, name = _('Weapon Safety Trigger ON'), category = _('Weapons')},
+    {down = Keys.WeaponSafetyTriggerOn, value_down = 0, name = _('Weapon Safety Trigger OFF'), category = _('Weapons')},
     {down = Keys.GunSightInstall, value_down = 1, value_up = 0, name = _('Sikte Installera'), category = _('Weapons')},
     {down = Keys.GunSightUninstall, value_down = 0.0, value_up = 0.0, name = _('Sikte Parkera '), category = _('Weapons')},
     -- debug
@@ -386,8 +389,8 @@ return {
 	--{down = Keys.PilotBody,			name = _('Toggle Pilot'),				category = _('Special Function') },
 
     -- NAV Unit
-    {down = Keys.Nav_Main_Power, value_down = 1, name = _('NAV Main Power ON'), category = _('NAV Unit')},
-    {down = Keys.Nav_Main_Power, value_down = 0, name = _('NAV Main Power OFF'), category = _('NAV Unit')},
+    {down = Keys.Nav_Main_Power_On, name = _('NAV Main Power ON'), category = _('NAV Unit')},
+    {down = Keys.Nav_Main_Power_Off, name = _('NAV Main Power OFF'), category = _('NAV Unit')},
     {down = Keys.Nav_Course_Sel, value_down = 0.05, name = _('VOR Course Increase'), category = _('NAV Unit')},
     {down = Keys.Nav_Course_Sel, value_down = -0.05, name = _('VOR Course Decrease'), category = _('NAV Unit')},
     {down = Keys.Nav_RNAV_PWR, value_down = 0.1, name = _('RNAV Display Power ON'), category = _('NAV Unit')},

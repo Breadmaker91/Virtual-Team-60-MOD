@@ -53,6 +53,8 @@ WeaponSystem:listen_command(Keys.WeaponSelectRocket)
 WeaponSystem:listen_command(Keys.WeaponConfigSerie)
 WeaponSystem:listen_command(Keys.WeaponConfigImpuls)
 WeaponSystem:listen_command(Keys.WeaponMasterSwitch)
+WeaponSystem:listen_command(Keys.WeaponSafetyTrigger)
+WeaponSystem:listen_command(Keys.WeaponSafetyTriggerOn)
 WeaponSystem:listen_command(Keys.WeaponAirGroundChange)
 WeaponSystem:listen_command(Keys.GunSightInstall)
 WeaponSystem:listen_command(Keys.GunSightUninstall)
@@ -79,9 +81,11 @@ local weapon_system_mode = 0
 -- until the player explicitly chooses AKAN or ROCKET.
 local selected_weapon_mode = 0
 local fire_trigger_status = 0
+local safety_trigger_status = 0
 local gun_sight_is_installed = 0
 
 local gun_sight_display = get_param_handle("gunsightEnable")
+local safety_trigger_animation = get_param_handle("WEAPON_SAFETY_TRIGGER")
 
 -- PYLON_INFO_LIST[pylonSelection + 1] = {station_data.weapon.level2, station_data.weapon.level3, station_data.count}
 
@@ -249,7 +253,9 @@ function launch_rockets(launch_mode)
 end
 
 function SetCommand(command,value)
-    if (get_elec_dc_status() and current_status[master_switch][2] == SWITCH_ON ) then
+    if command == Keys.WeaponFireOff then
+        fire_trigger_status = 0
+    elseif (get_elec_dc_status() and current_status[master_switch][2] == SWITCH_ON and safety_trigger_status == SWITCH_ON) then
         check_load_status()
         if (command == Keys.WeaponFireOn) then
             if (weapon_system_mode == 2 and rocket_ripple_enable == 0) then
@@ -259,8 +265,6 @@ function SetCommand(command,value)
             else
                 fire_trigger_status = 1
             end
-        elseif (command == Keys.WeaponFireOff) then
-            fire_trigger_status = 0
         end
     end
     if (command == Keys.WeaponConfigAll) then
@@ -290,8 +294,23 @@ function SetCommand(command,value)
         dprintf("rocket fire mode Pairs")
     elseif (command == Keys.WeaponMasterSwitch) then
         target_status[master_switch][2] = 1 - target_status[master_switch][2]
+        if target_status[master_switch][2] == SWITCH_OFF then
+            fire_trigger_status = 0
+        end
         dispatch_action(devices.SOUND_SYSTEM, Keys.SND_LEFT_PANEL, cockpit_sound.basic_switch)
         check_load_status()
+    elseif (command == Keys.WeaponSafetyTrigger) then
+        safety_trigger_status = 1 - safety_trigger_status
+        if safety_trigger_status == SWITCH_OFF then
+            fire_trigger_status = 0
+        end
+        dispatch_action(devices.SOUND_SYSTEM, Keys.SND_CENTER_PANEL, cockpit_sound.basic_switch)
+    elseif (command == Keys.WeaponSafetyTriggerOn) then
+        safety_trigger_status = value > 0.5 and SWITCH_ON or SWITCH_OFF
+        if safety_trigger_status == SWITCH_OFF then
+            fire_trigger_status = 0
+        end
+        dispatch_action(devices.SOUND_SYSTEM, Keys.SND_CENTER_PANEL, cockpit_sound.basic_switch)
     elseif (command == Keys.GunSightInstall) then
         gun_sight_is_installed = 1
         gun_sight_animation:set(1 - gun_sight_is_installed)
@@ -358,13 +377,15 @@ function update()
     nozzle_smoke_light:set(nozzlesmokestatus)
     update_switch_status()
     gun_sight_animation:set(1 - gun_sight_is_installed)
+    safety_trigger_animation:set(safety_trigger_status)
     if (get_elec_dc_status() and current_status[master_switch][2] == SWITCH_ON and gun_sight_is_installed == 1) then
         gun_sight_display:set(1)
     else
         gun_sight_display:set(0)
     end
     rocket_interval = rocket_interval - update_time_step
-    if fire_trigger_status == 1 then
+    if fire_trigger_status == 1 and get_elec_dc_status() and
+       current_status[master_switch][2] == SWITCH_ON and safety_trigger_status == SWITCH_ON then
         if (weapon_system_mode == 2) then
             check_load_status()
             if rocket_interval <= 0 then

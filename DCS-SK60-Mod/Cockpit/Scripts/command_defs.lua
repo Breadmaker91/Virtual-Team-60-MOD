@@ -312,6 +312,8 @@ Keys =
     WeaponSelectRocket = 5065,
     WeaponConfigSerie = 5066,
     WeaponConfigImpuls = 5067,
+    WeaponSafetyTrigger = 5068,
+    WeaponSafetyTriggerOn = 5069,
 
    -- special functions
     SpecialSence = 5070,
@@ -380,6 +382,8 @@ Keys =
     EALT_BARO = 5202,
    -- Main Nav Power Bus
     Nav_Main_Power = 5500,
+    Nav_Main_Power_On = 5515,
+    Nav_Main_Power_Off = 5516,
 
    -- 5500 - 5550 Engine Conrol
     L_LP_PUMP = 5501,

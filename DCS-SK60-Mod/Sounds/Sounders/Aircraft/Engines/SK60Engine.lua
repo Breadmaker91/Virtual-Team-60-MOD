@@ -60,9 +60,6 @@ function SK60Engine:new()
     o.startup_initialized = false
     o.startup_armed = true
     o.startup_sound = nil
-    o.sndCptLo = nil
-    o.sndCptHi = nil
-    o.sndCptStartup = nil
     return o
 end
 
@@ -143,26 +140,13 @@ function SK60Engine:createSounds(host)
 end
 
 function SK60Engine:createSoundsCpt(hostCpt)
-    self.sndCptLo = ED_AudioAPI.createSource(hostCpt, "Aircrafts/SK-60/SK60_Engine_Cockpit_Lo")
-    self.sndCptHi = ED_AudioAPI.createSource(hostCpt, "Aircrafts/SK-60/SK60_Engine_Cockpit_Hi")
-    self.sndCptStartup = ED_AudioAPI.createSource(hostCpt, "Aircrafts/SK-60/SK60_Engine_Cockpit_Startup")
+    -- Internal engine audio is owned by Cockpit/Scripts/Systems/sound_system.lua.
+    -- Keep this interface for Plane.lua, but do not create a second set of
+    -- cockpit sources here.
 end
 
 function SK60Engine:destroySoundsCpt()
-    if self.sndCptLo ~= nil then
-        ED_AudioAPI.destroySource(self.sndCptLo)
-        self.sndCptLo = nil
-    end
-
-    if self.sndCptHi ~= nil then
-        ED_AudioAPI.destroySource(self.sndCptHi)
-        self.sndCptHi = nil
-    end
-
-    if self.sndCptStartup ~= nil then
-        ED_AudioAPI.destroySource(self.sndCptStartup)
-        self.sndCptStartup = nil
-    end
+    -- See createSoundsCpt().
 end
 
 function SK60Engine:DBGstop()
@@ -176,17 +160,6 @@ function SK60Engine:DBGstop()
         ED_AudioAPI.stopSource(self.startup_sound)
     end
 
-    if self.sndCptLo ~= nil and ED_AudioAPI.isSourcePlaying(self.sndCptLo) then
-        ED_AudioAPI.stopSource(self.sndCptLo)
-    end
-
-    if self.sndCptHi ~= nil and ED_AudioAPI.isSourcePlaying(self.sndCptHi) then
-        ED_AudioAPI.stopSource(self.sndCptHi)
-    end
-
-    if self.sndCptStartup ~= nil and ED_AudioAPI.isSourcePlaying(self.sndCptStartup) then
-        ED_AudioAPI.stopSource(self.sndCptStartup)
-    end
 end
 
 function SK60Engine:controlSound(snd, pitch, gain)
@@ -222,10 +195,6 @@ function SK60Engine:handleStartup(fanRPM)
             ED_AudioAPI.playSourceOnce(self.startup_sound)
         end
 
-        if self.sndCptStartup ~= nil then
-            ED_AudioAPI.playSourceOnce(self.sndCptStartup)
-        end
-
         self.startup_armed = false
     end
 
@@ -234,20 +203,6 @@ function SK60Engine:handleStartup(fanRPM)
     end
 
     self.prev_fan_rpm = fan
-end
-
-function SK60Engine:updateCockpit(fanRPM, turbPower)
-    local fan = fanRPM or 0.0
-    local turb = turbPower or fan
-
-    local loPitch = 0.55 + fan * 0.55
-    local hiPitch = 0.70 + turb * 0.60
-
-    local loGain = clamp((fan - 0.03) * 1.10, 0.0, 0.55)
-    local hiGain = clamp((fan - 0.45) * 1.50, 0.0, 0.45)
-
-    self:controlSound(self.sndCptLo, loPitch, loGain)
-    self:controlSound(self.sndCptHi, hiPitch, hiGain)
 end
 
 function SK60Engine:update(coreRPM, fanRPM, turbPower, thrust, flame, vTrue)
@@ -266,6 +221,4 @@ function SK60Engine:update(coreRPM, fanRPM, turbPower, thrust, flame, vTrue)
         local param_pitch = sound_param[v.type_pitch]
         self:controlSound(v.sound, v.pitch_curve:value(param_pitch), v.gain_curve:value(param_gain))
     end
-
-    self:updateCockpit(fanRPM, turbPower)
 end

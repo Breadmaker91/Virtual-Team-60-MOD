@@ -22,6 +22,8 @@ electric_system:listen_command(Keys.BatteryPower)
 electric_system:listen_command(Keys.ElecPowerDCGenL)
 electric_system:listen_command(Keys.ElecPowerDCGenR)
 electric_system:listen_command(Keys.Nav_Main_Power)
+electric_system:listen_command(Keys.Nav_Main_Power_On)
+electric_system:listen_command(Keys.Nav_Main_Power_Off)
 
 electric_system:DC_Battery_on(true)
 
@@ -204,12 +206,15 @@ function SetCommand(command,value)
         else
             electric_system:AC_Generator_2_on(true)
         end
-    elseif command == Keys.Nav_Main_Power then
+    elseif command == Keys.Nav_Main_Power or
+           command == Keys.Nav_Main_Power_On or
+           command == Keys.Nav_Main_Power_Off then
         local requested_status = 1 - target_status[main_nav_switch][2]
-        if value ~= nil then
-            requested_status = value > 0.5 and 1 or 0
+        if command == Keys.Nav_Main_Power_On then
+            requested_status = SWITCH_ON
+        elseif command == Keys.Nav_Main_Power_Off then
+            requested_status = SWITCH_OFF
         end
-
         if target_status[main_nav_switch][2] ~= requested_status then
             target_status[main_nav_switch][2] = requested_status
             nav_switch_transfer:set(target_status[main_nav_switch][2])

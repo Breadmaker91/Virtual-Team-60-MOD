@@ -5,7 +5,7 @@ gain = 1
 attack = 0.2
 release = 0.3
 
-silent_radius = 0
+silent_radius = 2
 inner_radius = 100
 outer_radius = 2000
 

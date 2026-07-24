@@ -83,6 +83,10 @@ local EJECTION_SEAT_SAFETY_LEVER_TRAVEL_TIME = 1.0
 local ejection_seat_safety_lever_position = 0.0
 local ejection_seat_safety_lever_target = 0.0
 local solo_flight = false
+local PILOT_VISIBILITY_NONE = 0
+local PILOT_VISIBILITY_OTHER = 1
+local PILOT_VISIBILITY_OTHER_AND_PLAYER_BODY = 2
+local pilot_visibility_mode = PILOT_VISIBILITY_NONE
 
 local pilot_body_lean = 0.0
 local pilot_head_counter_lean = 0.0
@@ -158,11 +162,10 @@ local function aircraft_property_is_enabled(property_name)
 end
 
 local function update_pilot_body_visibility()
-	local show_bodies = pilotToggle:get() >= 0.5
-	local player_body_visible = show_bodies and 1.0 or 0.0
-	local other_body_visible = show_bodies and 1.0 or 0.0
+	local player_body_visible = pilot_visibility_mode == PILOT_VISIBILITY_OTHER_AND_PLAYER_BODY and 1.0 or 0.0
+	local other_body_visible = pilot_visibility_mode >= PILOT_VISIBILITY_OTHER and 1.0 or 0.0
 	local player_head_visible = 0.0
-	local other_head_visible = show_bodies and 1.0 or 0.0
+	local other_head_visible = other_body_visible
 	local right_body_visible = 0.0
 	local right_head_visible = 0.0
 
@@ -191,6 +194,7 @@ local function update_pilot_body_visibility()
 	rightPilotHeadArg:set(right_head_visible)
 	set_draw_argument(RIGHT_PILOT_BODY_VISIBLE_ARG, right_body_visible)
 	set_draw_argument(RIGHT_PILOT_HEAD_VISIBLE_ARG, right_head_visible)
+	pilotToggle:set(player_body_visible)
 	set_draw_argument(PLAYER_SEAT_BODY_VISIBLE_ARG, player_body_visible)
 end
 
@@ -566,11 +570,7 @@ end
 
 function SetCommand(command, value)
 	if command == Keys.pilotToggle then
-		if pilotToggle:get() == 1 then
-			pilotToggle:set(0)
-		else
-			pilotToggle:set(1)
-		end
+		pilot_visibility_mode = (pilot_visibility_mode + 1) % (PILOT_VISIBILITY_OTHER_AND_PLAYER_BODY + 1)
 		update_pilot_body_visibility()
 	elseif command == Keys.PilotTintedVisorToggle then
 		if is_canopy_closed() then
