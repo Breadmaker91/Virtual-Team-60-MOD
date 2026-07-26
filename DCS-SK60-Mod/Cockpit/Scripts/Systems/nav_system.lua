@@ -297,14 +297,15 @@ local function shortest_angle_delta(from_deg, to_deg)
 end
 
 local function get_magnetic_variation_deg()
-    if type(sensor_data.getHeading) ~= "function" or type(sensor_data.getMagneticHeading) ~= "function" then
-        return nil
-    end
-
-    local true_heading_rad = sensor_data.getHeading()
+    -- getHeading() is not guaranteed to be true heading. Prefer DCS's explicit
+    -- true-heading accessor when it is exposed by the current cockpit API; using
+    -- getHeading() here can make true and magnetic resolve to the same value and
+    -- leave an entered magnetic RAD uncorrected.
+    local true_heading_accessor = sensor_data.getTrueHeading or sensor_data.getHeading
+    local true_heading_rad = true_heading_accessor()
     local magnetic_heading_rad = sensor_data.getMagneticHeading()
     if type(true_heading_rad) ~= "number" or type(magnetic_heading_rad) ~= "number" then
-        return nil
+        return last_magnetic_variation_deg
     end
 
     local function norm180(angle_deg)
@@ -324,19 +325,11 @@ end
 
 local function true_to_magnetic(true_bearing_deg)
     local variation_deg = get_magnetic_variation_deg()
-    if variation_deg == nil then
-        return normalize_bearing(true_bearing_deg)
-    end
-
     return normalize_bearing(true_bearing_deg - variation_deg)
 end
 
 local function magnetic_to_true(magnetic_bearing_deg)
     local variation_deg = get_magnetic_variation_deg()
-    if variation_deg == nil then
-        return normalize_bearing(magnetic_bearing_deg)
-    end
-
     return normalize_bearing(magnetic_bearing_deg + variation_deg)
 end
 
@@ -380,27 +373,15 @@ local function grid_to_magnetic(grid_bearing_deg)
     return normalize_bearing(grid_bearing_deg + magnetic_grid_correction_deg)
 end
 
-local function destination_point_geo(lat_deg, lon_deg, bearing_deg, distance_nm)
-    local angular_distance = (distance_nm or 0) / 3440.065
-    local bearing_rad = normalize_bearing(bearing_deg) * DEG_TO_RADIAN
-    local lat1 = lat_deg * DEG_TO_RADIAN
-    local lon1 = lon_deg * DEG_TO_RADIAN
+local function magnetic_to_grid(magnetic_bearing_deg)
+    local grid_heading_deg = get_aircraft_grid_heading_deg()
+    local magnetic_heading_deg = get_aircraft_magnetic_heading_deg()
+    if grid_heading_deg == nil or magnetic_heading_deg == nil then
+        return magnetic_to_true(magnetic_bearing_deg)
+    end
 
-    local sin_lat1 = math.sin(lat1)
-    local cos_lat1 = math.cos(lat1)
-    local sin_ad = math.sin(angular_distance)
-    local cos_ad = math.cos(angular_distance)
-
-    local lat2 = math.asin((sin_lat1 * cos_ad) + (cos_lat1 * sin_ad * math.cos(bearing_rad)))
-    local lon2 = lon1 + math.atan2(
-        math.sin(bearing_rad) * sin_ad * cos_lat1,
-        cos_ad - (sin_lat1 * math.sin(lat2))
-    )
-
-    return {
-        lat = lat2 * RAD_TO_DEGREE,
-        lon = lon2 * RAD_TO_DEGREE,
-    }
+    local magnetic_grid_correction_deg = shortest_angle_delta(grid_heading_deg, magnetic_heading_deg)
+    return normalize_bearing(magnetic_bearing_deg - magnetic_grid_correction_deg)
 end
 
 local function clamp(value, min_value, max_value)
@@ -1371,7 +1352,15 @@ local function calculate_vor_data(beacon, target_geo_override)
     local target_x = beacon_x
     local target_z = beacon_z
     if target_geo_override ~= nil then
-        target_x, target_z = geo_to_lo_coords(target_geo.lat, target_geo.lon)
+        -- RNAV offset construction already knows the exact local-grid point.
+        -- Preserve it instead of unnecessarily converting X/Z -> lat/lon -> X/Z;
+        -- the latter can fail and send closing-speed calculation down its
+        -- geographic fallback path with a mismatched bearing convention.
+        target_x = target_geo_override.x
+        target_z = target_geo_override.z
+        if target_x == nil or target_z == nil then
+            target_x, target_z = geo_to_lo_coords(target_geo.lat, target_geo.lon)
+        end
     end
 
     local distance_nm = haversine(own_geo.lat, own_geo.lon, target_geo.lat, target_geo.lon)
@@ -1391,7 +1380,7 @@ end
 local function calculate_closing_speed_to_target(target_geo, target_x, target_z)
     local own_x, _, own_z = sensor_data.getSelfCoordinates()
     local vel_x, _, vel_z = sensor_data.getSelfVelocity()
-    if own_x == nil or own_z == nil or vel_x == nil or vel_z == nil or target_geo == nil then
+    if own_x == nil or own_z == nil or vel_x == nil or vel_z == nil or target_geo == nil or target_x == nil or target_z == nil then
         return nil
     end
 
@@ -1400,31 +1389,17 @@ local function calculate_closing_speed_to_target(target_geo, target_x, target_z)
         return 0
     end
 
-    -- DCS velocity and beacon positions are both in local X/Z coordinates. Projecting
-    -- velocity onto the local vector to the selected target avoids mixing local DCS
-    -- axes with geographic bearings, which can report zero closure for RNAV offsets.
-    if target_x ~= nil and target_z ~= nil then
-        local dx = target_x - own_x
-        local dz = target_z - own_z
-        local distance_m = math.sqrt((dx * dx) + (dz * dz))
-        if distance_m >= 1.0 then
-            local closure_mps = ((vel_x * dx) + (vel_z * dz)) / distance_m
-            if closure_mps < 0 then
-                return 0
-            end
-
-            return closure_mps * 1.9438444924406 -- m/s -> knots
-        end
+    -- DCS velocity and target positions are both in local X/Z coordinates.
+    -- Project velocity onto the exact aircraft-to-waypoint vector so closure
+    -- has the correct sign on either side of the VOR.
+    local dx = target_x - own_x
+    local dz = target_z - own_z
+    local distance_m = math.sqrt((dx * dx) + (dz * dz))
+    if distance_m < 1.0 then
+        return 0
     end
 
-    local own_geo = lo_to_geo_coords(own_x, own_z)
-    if own_geo == nil then
-        return nil
-    end
-
-    local track_true = normalize_bearing(math.deg(math.atan2(vel_x, vel_z)))
-    local bearing_true = normalize_bearing(getBearing(own_geo.lat, own_geo.lon, target_geo.lat, target_geo.lon))
-    local closure_mps = gs_mps * math.cos(shortest_angle_delta(track_true, bearing_true) * DEG_TO_RADIAN)
+    local closure_mps = ((vel_x * dx) + (vel_z * dz)) / distance_m
     if closure_mps < 0 then
         return 0
     end
@@ -1483,13 +1458,23 @@ local function get_offset_waypoint_geo(beacon, offset_radial_deg, offset_distanc
         return nil
     end
 
-    local beacon_geo = lo_to_geo_coords(beacon_x, beacon_z)
-    if beacon_geo == nil then
+    -- RAD is a VOR radial in the cockpit magnetic frame. Build the offset in
+    -- DCS's local grid frame, using the inverse of the same grid-to-magnetic
+    -- correction used by the RNAV CHK radial. Converting RAD as a geographic
+    -- true bearing made the offset behave like a true radial in game.
+    local radial_grid_deg = magnetic_to_grid(offset_radial_deg or selected_offset_radial_deg)
+    local radial_grid_rad = radial_grid_deg * DEG_TO_RADIAN
+    local distance_m = (offset_distance_nm or selected_offset_distance_nm) * 1852.0
+    local waypoint_x = beacon_x + (math.cos(radial_grid_rad) * distance_m)
+    local waypoint_z = beacon_z + (math.sin(radial_grid_rad) * distance_m)
+    local waypoint_geo = lo_to_geo_coords(waypoint_x, waypoint_z)
+    if waypoint_geo == nil then
         return nil
     end
 
-    local selected_radial_true = magnetic_to_true(offset_radial_deg or selected_offset_radial_deg)
-    return destination_point_geo(beacon_geo.lat, beacon_geo.lon, selected_radial_true, offset_distance_nm or selected_offset_distance_nm)
+    waypoint_geo.x = waypoint_x
+    waypoint_geo.z = waypoint_z
+    return waypoint_geo
 end
 
 function post_initialize()
