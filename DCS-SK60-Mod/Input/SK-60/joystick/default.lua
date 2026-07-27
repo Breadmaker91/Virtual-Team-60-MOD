@@ -23,7 +23,7 @@ forceFeedback = {
 keyCommands = {
 
     -- Gameplay
-    {down = iCommandPlaneShipTakeOff,		name = _('Ship Take Off Position'), category = _('General') , features = {"shiptakeoff"}},
+    --{down = iCommandPlaneShipTakeOff,		name = _('Ship Take Off Position'), category = _('General') , features = {"shiptakeoff"}},
     --{down = iCommandCockpitShowPilotOnOff,	name = _('Show Pilot Body'),		category = _('General')},
 	{down = Keys.pilotToggle,	name = _('Show Pilot Body'),		category = _('General')},
 	{down = Keys.PilotTintedVisorToggle, name = _('Toggle Tinted Visor'), category = _('View Cockpit')},
@@ -38,10 +38,10 @@ keyCommands = {
 
     {pressed = iCommandPlaneTrimUp,				up = iCommandPlaneTrimStop,	name = _('Trim: Nose Up'),			category = _('Flight Control')},
     {pressed = iCommandPlaneTrimDown,			up = iCommandPlaneTrimStop,	name = _('Trim: Nose Down'),		category = _('Flight Control')},
-    {pressed = iCommandPlaneTrimLeft,			up = iCommandPlaneTrimStop,	name = _('Trim: Left Wing Down'),	category = _('Flight Control')},
-    {pressed = iCommandPlaneTrimRight,			up = iCommandPlaneTrimStop,	name = _('Trim: Right Wing Down'),	category = _('Flight Control')},
-    {pressed = iCommandPlaneTrimLeftRudder,		up = iCommandPlaneTrimStop,	name = _('Trim: Rudder Left'),		category = _('Flight Control')},
-    {pressed = iCommandPlaneTrimRightRudder,	up = iCommandPlaneTrimStop,	name = _('Trim: Rudder Right'),		category = _('Flight Control')},
+    --{pressed = iCommandPlaneTrimLeft,			up = iCommandPlaneTrimStop,	name = _('Trim: Left Wing Down'),	category = _('Flight Control')},
+    --{pressed = iCommandPlaneTrimRight,			up = iCommandPlaneTrimStop,	name = _('Trim: Right Wing Down'),	category = _('Flight Control')},
+    --{pressed = iCommandPlaneTrimLeftRudder,		up = iCommandPlaneTrimStop,	name = _('Trim: Rudder Left'),		category = _('Flight Control')},
+    --{pressed = iCommandPlaneTrimRightRudder,	up = iCommandPlaneTrimStop,	name = _('Trim: Rudder Right'),		category = _('Flight Control')},
 
     {pressed = iCommandThrottleIncrease, up = iCommandThrottleStop,  name = _('Throttle Up'),			category = _('Flight Control')},
     {pressed = iCommandThrottleDecrease, up = iCommandThrottleStop,  name = _('Throttle Down'),			category = _('Flight Control')},
@@ -67,7 +67,7 @@ keyCommands = {
     {down = iCommandPlaneCockpitIllumination,	name = _('Illumination Cockpit'),		category = _('Systems')},
     {down = iCommandPlaneLightsOnOff,			name = _('Navigation lights'),			category = _('Systems')},
     {down = iCommandPlaneHeadLightOnOff,		name = _('Gear Light Near/Far/Off'),	category = _('Systems')},
-    {down = iCommandPlaneFlaps,					name = _('Flaps Up/Down (Warthunder like logic)'),				category = _('Systems')},
+    {down = iCommandPlaneFlaps,					name = _('Flaps Step Toggle'),				category = _('Systems')},
     {down = iCommandPlaneFlapsOn,				name = _('Flaps Move Down (One Step)'),		                    category = _('Systems')},
     {down = iCommandPlaneFlapsOff,				name = _('Flaps Move Up (One Step)'),					        category = _('Systems')},
     {down = iCommandPlaneGear,					name = _('Landing Gear Up/Down'),		category = _('Systems')},
@@ -76,23 +76,23 @@ keyCommands = {
     {down = iCommandPlaneWheelBrakeOn, up = iCommandPlaneWheelBrakeOff,			name = _('Wheel Brake On'),		category = _('Systems')},
     {down = iCommandPlaneFonar,value_down= 1, value_up = 0,	name = _('Canopy Open'),			category = _('Systems')},
 	{down = iCommandPlaneFonar,value_down= 0, value_up = 0,	name = _('Canopy Close'),			category = _('Systems')},
-    {down = iCommandPlaneParachute,				name = _('Dragging Chute'),				category = _('Systems'),	features = {"dragchute"}},
-    {down = iCommandPlaneResetMasterWarning,	name = _('Audible Warning Reset'),		category = _('Systems')},
-    {down = iCommandPlaneJettisonWeapons,up = iCommandPlaneJettisonWeaponsUp,	name = _('Weapons Jettison'),	category = _('Systems')},
+    --{down = iCommandPlaneParachute,				name = _('Dragging Chute'),				category = _('Systems'),	features = {"dragchute"}},
+    --{down = iCommandPlaneResetMasterWarning,	name = _('Audible Warning Reset'),		category = _('Systems')},
+    --{down = iCommandPlaneJettisonWeapons,up = iCommandPlaneJettisonWeaponsUp,	name = _('Weapons Jettison'),	category = _('Systems')},
     {down = Keys.EjectionSeatSafetyLever,			name = _('Ejection Seat Safety Handle'),	category = _('Systems')},
     {down = iCommandPlaneEject,					name = _('Eject (3 times)'),			category = _('Systems')},
-    {down = iCommandFlightClockReset,			name = _('Flight Clock Start/Stop/Reset'),						category = _('Systems') , features = {"flightclock"}},
-    {down = iCommandClockElapsedTimeReset,		name = _('Elapsed Time Clock Start/Stop/Reset'),				category = _('Systems') , features = {"flightclock"}},
+    --{down = iCommandFlightClockReset,			name = _('Flight Clock Start/Stop/Reset'),						category = _('Systems') , features = {"flightclock"}},
+    --{down = iCommandClockElapsedTimeReset,		name = _('Elapsed Time Clock Start/Stop/Reset'),				category = _('Systems') , features = {"flightclock"}},
     {down = iCommandEnginesStart,				name = _('Engines Start'),				category = _('Systems')},
     {down = iCommandEnginesStop,				name = _('Engines Stop'),				category = _('Systems')},
     {down = iCommandLeftEngineStart,			name = _('Engine Left Start'),			category = _('Systems') , features = {"TwinEngineAircraft"}},
     {down = iCommandLeftEngineStop,				name = _('Engine Left Stop'),			category = _('Systems') , features = {"TwinEngineAircraft"}},
     {down = iCommandRightEngineStart,			name = _('Engine Right Start'),			category = _('Systems') , features = {"TwinEngineAircraft"}},
     {down = iCommandRightEngineStop,			name = _('Engine Right Stop'),			category = _('Systems') , features = {"TwinEngineAircraft"}},
-    {down = iCommandBrightnessILS,				name = _('HUD Color'),					category = _('Systems') , features = {"HUDcolor"}},
-    {pressed = iCommandHUDBrightnessUp,			name = _('HUD Brightness up'),			category = _('Systems') , features = {"HUDbrightness"}},
-    {pressed = iCommandHUDBrightnessDown,		name = _('HUD Brightness down'),		category = _('Systems') , features = {"HUDbrightness"}},
-    {down = iCommandPlaneFuelOn,	up = iCommandPlaneFuelOff,					name = _('Fuel Dump'),			category = _('Systems') , features = {"fueldump"}},
+    --{down = iCommandBrightnessILS,				name = _('HUD Color'),					category = _('Systems') , features = {"HUDcolor"}},
+    --{pressed = iCommandHUDBrightnessUp,			name = _('HUD Brightness up'),			category = _('Systems') , features = {"HUDbrightness"}},
+    --{pressed = iCommandHUDBrightnessDown,		name = _('HUD Brightness down'),		category = _('Systems') , features = {"HUDbrightness"}},
+    --{down = iCommandPlaneFuelOn,	up = iCommandPlaneFuelOff,					name = _('Fuel Dump'),			category = _('Systems') , features = {"fueldump"}},
 
     -- Engine Control
     {down = Keys.L_THROTTLE_IDLE,					name = _('Toggle Left Throttle IDLE/OFF'),			category = _('Engine')},
@@ -100,17 +100,17 @@ keyCommands = {
     {down = Keys.L_THROTTLE_SETOFF,     up = Keys.L_THROTTLE_SETIDLE,				name = _('Left Throttle IDLE (on/press) else OFF'),			category = _('Engine')},
     {down = Keys.R_THROTTLE_SETOFF,     up = Keys.R_THROTTLE_SETIDLE,				name = _('Right Throttle IDLE (on/press) else OFF'),		category = _('Engine')},
 
-    {pressed = iCommandAltimeterPressureIncrease,	up = iCommandAltimeterPressureStop, name = _('Altimeter Pressure Increase'), category = _('Systems')},
-    {pressed = iCommandAltimeterPressureDecrease, up = iCommandAltimeterPressureStop, name = _('Altimeter Pressure Decrease'), category = _('Systems')},
+    --{pressed = iCommandAltimeterPressureIncrease,	up = iCommandAltimeterPressureStop, name = _('Altimeter Pressure Increase'), category = _('Systems')},
+    --{pressed = iCommandAltimeterPressureDecrease, up = iCommandAltimeterPressureStop, name = _('Altimeter Pressure Decrease'), category = _('Systems')},
 
     -- Weapons                                                                        
 
-    -- Countermeasures
+    --[[-- Countermeasures
     {down = iCommandPlaneDropSnar,		name = _('Countermeasures Continuously Dispense'),	category = _('Countermeasures') , features = {"Countermeasures"}},
     {down = iCommandPlaneDropSnarOnce,	up = iCommandPlaneDropSnarOnceOff,	name = _('Countermeasures Release'),	category = _('Countermeasures') , features = {"Countermeasures"}},
     {down = iCommandPlaneDropFlareOnce, name = _('Countermeasures Flares Dispense'),		category = _('Countermeasures') , features = {"Countermeasures"}},
     {down = iCommandPlaneDropChaffOnce, name = _('Countermeasures Chaff Dispense'),			category = _('Countermeasures') , features = {"Countermeasures"}},
-    {down = iCommandActiveJamming,		name = _('ECM'),									category = _('Countermeasures') , features = {"ECM"}},
+    {down = iCommandActiveJamming,		name = _('ECM'),									category = _('Countermeasures') , features = {"ECM"}}, ]]
 
     -- Communications
     {down = iCommandAWACSTankerBearing, name = _('Request AWACS Available Tanker'), category = _('Communications')},
@@ -330,12 +330,13 @@ keyCommands = {
     {	down = iCommandPlaneKneeboardJumpBookmark,								value_down = 8,							name = _('Kneeboard Jump To Shortcut  9'),			category = _('Kneeboard')},
     {	down = iCommandPlaneKneeboardJumpBookmark,								value_down = 9,							name = _('Kneeboard Jump To Shortcut 10'),			category = _('Kneeboard')},
 
-    {down = iCommandPlaneAutopilot, name = _('Autopilot - Attitude Hold'), category = _('Autopilot')},
+    --[[--Autipilot
+	{down = iCommandPlaneAutopilot, name = _('Autopilot - Attitude Hold'), category = _('Autopilot')},
     {down = iCommandPlaneStabHbar, name = _('Autopilot - Altitude Hold'), category = _('Autopilot')},
     {down = iCommandPlaneStabCancel, name = _('Autopilot Disengage'), category = _('Autopilot')},
     {down = iCommandHelicopter_PPR_button_T_up, name = _('CAS Pitch'), category = _('Autopilot')},
     {down = iCommandHelicopter_PPR_button_K_up, name = _('CAS Roll'), category = _('Autopilot')},
-    {down = iCommandHelicopter_PPR_button_H_up, name = _('CAS Yaw'), category = _('Autopilot')},
+    {down = iCommandHelicopter_PPR_button_H_up, name = _('CAS Yaw'), category = _('Autopilot')}, ]]
 
     --Flight Control
     {down = iCommandPlaneTrimOn, up = iCommandPlaneTrimOff, name = _('T/O Trim'), category = _('Flight Control')},
@@ -343,35 +344,35 @@ keyCommands = {
     {down = iCommandPlaneAirBrakeOn,	up = iCommandPlaneAirBrakeOff,			name = _('HOTAS Airbrake'),					category = _('Systems') },
 
     -- Systems
-    {down = iCommandPlaneAirRefuel, name = _('Refueling Boom'), category = _('Systems')},
-    {down = iCommandPlaneJettisonFuelTanks, name = _('Jettison Fuel Tanks'), category = _('Systems')},
-    {down = iCommandPlane_HOTAS_NoseWheelSteeringButton, up = iCommandPlane_HOTAS_NoseWheelSteeringButton, name = _('Nose Gear Maneuvering Range'), category = _('Systems')},
-    {down = iCommandPlane_HOTAS_NoseWheelSteeringButtonOff, up = iCommandPlane_HOTAS_NoseWheelSteeringButtonOff, name = _('Nose Wheel Steering'), category = _('Systems')},
+    --{down = iCommandPlaneAirRefuel, name = _('Refueling Boom'), category = _('Systems')},
+    --{down = iCommandPlaneJettisonFuelTanks, name = _('Jettison Fuel Tanks'), category = _('Systems')},
+    {down = iCommandPlane_HOTAS_NoseWheelSteeringButton, up = iCommandPlane_HOTAS_NoseWheelSteeringButton, name = _('Nose Wheel Steering'), category = _('Systems')},
+    --{down = iCommandPlane_HOTAS_NoseWheelSteeringButtonOff, up = iCommandPlane_HOTAS_NoseWheelSteeringButtonOff, name = _('Nose Wheel Steering'), category = _('Systems')},
     {down = iCommandPlaneWheelBrakeLeftOn, up = iCommandPlaneWheelBrakeLeftOff, name = _('Wheel Brake Left On/Off'), category = _('Systems')},
     {down = iCommandPlaneWheelBrakeRightOn, up = iCommandPlaneWheelBrakeRightOff, name = _('Wheel Brake Right On/Off'), category = _('Systems')},
-    {down = iCommandPlaneFSQuantityIndicatorSelectorMAIN, name = _('Fuel Quantity Selector'), category = _('Systems')},
-    {down = iCommandPlaneFSQuantityIndicatorTest, up = iCommandPlaneFSQuantityIndicatorTest, value_down = 1, value_up = 0, name = _('Fuel Quantity Test'), category = _('Systems')},
-    {down = iCommandPlaneFSQuantityIndicatorSelectorINT,	up = iCommandPlaneFSQuantityIndicatorSelectorINT, value_down = 1,  value_up = 0, 	name = _('Bingo Fuel Index, CW'),  category = _('Systems')},
-    {down = iCommandPlaneFSQuantityIndicatorSelectorINT,	up = iCommandPlaneFSQuantityIndicatorSelectorINT, value_down = -1, value_up = 0, 	name = _('Bingo Fuel Index, CCW'), category = _('Systems')},
-    {down = iCommandPlaneAntiCollisionLights, name = _('Anti-collision lights'), category = _('Systems')},
+   -- {down = iCommandPlaneFSQuantityIndicatorSelectorMAIN, name = _('Fuel Quantity Selector'), category = _('Systems')},
+    --{down = iCommandPlaneFSQuantityIndicatorTest, up = iCommandPlaneFSQuantityIndicatorTest, value_down = 1, value_up = 0, name = _('Fuel Quantity Test'), category = _('Systems')},
+    --{down = iCommandPlaneFSQuantityIndicatorSelectorINT,	up = iCommandPlaneFSQuantityIndicatorSelectorINT, value_down = 1,  value_up = 0, 	name = _('Bingo Fuel Index, CW'),  category = _('Systems')},
+   -- {down = iCommandPlaneFSQuantityIndicatorSelectorINT,	up = iCommandPlaneFSQuantityIndicatorSelectorINT, value_down = -1, value_up = 0, 	name = _('Bingo Fuel Index, CCW'), category = _('Systems')},
+    --{down = iCommandPlaneAntiCollisionLights, name = _('Anti-collision lights'), category = _('Systems')},
 
     -- self define for EFM
-    {down = Keys.YawDamperSwitch, name = _('Yaw Damper Engage'), category = _('Flight Control')},
+    --{down = Keys.YawDamperSwitch, name = _('Yaw Damper Engage'), category = _('Flight Control')},
 
     {down = Keys.WingPylonSmokeOn,	name = _('Smoke Pod On/Off'),		category = _('Weapons')},
     {down = Keys.NozzleSmokeOn,	name = _('Nozzle Smoke On/Off'),		category = _('Weapons')},
-    {down = Keys.WeaponFireOn, up = Keys.WeaponFireOff,	name = _('Weapon Fire Trigger'),		category = _('Weapons')},
+    {down = Keys.WeaponFireOn, up = Keys.WeaponFireOff,	name = _('Trigger'),		category = _('Weapons')},
     {down = Keys.WeaponSafetyTrigger, name = _('Weapon Safety Trigger Toggle'), category = _('Weapons')},
-    {down = Keys.WeaponSafetyTriggerOn, value_down = 1, name = _('Weapon Safety Trigger ON'), category = _('Weapons')},
-    {down = Keys.WeaponSafetyTriggerOn, value_down = 0, name = _('Weapon Safety Trigger OFF'), category = _('Weapons')},
+    {down = Keys.WeaponSafetyTriggerOn, value_down = 1, name = _('Weapon Safety Trigger ARMED'), category = _('Weapons')},
+    {down = Keys.WeaponSafetyTriggerOn, value_down = 0, name = _('Weapon Safety Trigger SAFE'), category = _('Weapons')},
 
     --HOTAS
-    {down = Keys.Flap_Pos_Up,	up = Keys.Flap_Pos_Half,			name = _('HOTAS Flap Up Position'),					category = _('HOTAS') },
-    {down = Keys.Flap_Pos_Down,	up = Keys.Flap_Pos_Half,			name = _('HOTAS Flap Down Position'),				category = _('HOTAS') },
+    {down = Keys.Flap_Pos_Up,	up = Keys.Flap_Pos_Half,			name = _('HOTAS Flaps Retracted/Takeoff'),					category = _('HOTAS') },
+    {down = Keys.Flap_Pos_Down,	up = Keys.Flap_Pos_Half,			name = _('HOTAS Flap Landing/Takeoff'),				category = _('HOTAS') },
 
     {down = Keys.SpecialSence,			name = _('Tjena Hejsan'),						category = _('Special Function') },
-    {down = Keys.Custom_Menu,			name = _('Trigger on Screen Menu'),				category = _('Special Function') },
-    {down = Keys.Custom_Menu_Enter,		name = _('Menu Enter'),							category = _('Special Function') },
+    {down = Keys.Custom_Menu,			name = _('Toggle Configuration Menu'),				category = _('Special Function') },
+    {down = Keys.Custom_Menu_Enter,		name = _('Configuration Menu Action'),							category = _('Special Function') },
 
     -- NAV Unit
     {down = Keys.Nav_Main_Power_On, name = _('NAV Main Power ON'), category = _('NAV Unit')},
@@ -400,7 +401,7 @@ keyCommands = {
     {down = Keys.Nav_DME_PWR_OFF, value_down = 0, name = _('DME Display Power OFF'), category = _('NAV Unit')},
     {down = Keys.Nav_EADI_MODE_CYCLE, value_down = 1, name = _('EADI ILS Mode Cycle'), category = _('NAV Unit')},
 
-    -- Music Player
+    --[[-- Music Player
     {down = Keys.MusicPauseOrPlay,			name = _('Music Pause/Play'),				category = _('Music Player')},
     {down = Keys.MusicVolUp,			    name = _('Music Volume Up'),				category = _('Music Player')},
     {down = Keys.MusicVolDown,			    name = _('Music Volume Down'),				category = _('Music Player')},
@@ -408,7 +409,7 @@ keyCommands = {
     {down = Keys.MusicLast,			        name = _('Music Play Last'),				category = _('Music Player')},
     {down = Keys.MusicFastForward,			name = _('Music Play Fast Forward'),		category = _('Music Player')},
     {down = Keys.MusicFastBack,			    name = _('Music Play Fast Backward'),		category = _('Music Player')},
-    {down = Keys.MusicLrcViewTrigger,		name = _('Music Display Lyrics'),			category = _('Music Player')},
+    {down = Keys.MusicLrcViewTrigger,		name = _('Music Display Lyrics'),			category = _('Music Player')},]]
 	
 	-- Breadmakers Additions
 	{down = Keys.BatteryPower, value_down= 1, value_up = 0,					name = _('FPL NAT ON'),   category = _('Electrical')},
@@ -435,10 +436,10 @@ keyCommands = {
 
 -- joystick axes 
 axisCommands = {
-    {action = iCommandPlaneSelecterHorizontalAbs, name = _('TDC Slew Horizontal')},
-    {action = iCommandPlaneSelecterVerticalAbs	, name = _('TDC Slew Vertical')},
-    {action = iCommandPlaneRadarHorizontalAbs	, name = _('Radar Horizontal')},
-    {action = iCommandPlaneRadarVerticalAbs		, name = _('Radar Vertical')},
+    --{action = iCommandPlaneSelecterHorizontalAbs, name = _('TDC Slew Horizontal')},
+    --{action = iCommandPlaneSelecterVerticalAbs	, name = _('TDC Slew Vertical')},
+    --{action = iCommandPlaneRadarHorizontalAbs	, name = _('Radar Horizontal')},
+    --{action = iCommandPlaneRadarVerticalAbs		, name = _('Radar Vertical')},
 
     {	action = iCommandViewHorizontalAbs,		name = _('Absolute Camera Horizontal View')},
     {	action = iCommandViewVerticalAbs,		name = _('Absolute Camera Vertical View')},
@@ -461,12 +462,12 @@ axisCommands = {
     {action = iCommandPlaneBase_DistanceAbs 	, name = _('Base/Distance')},
 
     {action = iCommandWheelBrake,		name = _('Wheel Brake')},
-    {action = iCommandLeftWheelBrake,	name = _('Wheel Brake Left')},
-    {action = iCommandRightWheelBrake,	name = _('Wheel Brake Right')},
+    {action = iCommandLeftWheelBrake,	name = _('Wheel Brake Right')},
+    {action = iCommandRightWheelBrake,	name = _('Wheel Brake Left')},
 	
 	{action = JOYSTICK.NoseWheelSteering,	name = _('NWS')}, --name = 'Nose Wheel Steering'},
   
-    {action = iCommandPlaneTrimPitch,	name = _('Elevator Trim')},
+    --{action = iCommandPlaneTrimPitch,	name = _('Elevator Trim')},
 },
 
 }
