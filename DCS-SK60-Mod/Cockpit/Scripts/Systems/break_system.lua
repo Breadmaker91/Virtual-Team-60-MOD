@@ -72,6 +72,7 @@ Breaks:listen_command(Keys.Flap_Pos_Half)
 Breaks:listen_command(Keys.Flap_Pos_Down)
 Breaks:listen_command(Keys.FlapUp)
 Breaks:listen_command(Keys.FlapDown)
+Breaks:listen_command(Keys.Sync_Flaps)
 
 ------Here Strat the general Switch Control
 
@@ -100,7 +101,19 @@ Flap_Target = 0
 Flap_Current = 0
 
 function SetCommand(command,value)
-    if (command == Keys.BrakesOn) and (parking_brake_target == 0) then
+	if command == Keys.Sync_Flaps then
+	    local position = math.max(0, math.min(1, value))
+	    Flap_Target = position
+	    Flap_Current = position
+	    if position < 0.25 then
+	        target_status[flap_switch][2] = SWITCH_ON
+	    elseif position < 0.75 then
+	        target_status[flap_switch][2] = SWITCH_HALF
+	    else
+	        target_status[flap_switch][2] = SWITCH_OFF
+	    end
+	    current_status[flap_switch][2] = target_status[flap_switch][2]
+	elseif (command == Keys.BrakesOn) and (parking_brake_target == 0) then
         dispatch_action(nil,iCommandPlaneWheelBrakeOn)
     elseif (command == Keys.BrakesOff) and (parking_brake_target == 0) then
         dispatch_action(nil,iCommandPlaneWheelBrakeOff)

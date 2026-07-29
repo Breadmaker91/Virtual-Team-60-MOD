@@ -3,7 +3,9 @@ dofile(LockOn_Options.script_path.."devices.lua")
 
 
 
-local updateTimeStep = 1/30
+-- Head-tracker draw arguments can arrive in small, irregular network steps.
+-- Run at 100 Hz so the filtered cockpit head follows them without stepping.
+local updateTimeStep = 0.01
 make_default_activity(updateTimeStep)
 
 
@@ -24,9 +26,9 @@ local leftPilotBodyArg = get_param_handle("LEFT_PILOT_BODY_VISIBLE")
 local leftPilotHeadArg = get_param_handle("LEFT_PILOT_HEAD_VISIBLE")
 local rightPilotBodyArg = get_param_handle("RIGHT_PILOT_BODY_VISIBLE")
 local rightPilotHeadArg = get_param_handle("RIGHT_PILOT_HEAD_VISIBLE")
-local cockpitLeftPilotHeadLRArg = get_param_handle("COCKPIT_LEFT_PILOT_HEAD_LR")
+local pilotHeadYawArg = get_param_handle("PILOT_HEAD_YAW")
+local copilotHeadYawArg = get_param_handle("COPILOT_HEAD_YAW")
 local cockpitLeftPilotHeadUDArg = get_param_handle("COCKPIT_LEFT_PILOT_HEAD_UD")
-local cockpitRightPilotHeadLRArg = get_param_handle("COCKPIT_RIGHT_PILOT_HEAD_LR")
 local cockpitPilotBodyLeanLRArg = get_param_handle("COCKPIT_PILOT_BODY_LEAN_LR")
 local cockpitPilotHeadLeanLRArg = get_param_handle("COCKPIT_PILOT_HEAD_LEAN_LR")
 local cockpitPilotEyesLRArg = get_param_handle("COCKPIT_PILOT_EYES_LR")
@@ -69,6 +71,14 @@ local EXTERNAL_LEFT_PILOT_TINTED_VISOR_ARG = 806
 local EXTERNAL_RIGHT_PILOT_HEAD_LR_ARG = 337
 local HEAD_MIN = -1.0
 local HEAD_MAX = 1.0
+
+local pilot_head_yaw = 0.0
+local pilot_head_yaw_target = 0.0
+local copilot_head_yaw = 0.0
+local copilot_head_yaw_target = 0.0
+local PILOT_HEAD_YAW_SMOOTHING_SPEED = 8.0
+local PILOT_HEAD_YAW_DEADBAND = 0.002
+local PILOT_HEAD_YAW_MAX_SPEED = 4.0
 
 local head_position = 0.0
 local head_start = 0.0
@@ -215,6 +225,23 @@ end
 local function smooth_step(alpha)
 	alpha = clamp(alpha, 0.0, 1.0)
 	return alpha * alpha * (3.0 - 2.0 * alpha)
+end
+
+local function apply_deadband(new_value, old_value, deadband)
+	if math.abs(new_value - old_value) < deadband then
+		return old_value
+	end
+
+	return new_value
+end
+
+local function smooth_value(current, target, speed, max_speed, dt)
+	local alpha = 1.0 - math.exp(-speed * dt)
+	local requested_change = (target - current) * alpha
+	local max_change = max_speed * dt
+	requested_change = clamp(requested_change, -max_change, max_change)
+
+	return current + requested_change
 end
 
 local function approach(current, target, rate)
@@ -460,27 +487,39 @@ local function update_head_motion()
 	end
 end
 
-local function update_external_visible_crew_head_motion()
-	-- DCS owns the occupied seat's external head argument and updates it from
-	-- the player's view/head tracker. Writing a neutral value to that argument
-	-- every frame fights the simulator and causes the visible L/R jitter.
-	-- Only animate the unoccupied/opposite seat here.
-	if is_player_in_right_seat() then
-		set_aircraft_draw_argument_value(EXTERNAL_LEFT_PILOT_HEAD_LR_ARG, head_position)
-	else
-		set_aircraft_draw_argument_value(EXTERNAL_RIGHT_PILOT_HEAD_LR_ARG, head_position)
-	end
-end
-
 local function mirror_external_head_motion_to_cockpit()
-	cockpitLeftPilotHeadLRArg:set(
-		get_aircraft_draw_argument_value(EXTERNAL_LEFT_PILOT_HEAD_LR_ARG)
+	local raw_pilot_yaw = clamp(
+		get_aircraft_draw_argument_value(EXTERNAL_LEFT_PILOT_HEAD_LR_ARG) or pilot_head_yaw_target,
+		HEAD_MIN,
+		HEAD_MAX
 	)
+	pilot_head_yaw_target = apply_deadband(raw_pilot_yaw, pilot_head_yaw_target, PILOT_HEAD_YAW_DEADBAND)
+	pilot_head_yaw = smooth_value(
+		pilot_head_yaw,
+		pilot_head_yaw_target,
+		PILOT_HEAD_YAW_SMOOTHING_SPEED,
+		PILOT_HEAD_YAW_MAX_SPEED,
+		updateTimeStep
+	)
+	pilotHeadYawArg:set(pilot_head_yaw)
+
+	local raw_copilot_yaw = clamp(
+		get_aircraft_draw_argument_value(EXTERNAL_RIGHT_PILOT_HEAD_LR_ARG) or copilot_head_yaw_target,
+		HEAD_MIN,
+		HEAD_MAX
+	)
+	copilot_head_yaw_target = apply_deadband(raw_copilot_yaw, copilot_head_yaw_target, PILOT_HEAD_YAW_DEADBAND)
+	copilot_head_yaw = smooth_value(
+		copilot_head_yaw,
+		copilot_head_yaw_target,
+		PILOT_HEAD_YAW_SMOOTHING_SPEED,
+		PILOT_HEAD_YAW_MAX_SPEED,
+		updateTimeStep
+	)
+	copilotHeadYawArg:set(copilot_head_yaw)
+
 	cockpitLeftPilotHeadUDArg:set(
 		get_aircraft_draw_argument_value(EXTERNAL_LEFT_PILOT_HEAD_UD_ARG)
-	)
-	cockpitRightPilotHeadLRArg:set(
-		get_aircraft_draw_argument_value(EXTERNAL_RIGHT_PILOT_HEAD_LR_ARG)
 	)
 end
 
@@ -530,11 +569,24 @@ function post_initialize()
 
 	start_new_head_turn()
 	head_pause_remaining = random_range(HEAD_PAUSE_MIN, HEAD_PAUSE_MAX)
+	pilot_head_yaw_target = clamp(
+		get_aircraft_draw_argument_value(EXTERNAL_LEFT_PILOT_HEAD_LR_ARG) or 0.0,
+		HEAD_MIN,
+		HEAD_MAX
+	)
+	pilot_head_yaw = pilot_head_yaw_target
+	pilotHeadYawArg:set(pilot_head_yaw)
+	copilot_head_yaw_target = clamp(
+		get_aircraft_draw_argument_value(EXTERNAL_RIGHT_PILOT_HEAD_LR_ARG) or 0.0,
+		HEAD_MIN,
+		HEAD_MAX
+	)
+	copilot_head_yaw = copilot_head_yaw_target
+	copilotHeadYawArg:set(copilot_head_yaw)
 	choose_next_eye_target()
 	schedule_next_blink()
 	previous_roll = read_sensor_number("getRoll", 0.0)
 	initialize_pilot_visor_selection()
-	update_external_visible_crew_head_motion()
 	mirror_external_head_motion_to_cockpit()
 	update_pilot_body_visibility()
 end
@@ -547,7 +599,6 @@ function update()
 	update_blink_motion()
 	update_pilot_visor_selection()
 	write_pilot_dynamic_animation_args()
-	update_external_visible_crew_head_motion()
 	mirror_external_head_motion_to_cockpit()
 	update_ejection_seat_safety_lever_motion()
 	set_ejection_seat_safety_lever_draw_argument()

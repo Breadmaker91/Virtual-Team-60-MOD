@@ -384,6 +384,13 @@ Keys =
     Nav_Main_Power = 5500,
     Nav_Main_Power_On = 5515,
     Nav_Main_Power_Off = 5516,
+	Sync_Battery_Power = 5517,
+	Sync_Generator_Left = 5518,
+	Sync_Generator_Right = 5519,
+	Sync_Nav_Power = 5520,
+	Sync_Canopy = 5521,
+	Sync_Flaps = 5522,
+	Sync_Landing_Gear = 5523,
 
    -- 5500 - 5550 Engine Conrol
     L_LP_PUMP = 5501,

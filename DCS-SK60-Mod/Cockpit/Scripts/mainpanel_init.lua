@@ -325,9 +325,9 @@ LeftPilotHeadDraw = create_parameter_gauge("LEFT_PILOT_HEAD_VISIBLE", 3102, visi
 RightPilotBodyDraw = create_parameter_gauge("RIGHT_PILOT_BODY_VISIBLE", 3103, visibility_range, visibility_range)
 RightPilotHeadDraw = create_parameter_gauge("RIGHT_PILOT_HEAD_VISIBLE", 3104, visibility_range, visibility_range)
 
-CockpitLeftPilotHeadLR = create_parameter_gauge("COCKPIT_LEFT_PILOT_HEAD_LR", 40, head_motion_range, head_motion_range)
+CockpitLeftPilotHeadLR = create_parameter_gauge("PILOT_HEAD_YAW", 40, head_motion_range, head_motion_range)
 CockpitLeftPilotHeadUD = create_parameter_gauge("COCKPIT_LEFT_PILOT_HEAD_UD", 99, head_motion_range, head_motion_range)
-CockpitRightPilotHeadLR = create_parameter_gauge("COCKPIT_RIGHT_PILOT_HEAD_LR", 336, head_motion_range, head_motion_range)
+CockpitRightPilotHeadLR = create_parameter_gauge("COPILOT_HEAD_YAW", 336, head_motion_range, head_motion_range)
 
 CockpitPilotBodyLeanLR = create_parameter_gauge("COCKPIT_PILOT_BODY_LEAN_LR", 800, head_motion_range, head_motion_range)
 CockpitPilotHeadLeanLR = create_parameter_gauge("COCKPIT_PILOT_HEAD_LEAN_LR", 801, head_motion_range, head_motion_range)

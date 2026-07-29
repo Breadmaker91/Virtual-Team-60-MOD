@@ -24,6 +24,10 @@ electric_system:listen_command(Keys.ElecPowerDCGenR)
 electric_system:listen_command(Keys.Nav_Main_Power)
 electric_system:listen_command(Keys.Nav_Main_Power_On)
 electric_system:listen_command(Keys.Nav_Main_Power_Off)
+electric_system:listen_command(Keys.Sync_Battery_Power)
+electric_system:listen_command(Keys.Sync_Generator_Left)
+electric_system:listen_command(Keys.Sync_Generator_Right)
+electric_system:listen_command(Keys.Sync_Nav_Power)
 
 electric_system:DC_Battery_on(true)
 
@@ -176,7 +180,18 @@ local nav_switch_transfer = get_param_handle("ELEC_NAV_BUS")
 function SetCommand(command,value)
 
     local status = 0
-    if command == Keys.PowerGeneratorLeft then
+    if command == Keys.Sync_Battery_Power then
+        local requested_status = value >= 0.5 and SWITCH_ON or SWITCH_OFF
+        target_status[main_power_switch][2] = requested_status
+        electric_system:DC_Battery_on(requested_status == SWITCH_ON)
+    elseif command == Keys.Sync_Generator_Left then
+        target_status[left_gen_switch][2] = value >= 0.5 and SWITCH_ON or SWITCH_OFF
+    elseif command == Keys.Sync_Generator_Right then
+        target_status[right_gen_switch][2] = value >= 0.5 and SWITCH_ON or SWITCH_OFF
+    elseif command == Keys.Sync_Nav_Power then
+        target_status[main_nav_switch][2] = value >= 0.5 and SWITCH_ON or SWITCH_OFF
+        nav_switch_transfer:set(target_status[main_nav_switch][2])
+    elseif command == Keys.PowerGeneratorLeft then
         target_status[left_gen_switch][2] = 1 - target_status[left_gen_switch][2]
         dispatch_action(devices.SOUND_SYSTEM, Keys.SND_LEFT_PANEL, cockpit_sound.basic_switch)
     elseif command == Keys.PowerGeneratorRight then

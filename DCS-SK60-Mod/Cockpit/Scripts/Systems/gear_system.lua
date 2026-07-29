@@ -39,6 +39,7 @@ gear_system:listen_command(gear_up)
 gear_system:listen_command(gear_down)
 gear_system:listen_command(click_cmd.GearLevel)
 gear_system:listen_command(120)
+gear_system:listen_command(Keys.Sync_Landing_Gear)
 
 local n_gear_status
 local l_gear_status
@@ -78,7 +79,18 @@ end
 
 local move_ability = 1;
 function SetCommand(command,value)
-    if (command == click_cmd.GearLevel) then
+	if command == Keys.Sync_Landing_Gear then
+	    local position = math.max(0, math.min(1, value))
+	    nose_gear_status = position >= 0.5 and 1 or 0
+	    l_main_gear_status = nose_gear_status
+	    r_main_gear_status = nose_gear_status
+	    n_gear_status = position
+	    l_gear_status = position
+	    r_gear_status = position
+	    gear_level_pos = 1 - position
+	    gear_level:set(gear_level_pos)
+	    gear_state_share:set(nose_gear_status)
+	elseif (command == click_cmd.GearLevel) then
         dispatch_action(nil, 68) --Reset command to default landing gear command
     elseif (command == gear_switch) then
         nose_gear_status = 1 - nose_gear_status
@@ -158,7 +170,7 @@ function update()
 
         if math.abs(r_main_gear_status - r_gear_status) < time_increse_step then
             if move_ability > 0.5 then
-                l_gear_status = l_main_gear_status
+                r_gear_status = r_main_gear_status
             end
         else
             if (r_gear_status > r_main_gear_status) then

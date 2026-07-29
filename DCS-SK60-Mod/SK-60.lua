@@ -160,7 +160,8 @@ sounderName = "Aircraft/Planes/PlaneSK60",
 				pos = 	{2.6,	0.94,	- 0.4}, -- DCS body-axis ejection station; keep near cockpit to avoid pitch impulse
 				g_suit 			    =  6,
 				can_be_playable   	= true,
-				canopy_arg          = 38,
+				-- No canopy_arg here: SK60 ejects through closed canopy glass,
+				-- so the normal canopy animation must not gate ejection.
 				ejection_through_canopy = true,
 				ejection_order    	= 1,
 				role      			= "pilot",
@@ -174,7 +175,8 @@ sounderName = "Aircraft/Planes/PlaneSK60",
 				pos = 	{2.6,	0.94,	0.4}, -- DCS body-axis ejection station; keep near cockpit to avoid pitch impulse
 				g_suit 			    =  6,
 				can_be_playable   	= true,
-				canopy_arg          = 38,
+				-- No canopy_arg here: SK60 ejects through closed canopy glass,
+				-- so the normal canopy animation must not gate ejection.
 				ejection_through_canopy = true,
 				ejection_order    	= 2,
 				role      			= "instructor",
@@ -636,6 +638,8 @@ pylons_enumeration = {6, 5, 4, 8, 7, 3, 2, 1},
 		417, -- Nav Power Switch
 		418, -- Left Low Fuel Pump Switch
 		420, -- Right Low Fuel Pump Switch
+		604, -- Left throttle idle/cutoff
+		605, -- Right throttle idle/cutoff
 		521,
 		950, -- FR33 100 MHz dial
 		951, -- FR33 10 MHz dial
