@@ -447,6 +447,7 @@ Keys =
     FR31_Clear = 5712,
     FR31_Manual_Mode = 5713,
     FR31_NR_Mode = 5714,
+    FR31_BAS_Mode = 5715,
 
    -- 5751 - 5760 for FR33 radio
     FR33_MHz = 5751,

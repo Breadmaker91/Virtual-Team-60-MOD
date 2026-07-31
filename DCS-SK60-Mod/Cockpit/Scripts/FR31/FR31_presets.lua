@@ -15,3 +15,5 @@ FR31_PRESETS = {
     [8] = 132.000E6,
     [9] = 133.000E6,
 }
+
+-- BAS presets are loaded separately from FR31/BAS for the active DCS terrain.

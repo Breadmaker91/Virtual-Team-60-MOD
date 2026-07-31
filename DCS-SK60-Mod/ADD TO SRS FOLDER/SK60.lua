@@ -9,12 +9,17 @@ function exportRadioSK60(_data, SR)
     _data.radios[1].volMode = 1
     _data.radios[1].model = SR.RadioModels.Intercom
 
+    -- Read the logical FR31 state rather than the native UHF backing device.
+    -- This preserves the VHF selection for SRS while DCS keeps its in-game
+    -- communicator on the last valid UHF channel.
     _data.radios[2].name = "FR31"
-    _data.radios[2].freq = SR.getRadioFrequency(6)
-    _data.radios[2].modulation = 1
+    _data.radios[2].freq = get_param_handle("FR31_FREQ_HZ"):get()
+    _data.radios[2].modulation = get_param_handle("FR31_MODULATION"):get()
+    _data.radios[2].secFreq = 121.5 * 1000000
     _data.radios[2].volume = 1.0
     _data.radios[2].volMode = 1
-    _data.radios[2].model = SR.RadioModels.AN_ARC164
+    _data.radios[2].freqMin = 104 * 1000000
+    _data.radios[2].freqMax = 407.975 * 1000000
 	
 	    -- COMM2 / FR33. Native VHF radio device ID is fixed at 24.
     _data.radios[3].name = "FR33"

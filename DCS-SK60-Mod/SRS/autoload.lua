@@ -9,10 +9,11 @@ function exportRadioSK60(_data, SR)
     _data.radios[1].volume = 1.0
     _data.radios[1].model = SR.RadioModels.Intercom
 
-   -- COMM1 / FR31. Native UHF radio device ID is fixed at 6.
+   -- COMM1 / FR31. Read the logical control head rather than its native UHF
+   -- backing device so SRS can use both of the real FR31 frequency bands.
     _data.radios[2].name = "FR31"
-    _data.radios[2].freq = SR.getRadioFrequency(6)
-    _data.radios[2].modulation = 0
+    _data.radios[2].freq = get_param_handle("FR31_FREQ_HZ"):get()
+    _data.radios[2].modulation = get_param_handle("FR31_MODULATION"):get()
     _data.radios[2].secFreq = 121.5 * 1000000
     _data.radios[2].volume = 1.0
     _data.radios[2].freqMin = 104 * 1000000

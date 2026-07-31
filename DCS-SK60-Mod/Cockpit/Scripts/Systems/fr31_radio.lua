@@ -1,6 +1,7 @@
 dofile(LockOn_Options.script_path.."devices.lua")
 dofile(LockOn_Options.script_path.."command_defs.lua")
 dofile(LockOn_Options.script_path.."FR31/FR31_presets.lua")
+dofile(LockOn_Options.script_path.."FR31/FR31_bas_database.lua")
 
 local dev = GetSelf()
 make_default_activity(0.05)
@@ -16,6 +17,13 @@ local fr31_nr_preset = get_param_handle("FR31_NR_PRESET")
 local fr31_entry_active = get_param_handle("FR31_ENTRY_ACTIVE")
 local fr31_entry_length = get_param_handle("FR31_ENTRY_LENGTH")
 local fr31_frequency_valid = get_param_handle("FR31_FREQ_VALID")
+local bas_suffix_enables = {
+    A = get_param_handle("FR31_BAS_SUFFIX_A_ENABLE"),
+    B = get_param_handle("FR31_BAS_SUFFIX_B_ENABLE"),
+    C = get_param_handle("FR31_BAS_SUFFIX_C_ENABLE"),
+    D = get_param_handle("FR31_BAS_SUFFIX_D_ENABLE"),
+    ["2"] = get_param_handle("FR31_BAS_SUFFIX_2_ENABLE"),
+}
 local DISPLAY_DIGIT_COUNT = 5
 local fr31_digits = {}
 local fr31_digit_enables = {}
@@ -31,6 +39,7 @@ local FREQ_STEP_HZ = 25E3
 local DEFAULT_FREQ_HZ = 124.8E6
 local MODE_MANUAL = 1
 local MODE_NR = 2
+local MODE_BAS = 3
 local DEFAULT_NR_PRESET = 0
 local NR_DISPLAY_PREFIX = "10"
 
@@ -42,7 +51,10 @@ local current_freq_hz = DEFAULT_FREQ_HZ
 local current_modulation = 0 -- 0 = AM, 1 = FM
 local operating_mode = MODE_MANUAL
 local current_nr_preset = DEFAULT_NR_PRESET
+local current_bas_group = nil
+local current_bas_subchannel = nil
 local last_backing_radio_available = 0
+local FR31_BAS_PRESETS = {}
 
 local function bool_to_number(value)
     return value and 1 or 0
@@ -73,6 +85,7 @@ dev:listen_command(Keys.FR31_Mode)
 dev:listen_command(Keys.FR31_Clear)
 dev:listen_command(Keys.FR31_Manual_Mode)
 dev:listen_command(Keys.FR31_NR_Mode)
+dev:listen_command(Keys.FR31_BAS_Mode)
 
 
 local function set_display_text(text)
@@ -90,6 +103,32 @@ local function set_display_text(text)
             fr31_digit_enables[display_index]:set(1)
             display_index = display_index + 1
         end
+    end
+end
+
+local function clear_bas_suffix_display()
+    for _,handle in pairs(bas_suffix_enables) do
+        handle:set(0)
+    end
+end
+
+local function set_bas_display()
+    clear_bas_suffix_display()
+
+    if current_bas_group == nil then
+        set_display_text(digit_buffer)
+        return
+    end
+
+    set_display_text(string.format("%03d", current_bas_group))
+    if current_bas_subchannel == nil then
+        return
+    end
+
+    local suffix_letter = string.sub(current_bas_subchannel, 1, 1)
+    bas_suffix_enables[suffix_letter]:set(1)
+    if current_bas_subchannel == "C2" then
+        bas_suffix_enables["2"]:set(1)
     end
 end
 
@@ -123,6 +162,10 @@ local function is_valid_fr31_frequency(freq_hz)
     end
 
     return math.floor((freq_hz / FREQ_STEP_HZ) + 0.5) * FREQ_STEP_HZ == freq_hz
+end
+
+local function is_uhf_fr31_frequency(freq_hz)
+    return freq_hz ~= nil and freq_hz >= 223E6 and freq_hz <= 407.975E6
 end
 
 local function get_backing_radio()
@@ -172,6 +215,13 @@ local function apply_fr31_frequency(freq_hz)
 end
 
 local function apply_radio_device_frequency(freq_hz)
+   -- The DCS communicator behind FR31 is an avUHF_ARC_164. Keep it on its
+   -- last valid UHF channel while the logical FR31 tunes VHF; SRS reads the
+   -- authoritative FR31_FREQ_HZ parameter directly.
+    if not is_uhf_fr31_frequency(freq_hz) then
+        return
+    end
+
     local uhf_radio = get_backing_radio()
     if uhf_radio ~= nil then
         local ok = pcall(function()
@@ -198,7 +248,7 @@ local function sync_from_backing_radio()
    -- digits. The backing DCS radio can still update FR31 when an external
    -- radio-menu action changes the communicator frequency, but it must not
    -- erase an in-progress keypad entry.
-    if entry_active then
+    if entry_active or not is_uhf_fr31_frequency(current_freq_hz) then
         return
     end
 
@@ -234,6 +284,42 @@ local function get_nr_preset_frequency(preset)
     end
 
     return FR31_PRESETS[preset]
+end
+
+local BAS_SUBCHANNELS = {
+    [1] = "A",
+    [2] = "B",
+    [3] = "C",
+    [4] = "C2",
+    [5] = "D",
+}
+
+local function get_bas_frequency(group, subchannel)
+    local group_presets = FR31_BAS_PRESETS and FR31_BAS_PRESETS[group]
+    if group_presets == nil then
+        return nil
+    end
+
+    return group_presets[subchannel]
+end
+
+local function load_bas_presets_for_terrain()
+    FR31_BAS_PRESETS = FR31_load_bas_database()
+end
+
+local function select_bas_subchannel(digit)
+    if current_bas_group == nil then
+        return
+    end
+
+    local subchannel = BAS_SUBCHANNELS[digit]
+    local freq_hz = get_bas_frequency(current_bas_group, subchannel)
+    if subchannel == nil or not is_valid_fr31_frequency(freq_hz) then
+        return
+    end
+
+    current_bas_subchannel = subchannel
+    set_radio_frequency(freq_hz)
 end
 
 local function normalise_mission_frequency(freq)
@@ -339,7 +425,10 @@ local function update_display()
     radio_power:set(1.0)
     fr31_active_freq:set(current_freq_hz / 1E6)
 
-    if operating_mode == MODE_NR then
+    clear_bas_suffix_display()
+    if operating_mode == MODE_BAS then
+        set_bas_display()
+    elseif operating_mode == MODE_NR then
         set_display_text(format_nr_channel_text())
     elseif entry_active then
         set_display_text(format_entry_text())
@@ -351,6 +440,7 @@ local function update_display()
 end
 
 function post_initialize()
+    load_bas_presets_for_terrain()
     load_nr_presets_from_mission()
     get_backing_radio()
     select_nr_preset(current_nr_preset)
@@ -390,9 +480,23 @@ function SetCommand(command, value)
         return
     end
 
+
+    if command == Keys.FR31_BAS_Mode then
+        operating_mode = MODE_BAS
+        digit_buffer = ""
+        entry_active = false
+        update_display()
+        return
+    end
+
     if command == Keys.FR31_Clear then
         if operating_mode == MODE_MANUAL then
             digit_buffer = ""
+            entry_active = true
+        elseif operating_mode == MODE_BAS then
+            digit_buffer = ""
+            current_bas_group = nil
+            current_bas_subchannel = nil
             entry_active = true
         end
         update_display()
@@ -403,6 +507,21 @@ function SetCommand(command, value)
     if digit ~= nil then
         if operating_mode == MODE_NR then
             select_nr_preset(tonumber(digit))
+        elseif operating_mode == MODE_BAS then
+            if current_bas_group ~= nil then
+                select_bas_subchannel(tonumber(digit))
+            elseif entry_active then
+                digit_buffer = digit_buffer .. digit
+                if string.len(digit_buffer) == 3 then
+                    local group = tonumber(digit_buffer)
+                    if group ~= nil and group >= 1 and group <= 999 and FR31_BAS_PRESETS[group] ~= nil then
+                        current_bas_group = group
+                        current_bas_subchannel = nil
+                    end
+                    digit_buffer = ""
+                    entry_active = false
+                end
+            end
         elseif entry_active then
             digit_buffer = digit_buffer .. digit
             if string.len(digit_buffer) > 5 then
