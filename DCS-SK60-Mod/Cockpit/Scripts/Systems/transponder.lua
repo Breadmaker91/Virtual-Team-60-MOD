@@ -26,8 +26,10 @@ local digit_params = {
     get_param_handle("XPDR_DIGIT_4"),
 }
 
-local function set_draw_argument(argument, value)
-    set_aircraft_draw_argument_value(argument, value)
+local function set_cockpit_argument(argument, value)
+    -- Transponder arguments belong to the cockpit EDM. Do not mirror them to
+    -- the aircraft EDM: external damage arguments use some of the same
+    -- numbers (notably 200-203 for the wings).
     if type(set_cockpit_draw_argument_value) == "function" then
         set_cockpit_draw_argument_value(argument, value)
     end
@@ -37,19 +39,19 @@ local function publish_state()
     power_param:set(power)
     code_param:set(digits[1] * 1000 + digits[2] * 100 + digits[3] * 10 + digits[4])
     ident_param:set(ident)
-    set_draw_argument(204, power)
-    set_draw_argument(209, ident)
+    set_cockpit_argument(204, power)
+    set_cockpit_argument(209, ident)
 
     -- The model should animate each digit roll from 0.0 = 0 to 1.0 = 7.
     for index, argument in ipairs(DIGIT_DRAW_ARGS) do
         digit_params[index]:set(digits[index])
-        set_draw_argument(argument, digits[index] / 7)
+        set_cockpit_argument(argument, digits[index] / 7)
     end
 
     -- Digit click connectors are spring-centred so repeated wheel events never
     -- get stuck at an animation-argument limit.
     for _, argument in ipairs(DIGIT_CLICK_ARGS) do
-        set_draw_argument(argument, 0)
+        set_cockpit_argument(argument, 0)
     end
 end
 
