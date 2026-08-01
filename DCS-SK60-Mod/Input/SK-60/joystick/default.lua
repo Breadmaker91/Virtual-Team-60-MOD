@@ -61,6 +61,7 @@ keyCommands = {
     {down = iCommandPowerOnOff,					name = _('Electric Power Switch ON'),		category = _('Systems')},
 	{down = iCommandPowerOnOff,					name = _('Electric Power Switch OFF'),		category = _('Systems')},
     {down = iCommandPlaneAirBrake,				name = _('Airbrake'),					category = _('Systems') , features = {"airbrake"}},
+	{down = Keys.ThrustBreakerArm,				name = _('Thrust Breaker Arm'),			category = _('Systems')},
     {down = iCommandPlaneAirBrakeOn,up = Keys.AirbrakePauseMove,			name = _('Airbrake On'),				category = _('Systems') , features = {"airbrake"}},
     {down = iCommandPlaneAirBrakeOff,up = Keys.AirbrakePauseMove,			name = _('Airbrake Off'),				category = _('Systems') , features = {"airbrake"}},
     {down = iCommandPlaneWingtipSmokeOnOff,		name = _('Smoke'),						category = _('Systems')},

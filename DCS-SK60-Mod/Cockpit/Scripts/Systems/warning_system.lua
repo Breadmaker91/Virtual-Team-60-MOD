@@ -20,6 +20,8 @@ local SWITCH_ON = 1
 local SWITCH_TEST = -1
 
 local IAS_TO_KMH = 3.6
+local THRUST_BREAKER_ARG = 22
+local THRUST_BREAKER_EXTENDED_THRESHOLD = 0.99
 
 -- Stall warning is driven by indicated airspeed margin instead of AoA.
 -- Values are the configured 1G stall speeds in km/h for the SK-60 flap schedule.
@@ -38,7 +40,7 @@ local l_eng_fire    = _switch_counter()
 local canopy        = _switch_counter()
 local r_eng_fire    = _switch_counter()
 local l_eng_fuel    = _switch_counter()
-local thrust_rev    = _switch_counter()
+local thrust_breaker = _switch_counter()
 local r_eng_fuel    = _switch_counter()
 local l_eng_oil     = _switch_counter()
 local brake         = _switch_counter()
@@ -52,14 +54,14 @@ local r_eng_gen     = _switch_counter()
 local flap_gear_warn = _switch_counter()
 local master_cau     = _switch_counter()
 
-local element_name = {"FIRE_L_ENG", "CANOPY", "FIRE_R_ENG", "FUEL_L_ENG", "THRUST_REV", "FUEL_R_ENG", "OIL_L_ENG", "BRAKE", "OIL_R_ENG", "HYDRO_L", "CONVERT_A", "HYDRO_R", "GEN_L", "CONVERT_B", "GEN_R", "FLAP_GEAR_WARN"}
+local element_name = {"FIRE_L_ENG", "CANOPY", "FIRE_R_ENG", "FUEL_L_ENG", "THRUST_BREAKER", "FUEL_R_ENG", "OIL_L_ENG", "BRAKE", "OIL_R_ENG", "HYDRO_L", "CONVERT_A", "HYDRO_R", "GEN_L", "CONVERT_B", "GEN_R", "FLAP_GEAR_WARN"}
 
 target_status = {
     {l_eng_fire , SWITCH_OFF, get_param_handle(element_name[1]), element_name[1]},
     {canopy     , SWITCH_OFF, get_param_handle(element_name[2]), element_name[2]},
     {r_eng_fire , SWITCH_OFF, get_param_handle(element_name[3]), element_name[3]},
     {l_eng_fuel , SWITCH_OFF, get_param_handle(element_name[4]), element_name[4]},
-    {thrust_rev , SWITCH_OFF, get_param_handle(element_name[5]), element_name[5]},
+    {thrust_breaker, SWITCH_OFF, get_param_handle(element_name[5]), element_name[5]},
     {r_eng_fuel , SWITCH_OFF, get_param_handle(element_name[6]), element_name[6]},
     {l_eng_oil  , SWITCH_OFF, get_param_handle(element_name[7]), element_name[7]},
     {brake      , SWITCH_OFF, get_param_handle(element_name[8]), element_name[8]},
@@ -79,7 +81,7 @@ current_status = {
     {canopy     , SWITCH_OFF, SWITCH_OFF},
     {r_eng_fire , SWITCH_OFF, SWITCH_OFF},
     {l_eng_fuel , SWITCH_OFF, SWITCH_OFF},
-    {thrust_rev , SWITCH_OFF, SWITCH_OFF},
+    {thrust_breaker, SWITCH_OFF, SWITCH_OFF},
     {r_eng_fuel , SWITCH_OFF, SWITCH_OFF},
     {l_eng_oil  , SWITCH_OFF, SWITCH_OFF},
     {brake      , SWITCH_OFF, SWITCH_OFF},
@@ -195,6 +197,12 @@ end
 
 function updateWarningSignal()
     unarmedCounter = 0
+   -- DR. BR. UTE illuminates once the thrust breaker is fully extended.
+    if get_aircraft_draw_argument_value(THRUST_BREAKER_ARG) >= THRUST_BREAKER_EXTENDED_THRESHOLD then
+        switchTargetStatus(thrust_breaker, SWITCH_ON)
+    else
+        switchTargetStatus(thrust_breaker, SWITCH_OFF)
+    end
    -- canopy
     if get_aircraft_draw_argument_value(38) < 0.05 then
         switchTargetStatus(canopy, SWITCH_OFF)

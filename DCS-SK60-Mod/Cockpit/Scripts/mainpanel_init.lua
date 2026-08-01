@@ -247,7 +247,7 @@ animation_list = {
     {"CANOPY"       , 501},
     {"FIRE_R_ENG"   , 502},
     {"FUEL_L_ENG"   , 503},
-    {"THRUST_REV"   , 504},
+    {"THRUST_BREAKER", 504},
     {"FUEL_R_ENG"   , 505},
     {"OIL_L_ENG"    , 506},
     {"BRAKE"        , 507}, 

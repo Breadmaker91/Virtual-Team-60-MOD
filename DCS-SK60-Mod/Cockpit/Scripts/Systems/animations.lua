@@ -15,6 +15,7 @@ local sensor_data = get_base_data()
 
 misc:listen_command(Keys.pilotToggle)
 misc:listen_command(Keys.PilotTintedVisorToggle)
+misc:listen_command(Keys.ThrustBreakerArm)
 misc:listen_command(Keys.EjectionSeatSafetyLever)
 misc:listen_command(Keys.EjectionSeatSafetyLeverOn)
 misc:listen_command(Keys.EjectionSeatSafetyLeverOff)
@@ -39,9 +40,22 @@ local cockpitPilotTintedVisorArg = get_param_handle("COCKPIT_PILOT_TINTED_VISOR"
 local canopyInsideArg = get_param_handle("Inside_Canopy")
 local ejectionSeatArmed = get_param_handle("EJECTION_SEAT_ARMED")
 local ejectionSeatSafetyLeverArg = get_param_handle("PTN_51")
+local leftThrottleArg = get_param_handle("EFM_LEFT_THRUST_A")
+local rightThrottleArg = get_param_handle("EFM_RIGHT_THRUST_A")
+local thrustBreakerPositionArg = get_param_handle("THRUST_BREAKER_POSITION")
 
 local EJECTION_SEAT_SAFETY_LEVER_ARG = 51
 local EJECTION_COMMAND = 83
+local THRUST_BREAKER_ARG = 22
+-- The EFM publishes 0.15 at ground idle and 0.0 when a throttle is cut off.
+-- Use a narrow band around ground idle so either advancing or cutting a
+-- throttle off retracts the breaker.
+local THRUST_BREAKER_GROUND_IDLE_MIN = 0.14
+local THRUST_BREAKER_GROUND_IDLE_MAX = 0.16
+local THRUST_BREAKER_TRAVEL_TIME = 1.0
+
+local thrust_breaker_armed = false
+local thrust_breaker_position = 0.0
 
 -- These draw arguments must be assigned to the matching mesh visibility
 -- controllers in the cockpit/external EDMs:
@@ -558,6 +572,29 @@ local function update_ejection_seat_safety_lever_motion()
 	end
 end
 
+local function update_thrust_breaker()
+	local weight_on_wheels = read_sensor_number("getWOW_LeftMainLandingGear", 0.0) > 0.001
+		or read_sensor_number("getWOW_RightMainLandingGear", 0.0) > 0.001
+		or read_sensor_number("getWOW_NoseLandingGear", 0.0) > 0.001
+	local left_throttle = leftThrottleArg:get() or 0.0
+	local right_throttle = rightThrottleArg:get() or 0.0
+	local left_throttle_idle = left_throttle >= THRUST_BREAKER_GROUND_IDLE_MIN
+		and left_throttle <= THRUST_BREAKER_GROUND_IDLE_MAX
+	local right_throttle_idle = right_throttle >= THRUST_BREAKER_GROUND_IDLE_MIN
+		and right_throttle <= THRUST_BREAKER_GROUND_IDLE_MAX
+	local target = thrust_breaker_armed and weight_on_wheels and left_throttle_idle and right_throttle_idle and 1.0 or 0.0
+	local max_step = updateTimeStep / THRUST_BREAKER_TRAVEL_TIME
+
+	if thrust_breaker_position < target then
+		thrust_breaker_position = math.min(thrust_breaker_position + max_step, target)
+	elseif thrust_breaker_position > target then
+		thrust_breaker_position = math.max(thrust_breaker_position - max_step, target)
+	end
+
+	set_aircraft_draw_argument_value(THRUST_BREAKER_ARG, thrust_breaker_position)
+	thrustBreakerPositionArg:set(thrust_breaker_position)
+end
+
 --function post_initialize()
 	--show_param_handles_list(true) --For testing.
 --end
@@ -566,6 +603,10 @@ function post_initialize()
 	local birth = LockOn_Options.init_conditions.birth_place
 	solo_flight = aircraft_property_is_enabled("SoloFlight")
 	set_ejection_seat_safety_lever_immediate(birth ~= "GROUND_COLD")
+	thrust_breaker_armed = false
+	thrust_breaker_position = 0.0
+	set_aircraft_draw_argument_value(THRUST_BREAKER_ARG, thrust_breaker_position)
+	thrustBreakerPositionArg:set(thrust_breaker_position)
 
 	start_new_head_turn()
 	head_pause_remaining = random_range(HEAD_PAUSE_MIN, HEAD_PAUSE_MAX)
@@ -602,6 +643,7 @@ function update()
 	mirror_external_head_motion_to_cockpit()
 	update_ejection_seat_safety_lever_motion()
 	set_ejection_seat_safety_lever_draw_argument()
+	update_thrust_breaker()
 end
 
 local function set_ejection_seat_safety_lever(armed)
@@ -627,6 +669,8 @@ function SetCommand(command, value)
 		if is_canopy_closed() then
 			tinted_visor_selected = not tinted_visor_selected
 		end
+	elseif command == Keys.ThrustBreakerArm then
+		thrust_breaker_armed = not thrust_breaker_armed
 	elseif command == Keys.EjectionSeatSafetyLever then
 		if value ~= nil and value < 0 then
 			set_ejection_seat_safety_lever(false)

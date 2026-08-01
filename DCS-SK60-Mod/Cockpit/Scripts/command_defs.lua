@@ -15,6 +15,7 @@ Keys =
 {
 	pilotToggle = __custom_counter(),
 	PilotTintedVisorToggle = __custom_counter(),
+	ThrustBreakerArm = __custom_counter(),
 
 	PlanePickleOn	= 350,
 	PlanePickleOff	= 351,
