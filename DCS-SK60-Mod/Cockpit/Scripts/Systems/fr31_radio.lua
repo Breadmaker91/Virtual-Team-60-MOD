@@ -483,8 +483,13 @@ function SetCommand(command, value)
 
     if command == Keys.FR31_BAS_Mode then
         operating_mode = MODE_BAS
+        -- Selecting BAS starts a fresh three-digit group entry, just like CL.
+        -- Once a group is accepted, digit keys select its subchannels until
+        -- CL (or BAS again) explicitly clears the group.
         digit_buffer = ""
-        entry_active = false
+        current_bas_group = nil
+        current_bas_subchannel = nil
+        entry_active = true
         update_display()
         return
     end

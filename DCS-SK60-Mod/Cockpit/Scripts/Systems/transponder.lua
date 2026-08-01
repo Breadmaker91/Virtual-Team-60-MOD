@@ -19,6 +19,12 @@ local ident = 0
 local power_param = get_param_handle("XPDR_POWER")
 local code_param = get_param_handle("XPDR_MODE_A_CODE")
 local ident_param = get_param_handle("XPDR_IDENT")
+local digit_params = {
+    get_param_handle("XPDR_DIGIT_1"),
+    get_param_handle("XPDR_DIGIT_2"),
+    get_param_handle("XPDR_DIGIT_3"),
+    get_param_handle("XPDR_DIGIT_4"),
+}
 
 local function set_draw_argument(argument, value)
     set_aircraft_draw_argument_value(argument, value)
@@ -36,6 +42,7 @@ local function publish_state()
 
     -- The model should animate each digit roll from 0.0 = 0 to 1.0 = 7.
     for index, argument in ipairs(DIGIT_DRAW_ARGS) do
+        digit_params[index]:set(digits[index])
         set_draw_argument(argument, digits[index] / 7)
     end
 
@@ -62,7 +69,13 @@ end
 
 function SetCommand(command, value)
     if command == Keys.TransponderPower then
-        power = value > 0.5 and 1 or 0
+        -- The two clickable actions send +1 for left click (ON) and -1 for
+        -- right click (OFF). Ignore a centred/zero initialization event.
+        if value > 0 then
+            power = 1
+        elseif value < 0 then
+            power = 0
+        end
     elseif command == Keys.TransponderIdent then
         ident = value > 0.5 and 1 or 0
     else

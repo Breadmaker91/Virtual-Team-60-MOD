@@ -25,6 +25,7 @@ creators[devices.UHF_RADIO]       ={"avUHF_ARC_164"         ,LockOn_Options.scri
 creators[devices.FR31_RADIO]      ={"avLuaDevice"           ,LockOn_Options.script_path.."Systems/fr31_radio.lua"}
 creators[devices.VHF_RADIO]       ={"avUHF_ARC_164"         ,LockOn_Options.script_path.."vhf_radio.lua", {devices.INTERCOM, devices.ELECTRIC_SYSTEM} }
 creators[devices.FR33_RADIO]      ={"avLuaDevice"           ,LockOn_Options.script_path.."Systems/fr33_radio.lua"}
+creators[devices.TRANSPONDER]     ={"avLuaDevice"           ,LockOn_Options.script_path.."Systems/transponder.lua"}
 -- radar module
 creators[devices.RADAR_RAW]		  ={"avSimpleRadar"			,LockOn_Options.script_path.."avRadar/Device/Radar_init.lua"}
 -- hud Display processor

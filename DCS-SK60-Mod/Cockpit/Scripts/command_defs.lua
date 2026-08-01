@@ -455,6 +455,14 @@ Keys =
     FR33_100kHz = 5752,
     FR33_25kHz = 5753,
 
+   -- 5801 - 5810 for transponder
+    TransponderPower = 5801,
+    TransponderDigit1 = 5802,
+    TransponderDigit2 = 5803,
+    TransponderDigit3 = 5804,
+    TransponderDigit4 = 5805,
+    TransponderIdent = 5806,
+
    -- 6000 - 6100 for sound trigger
     SND_LEFT_PANEL = 6001,
     SND_CENTER_PANEL = 6002,

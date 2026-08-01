@@ -33,3 +33,4 @@ devices["NAV_SYSTEM"]               = counter() --22
 devices["FR31_RADIO"]               = counter() --23 FR31 controller
 devices["VHF_RADIO"]                = counter() --24 native FR33 backing radio
 devices["FR33_RADIO"]               = counter() --25 FR33 controller
+devices["TRANSPONDER"]              = counter() --26 transponder controller

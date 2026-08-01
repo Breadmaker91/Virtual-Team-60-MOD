@@ -164,6 +164,14 @@ animation_list = {
     
     {"PTN_601", 601},
 
+    -- Transponder code wheels, power switch, and momentary IDENT button.
+    {"XPDR_DIGIT_1", 200, {0, 7}, {0, 1}},
+    {"XPDR_DIGIT_2", 201, {0, 7}, {0, 1}},
+    {"XPDR_DIGIT_3", 202, {0, 7}, {0, 1}},
+    {"XPDR_DIGIT_4", 203, {0, 7}, {0, 1}},
+    {"XPDR_POWER", 204, {0, 1}, {0, 1}},
+    {"XPDR_IDENT", 209, {0, 1}, {0, 1}},
+
     -- Airbrake Ind
     {"AIRBRAKE_IND", 316},
     {"FLAP_LEVEL", 43},

@@ -555,6 +555,15 @@ elements["PTN_737"] = default_axis("ADF Frequency 1kHz Knob", devices.NAV_SYSTEM
 elements["PTN_738"] = default_axis("ADF Display Power Knob", devices.NAV_SYSTEM, Keys.Nav_ADF_PWR, 738, 0, 0.1, true, true)
 elements["PTN_718"] = left_right_command_button("DME Display Power Knob", devices.NAV_SYSTEM, Keys.Nav_DME_PWR_ON, Keys.Nav_DME_PWR_OFF, 718)
 
+-- Transponder. The four code selectors are endless mouse-wheel knobs; their
+-- click arguments are separate from the digit display arguments (200-203).
+elements["PTN_204"] = default_2_position_tumb("Transponder Power (Left click ON / Right click OFF)", devices.TRANSPONDER, Keys.TransponderPower, 204, SOUND_DEFAULT_2_WAY_SWITCH)
+elements["PTN_205"] = default_axis("Transponder First Digit", devices.TRANSPONDER, Keys.TransponderDigit1, 205, 0, 1.0, true, true)
+elements["PTN_206"] = default_axis("Transponder Second Digit", devices.TRANSPONDER, Keys.TransponderDigit2, 206, 0, 1.0, true, true)
+elements["PTN_207"] = default_axis("Transponder Third Digit", devices.TRANSPONDER, Keys.TransponderDigit3, 207, 0, 1.0, true, true)
+elements["PTN_208"] = default_axis("Transponder Fourth Digit", devices.TRANSPONDER, Keys.TransponderDigit4, 208, 0, 1.0, true, true)
+elements["PTN_209"] = default_button("Transponder IDENT", devices.TRANSPONDER, Keys.TransponderIdent, Keys.TransponderIdent, 209, SOUND_DEFAULT_2_WAY_SWITCH, 1, {0, 1})
+
 -- UHF R&S GB6500
 elements["PTN_554"] = default_axis("UHF Volume", devices.UHF_RADIO, Keys.UHF_Vol, 1134, 0, 0.1)
 

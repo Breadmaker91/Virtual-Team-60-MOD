@@ -1,6 +1,22 @@
 function exportRadioSK60(_data, SR)
 
-    _data.capabilities = { dcsPtt = false, dcsIFF = false, dcsRadioSwitch = false, intercomHotMic = false, desc = "" }
+    _data.capabilities = { dcsPtt = false, dcsIFF = true, dcsRadioSwitch = false, intercomHotMic = false, desc = "" }
+
+    -- The SK 60 only exposes a civil Mode A transponder. SRS represents that
+    -- code as Mode 3; status 2 makes the IDENT indicator flash.
+    local transponder_power = get_param_handle("XPDR_POWER"):get()
+    local transponder_ident = get_param_handle("XPDR_IDENT"):get()
+    _data.iff = {
+        status = transponder_power > 0.5 and (transponder_ident > 0.5 and 2 or 1) or 0,
+        mode1 = -1,
+        mode2 = -1,
+        -- This packed parameter is published whenever a code wheel moves.
+        mode3 = get_param_handle("XPDR_MODE_A_CODE"):get(),
+        mode4 = false,
+        control = 0, -- cockpit/DCS controls the transponder, not the SRS overlay
+        expansion = false,
+        mic = -1,
+    }
 
     _data.radios[1].name = "Intercom"
     _data.radios[1].freq = 100.0
