@@ -58,6 +58,8 @@ WeaponSystem:listen_command(Keys.WeaponSafetyTriggerOn)
 WeaponSystem:listen_command(Keys.WeaponAirGroundChange)
 WeaponSystem:listen_command(Keys.GunSightInstall)
 WeaponSystem:listen_command(Keys.GunSightUninstall)
+WeaponSystem:listen_command(Keys.ReleaseJettison)
+WeaponSystem:listen_command(iCommandPlaneJettisonWeapons)
 
 local pod_smoke_light = get_param_handle("POD_SMOKE")
 local nozzle_smoke_light = get_param_handle("NOZZLE_SMOKE")
@@ -68,6 +70,17 @@ end
 
 local smokepodstatus = 0
 local nozzlesmokestatus = 0
+
+local function emergency_jettison_wing_stores()
+    -- Stations 0-5 are the wing stations. emergency_jettison removes the
+    -- store from a station without removing its pylon/rack.
+    for station_index = 0, 5 do
+        local station = WeaponSystem:get_station_info(station_index)
+        if station.count > 0 then
+            WeaponSystem:emergency_jettison(station_index)
+        end
+    end
+end
 
 -- fireing mode, 1 is single, 2 is in pairs,
 local rockets_fire_mode = 1
@@ -253,7 +266,9 @@ function launch_rockets(launch_mode)
 end
 
 function SetCommand(command,value)
-    if command == Keys.WeaponFireOff then
+    if command == Keys.ReleaseJettison or command == iCommandPlaneJettisonWeapons then
+        emergency_jettison_wing_stores()
+    elseif command == Keys.WeaponFireOff then
         fire_trigger_status = 0
     elseif (get_elec_dc_status() and current_status[master_switch][2] == SWITCH_ON and safety_trigger_status == SWITCH_ON) then
         check_load_status()

@@ -359,6 +359,8 @@ elements = {}
 
 --SWITCHOFF elements["POINTER"] = default_2_position_tumb(LOCALIZE("Test Command"),devices.TEST, device_commands.Button_1,444) -- 44 arg number
 
+elements["PTN_781"] = default_button(_("Emergency Weapons Jettison"), devices.WEAPON_SYSTEM, Keys.ReleaseJettison, 0, 781)
+
 
 --elements["PTN_003"] = default_2_position_tumb("Landing Gear Handle", devices.GEAR_SYSTEM, click_cmd.GearLevel, 3)
 elements["PNT_083"] = default_2_position_tumb(_("Landing Gear Handle"), devices.GEAR_SYSTEM, click_cmd.GearLevel, 83, 4)

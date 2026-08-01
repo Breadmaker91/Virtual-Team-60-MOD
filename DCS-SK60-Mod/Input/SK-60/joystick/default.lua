@@ -79,7 +79,7 @@ keyCommands = {
 	{down = iCommandPlaneFonar,value_down= 0, value_up = 0,	name = _('Canopy Close'),			category = _('Systems')},
     --{down = iCommandPlaneParachute,				name = _('Dragging Chute'),				category = _('Systems'),	features = {"dragchute"}},
     --{down = iCommandPlaneResetMasterWarning,	name = _('Audible Warning Reset'),		category = _('Systems')},
-    --{down = iCommandPlaneJettisonWeapons,up = iCommandPlaneJettisonWeaponsUp,	name = _('Weapons Jettison'),	category = _('Systems')},
+    {down = iCommandPlaneJettisonWeapons, up = iCommandPlaneJettisonWeaponsUp, name = _('Weapons Jettison'), category = _('Systems')},
     {down = Keys.EjectionSeatSafetyLever,			name = _('Ejection Seat Safety Handle'),	category = _('Systems')},
     {down = iCommandPlaneEject,					name = _('Eject (3 times)'),			category = _('Systems')},
     --{down = iCommandFlightClockReset,			name = _('Flight Clock Start/Stop/Reset'),						category = _('Systems') , features = {"flightclock"}},
