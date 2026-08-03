@@ -375,6 +375,18 @@ keyCommands = {
     {down = Keys.Custom_Menu,			name = _('Toggle Configuration Menu'),				category = _('Special Function') },
     {down = Keys.Custom_Menu_Enter,		name = _('Configuration Menu Action'),							category = _('Special Function') },
 
+    -- Transponder
+    {down = Keys.TransponderPower, value_down = 1, name = _('Transponder Power Toggle'), category = _('Transponder')},
+    {down = Keys.TransponderDigit1, value_down = 1, name = _('Transponder Digit 1 Increase'), category = _('Transponder')},
+    {down = Keys.TransponderDigit1, value_down = -1, name = _('Transponder Digit 1 Decrease'), category = _('Transponder')},
+    {down = Keys.TransponderDigit2, value_down = 1, name = _('Transponder Digit 2 Increase'), category = _('Transponder')},
+    {down = Keys.TransponderDigit2, value_down = -1, name = _('Transponder Digit 2 Decrease'), category = _('Transponder')},
+    {down = Keys.TransponderDigit3, value_down = 1, name = _('Transponder Digit 3 Increase'), category = _('Transponder')},
+    {down = Keys.TransponderDigit3, value_down = -1, name = _('Transponder Digit 3 Decrease'), category = _('Transponder')},
+    {down = Keys.TransponderDigit4, value_down = 1, name = _('Transponder Digit 4 Increase'), category = _('Transponder')},
+    {down = Keys.TransponderDigit4, value_down = -1, name = _('Transponder Digit 4 Decrease'), category = _('Transponder')},
+    {down = Keys.TransponderIdent, up = Keys.TransponderIdent, value_down = 1, value_up = 0, name = _('Transponder IDENT'), category = _('Transponder')},
+
     -- NAV Unit
     {down = Keys.Nav_Main_Power_On, name = _('NAV Main Power ON'), category = _('NAV Unit')},
     {down = Keys.Nav_Main_Power_Off, name = _('NAV Main Power OFF'), category = _('NAV Unit')},

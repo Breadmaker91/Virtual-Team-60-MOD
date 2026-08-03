@@ -71,12 +71,10 @@ end
 
 function SetCommand(command, value)
     if command == Keys.TransponderPower then
-        -- The two clickable actions send +1 for left click (ON) and -1 for
-        -- right click (OFF). Ignore a centred/zero initialization event.
-        if value > 0 then
-            power = 1
-        elseif value < 0 then
-            power = 0
+        -- Treat either mouse button direction, or a key/button press, as one
+        -- toggle. Ignore the centred initialization event.
+        if value ~= 0 then
+            power = 1 - power
         end
     elseif command == Keys.TransponderIdent then
         ident = value > 0.5 and 1 or 0

@@ -155,11 +155,12 @@ sounderName = "Aircraft/Planes/PlaneSK60",
 			[1] = 
 			{
 				ejection_seat_name	=	17,--17=FA-18 58=F-15
-				-- No drop_canopy_name: SK60 ejects through closed canopy glass,
+				drop_canopy_name    = 0, -- SK60 ejects through the fixed canopy glass
 				-- so DCS must not wait for a jettisoned/open canopy.
 				pos = 	{2.6,	0.94,	- 0.4}, -- DCS body-axis ejection station; keep near cockpit to avoid pitch impulse
 				g_suit 			    =  6,
 				can_be_playable   	= true,
+				canopy_arg			= 38,
 				-- No canopy_arg here: SK60 ejects through closed canopy glass,
 				-- so the normal canopy animation must not gate ejection.
 				ejection_through_canopy = true,
@@ -170,11 +171,12 @@ sounderName = "Aircraft/Planes/PlaneSK60",
 			[2] =
 			{
 				ejection_seat_name	=	17,--17=FA-18 58=F-15
-				-- No drop_canopy_name: SK60 ejects through closed canopy glass,
+				drop_canopy_name    = 0, -- SK60 ejects through the fixed canopy glass
 				-- so DCS must not wait for a jettisoned/open canopy.
 				pos = 	{2.6,	0.94,	0.4}, -- DCS body-axis ejection station; keep near cockpit to avoid pitch impulse
 				g_suit 			    =  6,
 				can_be_playable   	= true,
+				canopy_arg			= 38,
 				-- No canopy_arg here: SK60 ejects through closed canopy glass,
 				-- so the normal canopy animation must not gate ejection.
 				ejection_through_canopy = true,

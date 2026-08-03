@@ -557,7 +557,7 @@ elements["PTN_718"] = left_right_command_button("DME Display Power Knob", device
 
 -- Transponder. The four code selectors are endless mouse-wheel knobs; their
 -- click arguments are separate from the digit display arguments (200-203).
-elements["PTN_204"] = default_2_position_tumb("Transponder Power (Left click ON / Right click OFF)", devices.TRANSPONDER, Keys.TransponderPower, 204, SOUND_DEFAULT_2_WAY_SWITCH)
+elements["PTN_204"] = default_2_position_tumb("Transponder Power (click to toggle)", devices.TRANSPONDER, Keys.TransponderPower, 204, SOUND_DEFAULT_2_WAY_SWITCH)
 elements["PTN_205"] = default_axis("Transponder First Digit", devices.TRANSPONDER, Keys.TransponderDigit1, 205, 0, 1.0, true, true)
 elements["PTN_206"] = default_axis("Transponder Second Digit", devices.TRANSPONDER, Keys.TransponderDigit2, 206, 0, 1.0, true, true)
 elements["PTN_207"] = default_axis("Transponder Third Digit", devices.TRANSPONDER, Keys.TransponderDigit3, 207, 0, 1.0, true, true)

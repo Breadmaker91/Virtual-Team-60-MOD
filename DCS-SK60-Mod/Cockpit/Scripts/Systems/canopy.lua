@@ -21,9 +21,6 @@ canopy_system:listen_command(Canopy)
 
 local function set_canopy_position(position)
     set_aircraft_draw_argument_value(38, position)
-    if type(set_cockpit_draw_argument_value) == "function" then
-        set_cockpit_draw_argument_value(38, position)
-    end
     CANOPY_ANI_INSIDE:set(position)
     CANOPY_INSIDE:set(position)
 end
