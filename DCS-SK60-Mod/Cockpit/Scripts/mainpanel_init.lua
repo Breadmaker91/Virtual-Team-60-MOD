@@ -152,6 +152,7 @@ animation_list = {
     {"PTN_115", 115},
     {"PTN_116", 116},
     {"PTN_117", 117},
+    {"PTN_120", 120, {0, 1}, {0, 1}}, -- Thrust breaker arming switch
     {"PTN_51", 51, {0, 1}, {0, 1}}, -- Ejection seat safety lever
 	{"PTN_131", 131}, --{0, 1}, {0.12, 0.19}},
     {"PTN_132", 132}, --{0, 1}, {0.7, 1}},

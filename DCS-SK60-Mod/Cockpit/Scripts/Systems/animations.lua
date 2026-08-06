@@ -43,10 +43,12 @@ local ejectionSeatSafetyLeverArg = get_param_handle("PTN_51")
 local leftThrottleArg = get_param_handle("EFM_LEFT_THRUST_A")
 local rightThrottleArg = get_param_handle("EFM_RIGHT_THRUST_A")
 local thrustBreakerPositionArg = get_param_handle("THRUST_BREAKER_POSITION")
+local thrustBreakerArmSwitchArg = get_param_handle("PTN_120")
 
 local EJECTION_SEAT_SAFETY_LEVER_ARG = 51
 local EJECTION_COMMAND = 83
 local THRUST_BREAKER_ARG = 22
+local THRUST_BREAKER_ARM_SWITCH_ARG = 120
 -- The EFM publishes 0.15 at ground idle and 0.0 when a throttle is cut off.
 -- Use a narrow band around ground idle so either advancing or cutting a
 -- throttle off retracts the breaker.
@@ -56,6 +58,12 @@ local THRUST_BREAKER_TRAVEL_TIME = 1.0
 
 local thrust_breaker_armed = false
 local thrust_breaker_position = 0.0
+
+local function set_thrust_breaker_arm_switch_draw_argument()
+	local value = thrust_breaker_armed and 1.0 or 0.0
+	set_aircraft_draw_argument_value(THRUST_BREAKER_ARM_SWITCH_ARG, value)
+	thrustBreakerArmSwitchArg:set(value)
+end
 
 -- These draw arguments must be assigned to the matching mesh visibility
 -- controllers in the cockpit/external EDMs:
@@ -93,6 +101,9 @@ local copilot_head_yaw_target = 0.0
 local PILOT_HEAD_YAW_SMOOTHING_SPEED = 8.0
 local PILOT_HEAD_YAW_DEADBAND = 0.002
 local PILOT_HEAD_YAW_MAX_SPEED = 4.0
+-- The right-seat cockpit mesh uses the opposite yaw direction from external
+-- argument 337, so convert the shared random head position for that mesh.
+local COPILOT_HEAD_YAW_DIRECTION = -1.0
 
 local head_position = 0.0
 local head_start = 0.0
@@ -501,7 +512,11 @@ local function update_head_motion()
 	end
 end
 
-local function mirror_external_head_motion_to_cockpit()
+local function write_random_copilot_head_motion()
+	set_aircraft_draw_argument_value(EXTERNAL_RIGHT_PILOT_HEAD_LR_ARG, head_position)
+end
+
+local function update_cockpit_head_motion()
 	local raw_pilot_yaw = clamp(
 		get_aircraft_draw_argument_value(EXTERNAL_LEFT_PILOT_HEAD_LR_ARG) or pilot_head_yaw_target,
 		HEAD_MIN,
@@ -518,7 +533,7 @@ local function mirror_external_head_motion_to_cockpit()
 	pilotHeadYawArg:set(pilot_head_yaw)
 
 	local raw_copilot_yaw = clamp(
-		get_aircraft_draw_argument_value(EXTERNAL_RIGHT_PILOT_HEAD_LR_ARG) or copilot_head_yaw_target,
+		COPILOT_HEAD_YAW_DIRECTION * head_position,
 		HEAD_MIN,
 		HEAD_MAX
 	)
@@ -607,9 +622,11 @@ function post_initialize()
 	thrust_breaker_position = 0.0
 	set_aircraft_draw_argument_value(THRUST_BREAKER_ARG, thrust_breaker_position)
 	thrustBreakerPositionArg:set(thrust_breaker_position)
+	set_thrust_breaker_arm_switch_draw_argument()
 
 	start_new_head_turn()
 	head_pause_remaining = random_range(HEAD_PAUSE_MIN, HEAD_PAUSE_MAX)
+	write_random_copilot_head_motion()
 	pilot_head_yaw_target = clamp(
 		get_aircraft_draw_argument_value(EXTERNAL_LEFT_PILOT_HEAD_LR_ARG) or 0.0,
 		HEAD_MIN,
@@ -618,7 +635,7 @@ function post_initialize()
 	pilot_head_yaw = pilot_head_yaw_target
 	pilotHeadYawArg:set(pilot_head_yaw)
 	copilot_head_yaw_target = clamp(
-		get_aircraft_draw_argument_value(EXTERNAL_RIGHT_PILOT_HEAD_LR_ARG) or 0.0,
+		COPILOT_HEAD_YAW_DIRECTION * head_position,
 		HEAD_MIN,
 		HEAD_MAX
 	)
@@ -628,19 +645,20 @@ function post_initialize()
 	schedule_next_blink()
 	previous_roll = read_sensor_number("getRoll", 0.0)
 	initialize_pilot_visor_selection()
-	mirror_external_head_motion_to_cockpit()
+	update_cockpit_head_motion()
 	update_pilot_body_visibility()
 end
 
 function update()
 	update_pilot_body_visibility()
 	update_head_motion()
+	write_random_copilot_head_motion()
 	update_pilot_roll_reaction()
 	update_eye_scan_motion()
 	update_blink_motion()
 	update_pilot_visor_selection()
 	write_pilot_dynamic_animation_args()
-	mirror_external_head_motion_to_cockpit()
+	update_cockpit_head_motion()
 	update_ejection_seat_safety_lever_motion()
 	set_ejection_seat_safety_lever_draw_argument()
 	update_thrust_breaker()
@@ -671,6 +689,7 @@ function SetCommand(command, value)
 		end
 	elseif command == Keys.ThrustBreakerArm then
 		thrust_breaker_armed = not thrust_breaker_armed
+		set_thrust_breaker_arm_switch_draw_argument()
 	elseif command == Keys.EjectionSeatSafetyLever then
 		if value ~= nil and value < 0 then
 			set_ejection_seat_safety_lever(false)

@@ -395,6 +395,7 @@ elements["FLAP_LEVEL"] = default_multi_position_tumb("Flap handle", devices.BREA
 elements["PARKING_BREAK"] = default_2_position_tumb("Parking Break", devices.BREAK_SYSTEM, Keys.ParkingBrakes, 432)
 
 elements["PTN_51"] = default_multi_position_tumb(_("Ejection Seat Safety Handle"), devices.animations, Keys.EjectionSeatSafetyLeverOn, Keys.EjectionSeatSafetyLeverOff, 51, SOUND_DEFAULT_2_WAY_SWITCH, 1)
+elements["PTN_120"] = default_2_position_tumb(_("Thrust Breaker Arm"), devices.animations, Keys.ThrustBreakerArm, 120, SOUND_DEFAULT_2_WAY_SWITCH, 1)
 
 --elements["PTN_118"] = default_button("Boost Pump Test", devices.FUEL_SYSTEM, Keys.BoostPumpTestUP, Keys.BoostPumpTestDOWN, 118)
 

@@ -1,6 +1,7 @@
 
 dofile(LockOn_Options.script_path.."command_defs.lua")
 dofile(LockOn_Options.script_path.."Systems/electric_system_api.lua")
+local HeadingUtils = dofile(LockOn_Options.script_path.."Systems/heading_utils.lua")
 
 local dev 	    = GetSelf()
 
@@ -237,7 +238,7 @@ function update()
         hud_maxg_dis:set(maxG_record)
     end
     hud_mach_dis:set(sensor_data.getMachNumber())
-    hud_hdg_dis:set(sensor_data.getMagneticHeading() * RAD_TO_DEGREE)
+    hud_hdg_dis:set(HeadingUtils.get_corrected_magnetic_heading(sensor_data))
     hud_ln2_dis:set(sensor_data.getEngineLeftRPM() / 1.2)
     hud_rn2_dis:set(sensor_data.getEngineRightRPM() / 1.2)
    -- getMagneticHeading
@@ -246,7 +247,7 @@ function update()
     hud_nav_data_2:set("ETE: 00:00")
     hud_nav_data_3:set("MODE: TEST")
 
-    local temp_hdg = sensor_data.getMagneticHeading() * RAD_TO_DEGREE / 10
+    local temp_hdg = HeadingUtils.get_corrected_magnetic_heading(sensor_data) / 10
     if temp_hdg > 18 then
         temp_hdg = 36 - temp_hdg
         hud_hdg_mov:set(temp_hdg)
@@ -314,12 +315,7 @@ function update()
     end
 
     if get_elec_ac_status() then
-        local deg_heading = sensor_data.getMagneticHeading() * RAD_TO_DEGREE
-        if deg_heading < 0 then
-            deg_heading = deg_heading + 360
-        elseif deg_heading > 360 then
-            deg_heading = deg_heading - 360
-        end
+        local deg_heading = HeadingUtils.get_corrected_magnetic_heading(sensor_data)
         ehsi_mag_heading:set(deg_heading)
         ehsi_compass:set(deg_heading)
     end

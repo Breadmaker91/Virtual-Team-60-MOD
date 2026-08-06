@@ -1,5 +1,6 @@
 dofile(LockOn_Options.script_path.."command_defs.lua")
 dofile(LockOn_Options.script_path.."Systems/electric_system_api.lua")
+local HeadingUtils = dofile(LockOn_Options.script_path.."Systems/heading_utils.lua")
 dofile(LockOn_Options.script_path.."debug_util.lua")
 
 local dev = GetSelf()
@@ -182,7 +183,7 @@ function calculate_Climb_Slide()
 end
 
 function update_HSI_Compass()
-    local current_magnitude_heading = sensor_data.getMagneticHeading() * RAD_TO_DEGREE
+    local current_magnitude_heading = HeadingUtils.get_magnetic_heading(sensor_data)
     local temp = 0
     if (get_elec_ac_status() == true) then
         if (current_magnitude_heading > 180) then

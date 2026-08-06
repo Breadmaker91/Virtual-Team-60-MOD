@@ -4,7 +4,7 @@
 
 local waypoints = {
     -- WPT   FRQ      RAD    DST
-    [ 1] = { FRQ = 113.60, RAD = 223, DST =  35.8 },
+    [ 1] = { FRQ = 113.00, RAD = 153, DST =  75.7 },
     [ 2] = { FRQ = 113.70, RAD = 278, DST = 135.0 },
     [ 3] = { FRQ = 113.60, RAD = 292, DST =  36.9 },
     [ 4] = { FRQ = 109.75, RAD =  12, DST =  25.7 },
@@ -21,18 +21,18 @@ return {
     state = {
         ["active_rnav_edit_segment"] = 3,
         ["active_waypoint"] = {
-            ["index"] = 3,
-            ["offset_distance_nm"] = 36.899999999999999,
-            ["offset_radial_deg"] = 292,
-            ["vor_frequency_mhz"] = 113.60000000000001,
+            ["index"] = 1,
+            ["offset_distance_nm"] = 75.700000000000003,
+            ["offset_radial_deg"] = 153,
+            ["vor_frequency_mhz"] = 113,
         },
-        ["current_waypoint_index"] = 3,
+        ["current_waypoint_index"] = 1,
         ["selected_heading_bug_deg"] = 244,
-        ["selected_offset_distance_nm"] = 36.899999999999999,
-        ["selected_offset_radial_deg"] = 292,
+        ["selected_offset_distance_nm"] = 75.700000000000003,
+        ["selected_offset_radial_deg"] = 153,
         ["selected_vor_course_deg"] = 67,
         ["tuned_ndb_frequency_khz"] = 311,
-        ["tuned_vor_frequency_mhz"] = 113.60000000000001,
+        ["tuned_vor_frequency_mhz"] = 113,
         ["version"] = 1,
     },
 }
